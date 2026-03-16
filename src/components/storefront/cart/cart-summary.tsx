@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ROUTES } from "@/constants/routes";
 
@@ -56,9 +56,12 @@ export function CartSummary({
       </div>
 
       <div className="space-y-3">
-        <Button className="w-full" size="lg">
-          Checkout placeholder
-        </Button>
+        <Link
+          className={buttonVariants({ className: "w-full", size: "lg" })}
+          href={ROUTES.storefront.checkout}
+        >
+          Proceed to checkout
+        </Link>
         <Link
           className={buttonVariants({ className: "w-full", size: "lg", variant: "outline" })}
           href={ROUTES.storefront.shop}

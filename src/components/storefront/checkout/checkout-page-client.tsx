@@ -1,0 +1,390 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import Link from "next/link";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
+import { ROUTES } from "@/constants/routes";
+import { useAppSelector } from "@/hooks/use-redux";
+import { buildCheckoutOrderDraft } from "@/lib/checkout/checkout-order";
+import { buildCheckoutPricing, DELIVERY_METHODS } from "@/lib/checkout/checkout-pricing";
+import { validateCheckoutForm } from "@/lib/checkout/checkout-validation";
+import { selectCartHydrated, selectCartItems } from "@/store/features/cart/cart-slice";
+import type {
+  CheckoutFormErrors,
+  CheckoutFormValues,
+  CheckoutOrderDraft,
+  DeliveryMethod,
+} from "@/types/checkout";
+import { CheckoutSummary } from "@/components/storefront/checkout/checkout-summary";
+
+type CheckoutPageClientProps = {
+  initialValues: CheckoutFormValues;
+};
+
+const EMPTY_ERRORS: CheckoutFormErrors = {};
+
+export function CheckoutPageClient({
+  initialValues,
+}: CheckoutPageClientProps) {
+  const hydrated = useAppSelector(selectCartHydrated);
+  const items = useAppSelector(selectCartItems);
+  const [values, setValues] = useState<CheckoutFormValues>(initialValues);
+  const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>("standard");
+  const [couponCode, setCouponCode] = useState("");
+  const [errors, setErrors] = useState<CheckoutFormErrors>(EMPTY_ERRORS);
+  const [orderDraft, setOrderDraft] = useState<CheckoutOrderDraft | null>(null);
+
+  const pricing = useMemo(
+    () =>
+      buildCheckoutPricing({
+        couponCode,
+        deliveryMethod,
+        items,
+      }),
+    [couponCode, deliveryMethod, items],
+  );
+
+  if (!hydrated) {
+    return (
+      <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
+        <Skeleton className="h-170 w-full rounded-4xl" />
+        <Skeleton className="h-105 w-full rounded-4xl" />
+      </div>
+    );
+  }
+
+  if (items.length === 0) {
+    return (
+      <EmptyState
+        action={
+          <Link href={ROUTES.storefront.cart}>
+            <Button>Return to cart</Button>
+          </Link>
+        }
+        description="Add products to your cart before proceeding to checkout."
+        title="Your cart is empty"
+      />
+    );
+  }
+
+  return (
+    <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
+      <div className="space-y-6">
+        <Card className="space-y-6 p-6">
+          <div>
+            <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
+              Customer Information
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight">
+              Delivery details
+            </h2>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2 sm:col-span-2">
+              <label className="text-sm font-medium" htmlFor="fullName">
+                Full name
+              </label>
+              <Input
+                id="fullName"
+                onChange={(event) =>
+                  setValues((current) => ({
+                    ...current,
+                    fullName: event.target.value,
+                  }))
+                }
+                value={values.fullName}
+              />
+              {errors.fullName ? (
+                <p className="text-sm text-danger">{errors.fullName}</p>
+              ) : null}
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="email">
+                Email
+              </label>
+              <Input
+                id="email"
+                onChange={(event) =>
+                  setValues((current) => ({
+                    ...current,
+                    email: event.target.value,
+                  }))
+                }
+                type="email"
+                value={values.email}
+              />
+              {errors.email ? (
+                <p className="text-sm text-danger">{errors.email}</p>
+              ) : null}
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="phoneNumber">
+                Phone number
+              </label>
+              <Input
+                id="phoneNumber"
+                onChange={(event) =>
+                  setValues((current) => ({
+                    ...current,
+                    phoneNumber: event.target.value,
+                  }))
+                }
+                value={values.phoneNumber}
+              />
+              {errors.phoneNumber ? (
+                <p className="text-sm text-danger">{errors.phoneNumber}</p>
+              ) : null}
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="country">
+                Country
+              </label>
+              <Input
+                id="country"
+                onChange={(event) =>
+                  setValues((current) => ({
+                    ...current,
+                    country: event.target.value,
+                  }))
+                }
+                value={values.country}
+              />
+              {errors.country ? (
+                <p className="text-sm text-danger">{errors.country}</p>
+              ) : null}
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="state">
+                State
+              </label>
+              <Input
+                id="state"
+                onChange={(event) =>
+                  setValues((current) => ({
+                    ...current,
+                    state: event.target.value,
+                  }))
+                }
+                value={values.state}
+              />
+              {errors.state ? (
+                <p className="text-sm text-danger">{errors.state}</p>
+              ) : null}
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="city">
+                City
+              </label>
+              <Input
+                id="city"
+                onChange={(event) =>
+                  setValues((current) => ({
+                    ...current,
+                    city: event.target.value,
+                  }))
+                }
+                value={values.city}
+              />
+              {errors.city ? (
+                <p className="text-sm text-danger">{errors.city}</p>
+              ) : null}
+            </div>
+
+            <div className="space-y-2 sm:col-span-2">
+              <label className="text-sm font-medium" htmlFor="addressLine">
+                Address line
+              </label>
+              <Textarea
+                id="addressLine"
+                onChange={(event) =>
+                  setValues((current) => ({
+                    ...current,
+                    addressLine: event.target.value,
+                  }))
+                }
+                rows={4}
+                value={values.addressLine}
+              />
+              {errors.addressLine ? (
+                <p className="text-sm text-danger">{errors.addressLine}</p>
+              ) : null}
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="landmark">
+                Landmark
+              </label>
+              <Input
+                id="landmark"
+                onChange={(event) =>
+                  setValues((current) => ({
+                    ...current,
+                    landmark: event.target.value,
+                  }))
+                }
+                value={values.landmark}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="postalCode">
+                Postal code
+              </label>
+              <Input
+                id="postalCode"
+                onChange={(event) =>
+                  setValues((current) => ({
+                    ...current,
+                    postalCode: event.target.value,
+                  }))
+                }
+                value={values.postalCode}
+              />
+            </div>
+          </div>
+        </Card>
+
+        <Card className="space-y-5 p-6">
+          <div>
+            <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
+              Delivery Method
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight">
+              Choose how you want it delivered
+            </h2>
+          </div>
+
+          <div className="grid gap-3">
+            {DELIVERY_METHODS.map((method) => (
+              <label
+                key={method.value}
+                className={`flex cursor-pointer items-start gap-4 rounded-3xl border px-4 py-4 ${
+                  deliveryMethod === method.value
+                    ? "border-primary bg-primary/5"
+                    : "border-border bg-white"
+                }`}
+              >
+                <input
+                  checked={deliveryMethod === method.value}
+                  className="mt-1 h-4 w-4 accent-primary"
+                  name="deliveryMethod"
+                  onChange={() => setDeliveryMethod(method.value)}
+                  type="radio"
+                />
+                <div className="flex-1">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="font-medium">{method.label}</p>
+                    <p className="font-semibold">
+                      {method.fee === 0
+                        ? "Free"
+                        : new Intl.NumberFormat("en-US", {
+                            currency: "USD",
+                            style: "currency",
+                          }).format(method.fee)}
+                    </p>
+                  </div>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {method.description}
+                  </p>
+                </div>
+              </label>
+            ))}
+          </div>
+        </Card>
+
+        <Card className="space-y-4 p-6">
+          <div>
+            <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
+              Coupon
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight">
+              Discounts placeholder
+            </h2>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Input
+              onChange={(event) => setCouponCode(event.target.value)}
+              placeholder="Enter coupon code"
+              value={couponCode}
+            />
+            <Button disabled variant="outline">
+              Apply later
+            </Button>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Coupon logic is intentionally not active yet, but the field is ready for
+            the next pricing phase.
+          </p>
+        </Card>
+
+        <div className="flex flex-wrap gap-3">
+          <Button
+            onClick={() => {
+              const nextErrors = validateCheckoutForm(values);
+              setErrors(nextErrors);
+
+              if (Object.keys(nextErrors).length > 0) {
+                setOrderDraft(null);
+                return;
+              }
+
+              setOrderDraft(
+                buildCheckoutOrderDraft({
+                  couponCode,
+                  deliveryMethod,
+                  items,
+                  values,
+                }),
+              );
+            }}
+            size="lg"
+          >
+            Continue to payment placeholder
+          </Button>
+          <Link href={ROUTES.storefront.cart}>
+            <Button size="lg" variant="outline">
+              Back to cart
+            </Button>
+          </Link>
+        </div>
+
+        {orderDraft ? (
+          <Card className="space-y-3 p-6">
+            <p className="text-sm font-medium uppercase tracking-[0.2em] text-success">
+              Checkout payload ready
+            </p>
+            <p className="text-sm text-muted-foreground">
+              This structured object can be used in the next chunk to create an order
+              record and initialize payment.
+            </p>
+            <pre className="overflow-x-auto rounded-3xl bg-surface p-4 text-xs leading-6 text-foreground">
+              {JSON.stringify(orderDraft, null, 2)}
+            </pre>
+          </Card>
+        ) : null}
+      </div>
+
+      <div className="space-y-6">
+        <CheckoutSummary items={items} pricing={pricing} />
+        <Card className="space-y-3 p-5 text-sm text-muted-foreground">
+          <p className="font-medium text-foreground">Payment note</p>
+          <p>
+            Payment verification and Kora initialization are intentionally deferred to
+            the next chunk.
+          </p>
+        </Card>
+      </div>
+    </div>
+  );
+}

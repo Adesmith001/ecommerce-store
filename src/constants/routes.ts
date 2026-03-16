@@ -2,6 +2,7 @@ export const ROUTES = {
   storefront: {
     home: "/",
     cart: "/cart",
+    checkout: "/checkout",
     shop: "/shop",
     categories: "/categories",
     category: (slug: string) => `/categories/${slug}`,

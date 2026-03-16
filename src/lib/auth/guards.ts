@@ -11,11 +11,13 @@ export async function getCurrentUserRole() {
   return getRoleFromMetadata(user?.publicMetadata?.role);
 }
 
-export async function requireAuthenticatedUser() {
+export async function requireAuthenticatedUser(returnBackUrl?: string) {
   const { redirectToSignIn, userId } = await auth();
 
   if (!userId) {
-    return redirectToSignIn({ returnBackUrl: ROUTES.admin.dashboard });
+    return redirectToSignIn({
+      returnBackUrl: returnBackUrl ?? ROUTES.storefront.home,
+    });
   }
 
   const user = await currentUser();
