@@ -29,13 +29,10 @@ function handleCatalogError(error: unknown, context: string) {
 }
 
 function sortProducts(products: Product[]) {
-  return [...products].sort((left, right) => {
-    if (Number(right.featured) !== Number(left.featured)) {
-      return Number(right.featured) - Number(left.featured);
-    }
-
-    return right.ratingSummary.average - left.ratingSummary.average;
-  });
+  return [...products].sort(
+    (left, right) =>
+      new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime(),
+  );
 }
 
 async function listProductDocuments(queries: string[] = []) {

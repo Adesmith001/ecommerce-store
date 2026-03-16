@@ -64,6 +64,8 @@ export type Product = {
   name: string;
   slug: string;
   sku: string;
+  createdAt: string;
+  updatedAt: string;
   price: number;
   salePrice: number | null;
   stock: number;
@@ -119,4 +121,50 @@ export type AppwriteProductDocument = Models.Document & {
   shortDescription?: string;
   fullDescription?: string;
   status?: string;
+};
+
+export type ProductAvailabilityFilter = "all" | "in-stock" | "out-of-stock";
+
+export type ProductSortOption =
+  | "newest"
+  | "price-low-to-high"
+  | "price-high-to-low"
+  | "best-rated"
+  | "featured";
+
+export type CatalogListingQuery = {
+  category: string;
+  brand: string;
+  availability: ProductAvailabilityFilter;
+  featured: boolean;
+  minPrice: string;
+  maxPrice: string;
+  page: number;
+  pageSize: number;
+  q: string;
+  sort: ProductSortOption;
+};
+
+export type CatalogFacetOption = {
+  count: number;
+  label: string;
+  value: string;
+};
+
+export type CatalogListingResponse = {
+  products: Product[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  hasMore: boolean;
+  availableFilters: {
+    brands: CatalogFacetOption[];
+    categories: CatalogFacetOption[];
+    priceRange: {
+      max: number;
+      min: number;
+    };
+  };
+  appliedQuery: CatalogListingQuery;
 };

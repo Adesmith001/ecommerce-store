@@ -97,16 +97,17 @@ export function StorefrontHeader() {
           </Link>
 
           <div className="hidden max-w-xl flex-1 items-center gap-3 lg:flex">
-            <div className="relative flex-1">
+            <form action={ROUTES.storefront.shop} className="relative flex-1">
               <Input
                 aria-label="Search storefront"
                 className="pl-10"
+                name="q"
                 placeholder="Search products, categories, and collections"
               />
               <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">
                 <SearchIcon />
               </span>
-            </div>
+            </form>
           </div>
 
           <div className="hidden items-center gap-2 md:flex">
@@ -190,16 +191,17 @@ export function StorefrontHeader() {
         </div>
 
         <div className="lg:hidden">
-          <div className="relative">
+          <form action={ROUTES.storefront.shop} className="relative">
             <Input
               aria-label="Search storefront"
               className="pl-10"
+              name="q"
               placeholder="Search the storefront"
             />
             <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">
               <SearchIcon />
             </span>
-          </div>
+          </form>
         </div>
 
         {mobileMenuOpen ? (

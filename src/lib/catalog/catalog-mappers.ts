@@ -282,6 +282,8 @@ export function mapProductDocumentToProduct(document: AppwriteProductDocument): 
     name: document.name ?? "",
     slug: document.slug ?? "",
     sku: document.sku ?? "",
+    createdAt: document.$createdAt,
+    updatedAt: document.$updatedAt,
     price: toNumber(document.price),
     salePrice:
       document.salePrice === null || document.salePrice === undefined
