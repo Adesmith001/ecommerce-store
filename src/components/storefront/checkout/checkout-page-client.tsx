@@ -14,12 +14,7 @@ import { buildCheckoutOrderDraft } from "@/lib/checkout/checkout-order";
 import { buildCheckoutPricing, DELIVERY_METHODS } from "@/lib/checkout/checkout-pricing";
 import { validateCheckoutForm } from "@/lib/checkout/checkout-validation";
 import { selectCartHydrated, selectCartItems } from "@/store/features/cart/cart-slice";
-import type {
-  CheckoutFormErrors,
-  CheckoutFormValues,
-  CheckoutOrderDraft,
-  DeliveryMethod,
-} from "@/types/checkout";
+import type { CheckoutFormErrors, CheckoutFormValues, DeliveryMethod } from "@/types/checkout";
 import { CheckoutSummary } from "@/components/storefront/checkout/checkout-summary";
 
 type CheckoutPageClientProps = {
@@ -37,7 +32,8 @@ export function CheckoutPageClient({
   const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>("standard");
   const [couponCode, setCouponCode] = useState("");
   const [errors, setErrors] = useState<CheckoutFormErrors>(EMPTY_ERRORS);
-  const [orderDraft, setOrderDraft] = useState<CheckoutOrderDraft | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const pricing = useMemo(
     () =>
@@ -330,27 +326,58 @@ export function CheckoutPageClient({
 
         <div className="flex flex-wrap gap-3">
           <Button
-            onClick={() => {
+            disabled={isSubmitting}
+            onClick={async () => {
               const nextErrors = validateCheckoutForm(values);
               setErrors(nextErrors);
+              setSubmitError(null);
 
               if (Object.keys(nextErrors).length > 0) {
-                setOrderDraft(null);
                 return;
               }
 
-              setOrderDraft(
-                buildCheckoutOrderDraft({
-                  couponCode,
-                  deliveryMethod,
-                  items,
-                  values,
-                }),
-              );
+              const orderDraft = buildCheckoutOrderDraft({
+                couponCode,
+                deliveryMethod,
+                items,
+                values,
+              });
+
+              try {
+                setIsSubmitting(true);
+
+                const response = await fetch("/api/payments/kora/initialize", {
+                  body: JSON.stringify(orderDraft),
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  method: "POST",
+                });
+
+                const payload =
+                  (await response.json()) as { checkoutUrl?: string; message?: string };
+
+                if (!response.ok || !payload.checkoutUrl) {
+                  throw new Error(
+                    payload.message ??
+                      "We could not start your payment right now. Please try again.",
+                  );
+                }
+
+                window.location.assign(payload.checkoutUrl);
+              } catch (error) {
+                setSubmitError(
+                  error instanceof Error
+                    ? error.message
+                    : "We could not start your payment right now. Please try again.",
+                );
+              } finally {
+                setIsSubmitting(false);
+              }
             }}
             size="lg"
           >
-            Continue to payment placeholder
+            {isSubmitting ? "Redirecting to payment..." : "Proceed to secure payment"}
           </Button>
           <Link href={ROUTES.storefront.cart}>
             <Button size="lg" variant="outline">
@@ -359,18 +386,12 @@ export function CheckoutPageClient({
           </Link>
         </div>
 
-        {orderDraft ? (
-          <Card className="space-y-3 p-6">
-            <p className="text-sm font-medium uppercase tracking-[0.2em] text-success">
-              Checkout payload ready
+        {submitError ? (
+          <Card className="space-y-3 border-danger/20 p-6">
+            <p className="text-sm font-medium uppercase tracking-[0.2em] text-danger">
+              Payment initialization failed
             </p>
-            <p className="text-sm text-muted-foreground">
-              This structured object can be used in the next chunk to create an order
-              record and initialize payment.
-            </p>
-            <pre className="overflow-x-auto rounded-3xl bg-surface p-4 text-xs leading-6 text-foreground">
-              {JSON.stringify(orderDraft, null, 2)}
-            </pre>
+            <p className="text-sm text-muted-foreground">{submitError}</p>
           </Card>
         ) : null}
       </div>
@@ -380,8 +401,8 @@ export function CheckoutPageClient({
         <Card className="space-y-3 p-5 text-sm text-muted-foreground">
           <p className="font-medium text-foreground">Payment note</p>
           <p>
-            Payment verification and Kora initialization are intentionally deferred to
-            the next chunk.
+            Orders are created before payment starts, and the cart will only clear
+            after a verified successful response from Kora.
           </p>
         </Card>
       </div>

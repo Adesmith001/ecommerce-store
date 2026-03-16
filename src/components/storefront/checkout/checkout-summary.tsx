@@ -40,7 +40,7 @@ export function CheckoutSummary({ items, pricing }: CheckoutSummaryProps) {
               <div className="min-w-0">
                 <p className="font-medium">{item.name}</p>
                 <p className="text-sm text-muted-foreground">
-                  Qty {item.quantity} · {item.sku}
+                  Qty {item.quantity} | {item.sku}
                 </p>
               </div>
               <p className="shrink-0 font-medium">
