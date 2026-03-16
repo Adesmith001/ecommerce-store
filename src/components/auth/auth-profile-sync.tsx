@@ -1,7 +1,6 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { buildProfilePayload, ensureAppwriteUserProfile } from "@/lib/auth/profile-sync";
-import { getRoleFromMetadata } from "@/lib/auth/roles";
 
 function isMissingClerkUserError(error: unknown) {
   if (isClerkAPIResponseError(error)) {
@@ -32,7 +31,9 @@ export async function AuthProfileSync() {
         email: user.primaryEmailAddress?.emailAddress,
         fullName: user.fullName,
         phone: user.primaryPhoneNumber?.phoneNumber,
-        role: getRoleFromMetadata(user.publicMetadata?.role),
+        // New profiles always start as customers. Admin access is intentionally
+        // managed manually from the Appwrite userProfiles collection.
+        role: "customer",
       }),
     );
   } catch (error) {

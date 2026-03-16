@@ -17,6 +17,7 @@ export type OrderRecord = {
   paymentReference: string;
   paymentStatus: OrderPaymentStatus;
   orderStatus: OrderStatus;
+  inventoryAdjusted: boolean;
   paymentUrl: string | null;
   paymentMethod: string | null;
   paymentMessage: string | null;

@@ -5,16 +5,16 @@ import { useState } from "react";
 import {
   UserButton,
   useAuth,
-  useUser,
 } from "@clerk/nextjs";
 import { APP_NAME } from "@/constants/app";
 import { ROUTES, STOREFRONT_NAV_LINKS } from "@/constants/routes";
 import { STORE_TAGLINE } from "@/constants/storefront";
-import { getRoleFromMetadata, isAdminRole } from "@/lib/auth/roles";
+import { isAdminRole } from "@/lib/auth/roles";
 import { buttonVariants } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Input } from "@/components/ui/input";
 import { useAppSelector } from "@/hooks/use-redux";
+import { useUserRole } from "@/hooks/use-user-role";
 import { selectCartTotalQuantity } from "@/store/features/cart/cart-slice";
 
 function SearchIcon() {
@@ -77,11 +77,10 @@ function MenuIcon() {
 export function StorefrontHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isLoaded, userId } = useAuth();
-  const { user } = useUser();
+  const { isLoading: isRoleLoading, role } = useUserRole();
   const totalCartQuantity = useAppSelector(selectCartTotalQuantity);
-  const role = getRoleFromMetadata(user?.publicMetadata?.role);
   const isSignedIn = Boolean(userId);
-  const showAdminLink = isAdminRole(role);
+  const showAdminLink = isSignedIn && !isRoleLoading && isAdminRole(role);
 
   return (
     <header className="sticky top-0 z-20 border-b border-border bg-white/85 backdrop-blur">

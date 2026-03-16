@@ -26,6 +26,7 @@ type AppwriteOrderDocument = {
   email: string;
   estimatedTotal: number;
   fullName: string;
+  inventoryAdjusted: boolean;
   items: string;
   landmark: string;
   orderStatus: OrderStatus;
@@ -120,6 +121,7 @@ function toOrderRecord(document: AppwriteOrderDocument): OrderRecord {
     paymentReference: document.paymentReference,
     paymentStatus: document.paymentStatus,
     orderStatus: document.orderStatus,
+    inventoryAdjusted: Boolean(document.inventoryAdjusted),
     paymentUrl: document.paymentUrl || null,
     paymentMethod: document.paymentMethod || null,
     paymentMessage: document.paymentMessage || null,
@@ -206,6 +208,7 @@ export async function createPendingOrder(input: CreateOrderInput) {
         paymentReference: input.paymentReference,
         paymentStatus: "pending",
         orderStatus: "pending",
+        inventoryAdjusted: false,
         paymentUrl: "",
         paymentMethod: "",
         paymentMessage: "",
@@ -281,6 +284,19 @@ export async function markOrderInitializationFailed(input: {
       phase: "initialization",
     }),
     paymentStatus: "failed",
+    updatedAt: new Date().toISOString(),
+  });
+}
+
+export async function markOrderInventoryAdjusted(paymentReference: string) {
+  const existingOrder = await findOrderDocumentByPaymentReference(paymentReference);
+
+  if (!existingOrder) {
+    throw new Error("Order not found for inventory adjustment.");
+  }
+
+  return patchOrderDocument(existingOrder.$id, {
+    inventoryAdjusted: true,
     updatedAt: new Date().toISOString(),
   });
 }

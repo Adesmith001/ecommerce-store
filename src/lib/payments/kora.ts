@@ -3,8 +3,10 @@ import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { APP_NAME } from "@/constants/app";
 import { ROUTES } from "@/constants/routes";
+import { decrementInventoryForOrderItems } from "@/lib/catalog/catalog-inventory";
 import {
   getOrderByPaymentReference,
+  markOrderInventoryAdjusted,
   updateOrderVerificationState,
 } from "@/lib/orders/order-service";
 import type { CheckoutOrderDraft } from "@/types/checkout";
@@ -200,10 +202,27 @@ export async function verifyAndFinalizeKoraOrder(paymentReference: string) {
     throw new Error("Order not found for payment reference.");
   }
 
+  if (existingOrder.paymentStatus === "paid" && existingOrder.inventoryAdjusted) {
+    return {
+      order: existingOrder,
+      verification: {
+        amount: null,
+        currency: existingOrder.currency,
+        message: existingOrder.paymentMessage,
+        paymentMethod: existingOrder.paymentMethod,
+        rawStatus: "success",
+        reference: existingOrder.paymentReference,
+        successful: true,
+      } satisfies KoraVerificationSnapshot,
+      isPaid: true,
+      isPending: false,
+    };
+  }
+
   const verification = await verifyKoraCharge(paymentReference);
   const mappedState = mapKoraStatusToOrderState(verification.rawStatus);
 
-  const order = await updateOrderVerificationState({
+  let order = await updateOrderVerificationState({
     orderStatus: mappedState.orderStatus,
     paymentMessage: verification.message,
     paymentMethod: verification.paymentMethod,
@@ -211,6 +230,13 @@ export async function verifyAndFinalizeKoraOrder(paymentReference: string) {
     paymentStatus: mappedState.paymentStatus,
     verification,
   });
+
+  if (mappedState.paymentStatus === "paid" && !existingOrder.inventoryAdjusted) {
+    // Inventory only moves after an explicit verified payment result. This keeps
+    // stock changes aligned with confirmed money movement instead of checkout intent.
+    await decrementInventoryForOrderItems(order.items);
+    order = await markOrderInventoryAdjusted(paymentReference);
+  }
 
   return {
     order,

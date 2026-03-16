@@ -36,6 +36,10 @@ function getAppwriteHeaders() {
 }
 
 async function findProfileByClerkId(clerkId: string) {
+  if (!isProfileSyncConfigured()) {
+    return null;
+  }
+
   const url = getAppwriteDocumentUrl();
 
   url.searchParams.append("queries[]", Query.equal("clerkId", clerkId));
@@ -90,6 +94,22 @@ export async function ensureAppwriteUserProfile(profile: SyncableProfile) {
   await createProfileDocument(profile);
 
   return { created: true, skipped: false };
+}
+
+export async function getAppwriteUserProfileByClerkId(clerkId: string) {
+  return findProfileByClerkId(clerkId);
+}
+
+export async function getUserRoleForClerkId(clerkId: string): Promise<UserRole> {
+  try {
+    const profile = await getAppwriteUserProfileByClerkId(clerkId);
+
+    return profile?.role ?? "customer";
+  } catch (error) {
+    console.error("Failed to resolve user role from Appwrite profile.", error);
+
+    return "customer";
+  }
 }
 
 export function buildProfilePayload(input: {

@@ -3,12 +3,17 @@ import "server-only";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { ROUTES } from "@/constants/routes";
-import { getRoleFromMetadata, isAdminRole } from "@/lib/auth/roles";
+import { isAdminRole } from "@/lib/auth/roles";
+import { getUserRoleForClerkId } from "@/lib/auth/profile-sync";
 
 export async function getCurrentUserRole() {
-  const user = await currentUser();
+  const { userId } = await auth();
 
-  return getRoleFromMetadata(user?.publicMetadata?.role);
+  if (!userId) {
+    return "customer";
+  }
+
+  return getUserRoleForClerkId(userId);
 }
 
 export async function requireAuthenticatedUser(returnBackUrl?: string) {
@@ -21,11 +26,12 @@ export async function requireAuthenticatedUser(returnBackUrl?: string) {
   }
 
   const user = await currentUser();
+  const role = await getUserRoleForClerkId(userId);
 
   return {
     user,
     userId,
-    role: getRoleFromMetadata(user?.publicMetadata?.role),
+    role,
   };
 }
 
