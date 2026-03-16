@@ -1,10 +1,9 @@
 import { notFound } from "next/navigation";
 import { ProductCard } from "@/components/storefront/catalog";
+import { ProductPurchaseActions } from "@/components/storefront/product/product-purchase-actions";
 import { SectionWrapper, StorePageHero } from "@/components/storefront";
 import { ProductGallery } from "@/components/storefront/product/product-gallery";
-import { QuantitySelector } from "@/components/storefront/product/quantity-selector";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ROUTES } from "@/constants/routes";
 import { getProductBySlug, getRelatedProducts } from "@/lib/catalog";
@@ -126,19 +125,7 @@ export default async function ProductDetailsPage({
               </div>
             </div>
 
-            <QuantitySelector max={Math.max(product.stock, 1)} />
-
-            <div className="grid gap-3 sm:grid-cols-3">
-              <Button disabled={product.stock <= 0} size="lg">
-                Add to Cart
-              </Button>
-              <Button disabled={product.stock <= 0} size="lg" variant="secondary">
-                Buy Now
-              </Button>
-              <Button size="lg" variant="outline">
-                Add to Wishlist
-              </Button>
-            </div>
+            <ProductPurchaseActions product={product} />
 
             <Card className="space-y-4">
               <h2 className="text-xl font-semibold">Product details</h2>

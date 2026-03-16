@@ -1,6 +1,7 @@
 export const ROUTES = {
   storefront: {
     home: "/",
+    cart: "/cart",
     shop: "/shop",
     categories: "/categories",
     category: (slug: string) => `/categories/${slug}`,
@@ -28,6 +29,7 @@ export const ROUTES = {
 
 export const STOREFRONT_NAV_LINKS = [
   { label: "Home", href: ROUTES.storefront.home },
+  { label: "Cart", href: ROUTES.storefront.cart },
   { label: "Shop", href: ROUTES.storefront.shop },
   { label: "Categories", href: ROUTES.storefront.categories },
   { label: "Contact", href: ROUTES.storefront.contact },

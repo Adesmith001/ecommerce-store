@@ -14,6 +14,8 @@ import { getRoleFromMetadata, isAdminRole } from "@/lib/auth/roles";
 import { buttonVariants } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Input } from "@/components/ui/input";
+import { useAppSelector } from "@/hooks/use-redux";
+import { selectCartTotalQuantity } from "@/store/features/cart/cart-slice";
 
 function SearchIcon() {
   return (
@@ -76,6 +78,7 @@ export function StorefrontHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isLoaded, userId } = useAuth();
   const { user } = useUser();
+  const totalCartQuantity = useAppSelector(selectCartTotalQuantity);
   const role = getRoleFromMetadata(user?.publicMetadata?.role);
   const isSignedIn = Boolean(userId);
   const showAdminLink = isAdminRole(role);
@@ -111,16 +114,21 @@ export function StorefrontHeader() {
           </div>
 
           <div className="hidden items-center gap-2 md:flex">
-            <button
+            <Link
               aria-label="Open cart"
               className={buttonVariants({
-                className: "h-11 w-11 rounded-full px-0",
+                className: "relative h-11 w-11 rounded-full px-0",
                 variant: "outline",
               })}
-              type="button"
+              href={ROUTES.storefront.cart}
             >
               <CartIcon />
-            </button>
+              {totalCartQuantity > 0 ? (
+                <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-[11px] font-semibold text-accent-foreground">
+                  {totalCartQuantity}
+                </span>
+              ) : null}
+            </Link>
             {!isLoaded ? (
               <div className="h-11 w-24 rounded-full bg-muted" />
             ) : null}
@@ -219,13 +227,15 @@ export function StorefrontHeader() {
               ))}
             </nav>
             <div className="flex gap-3">
-              <button
+              <Link
                 className={buttonVariants({ className: "flex-1", variant: "outline" })}
-                type="button"
+                href={ROUTES.storefront.cart}
+                onClick={() => setMobileMenuOpen(false)}
               >
                 <CartIcon />
                 Cart
-              </button>
+                {totalCartQuantity > 0 ? ` (${totalCartQuantity})` : ""}
+              </Link>
               {!isLoaded ? (
                 <div className="h-11 flex-1 rounded-full bg-muted" />
               ) : null}
