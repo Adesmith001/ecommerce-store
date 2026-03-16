@@ -1,0 +1,204 @@
+import type { Brand, Category, Product } from "@/types/catalog";
+
+export const mockBrands: Brand[] = [
+  {
+    id: "brand-aster-living",
+    name: "Aster Living",
+    slug: "aster-living",
+    description: "Thoughtful essentials for home, wardrobe, and daily rituals.",
+    featured: true,
+    logo: null,
+  },
+  {
+    id: "brand-north-harbor",
+    name: "North Harbor",
+    slug: "north-harbor",
+    description: "Minimal design with durable materials and clean lines.",
+    featured: false,
+    logo: null,
+  },
+] as const;
+
+export const mockCategories: Category[] = [
+  {
+    id: "category-wardrobe-refresh",
+    name: "Wardrobe Refresh",
+    slug: "wardrobe-refresh",
+    description: "Versatile fashion staples curated for effortless everyday styling.",
+    image: null,
+    parentCategory: null,
+    featured: true,
+  },
+  {
+    id: "category-home-decor",
+    name: "Home & Decor",
+    slug: "home-decor",
+    description: "Warm details, functional accents, and elevated pieces for your space.",
+    image: null,
+    parentCategory: null,
+    featured: true,
+  },
+  {
+    id: "category-beauty-rituals",
+    name: "Beauty Rituals",
+    slug: "beauty-rituals",
+    description: "Self-care picks that bring polish, ease, and a little indulgence.",
+    image: null,
+    parentCategory: null,
+    featured: false,
+  },
+] as const;
+
+export const mockProducts: Product[] = [
+  {
+    id: "product-structured-daily-tote",
+    name: "Structured Daily Tote",
+    slug: "structured-daily-tote",
+    sku: "AST-TOTE-001",
+    price: 84,
+    salePrice: 72,
+    stock: 24,
+    images: [],
+    category: {
+      id: "category-wardrobe-refresh",
+      name: "Wardrobe Refresh",
+      slug: "wardrobe-refresh",
+    },
+    brand: {
+      id: "brand-aster-living",
+      name: "Aster Living",
+      slug: "aster-living",
+    },
+    featured: true,
+    tags: ["bags", "featured", "best-seller"],
+    ratingSummary: {
+      average: 4.8,
+      max: 5,
+    },
+    reviewCount: 38,
+    specifications: [
+      { id: "spec-material", label: "Material", value: "Structured canvas" },
+      { id: "spec-size", label: "Size", value: "Medium" },
+    ],
+    variants: [
+      { id: "variant-sand", name: "Color", value: "Sand", stock: 10 },
+      { id: "variant-ink", name: "Color", value: "Ink", stock: 14 },
+    ],
+    shortDescription: "A polished everyday tote with room for your essentials.",
+    fullDescription:
+      "Designed for everyday carry, this structured tote balances minimal lines with practical capacity and durable construction.",
+    status: "active",
+  },
+  {
+    id: "product-signature-lounge-set",
+    name: "Signature Lounge Set",
+    slug: "signature-lounge-set",
+    sku: "AST-APP-014",
+    price: 112,
+    salePrice: null,
+    stock: 16,
+    images: [],
+    category: {
+      id: "category-wardrobe-refresh",
+      name: "Wardrobe Refresh",
+      slug: "wardrobe-refresh",
+    },
+    brand: {
+      id: "brand-north-harbor",
+      name: "North Harbor",
+      slug: "north-harbor",
+    },
+    featured: true,
+    tags: ["apparel", "loungewear"],
+    ratingSummary: {
+      average: 4.6,
+      max: 5,
+    },
+    reviewCount: 19,
+    specifications: [
+      { id: "spec-fabric", label: "Fabric", value: "Cotton blend" },
+      { id: "spec-fit", label: "Fit", value: "Relaxed" },
+    ],
+    variants: [
+      { id: "variant-sm", name: "Size", value: "S", stock: 5 },
+      { id: "variant-md", name: "Size", value: "M", stock: 6 },
+      { id: "variant-lg", name: "Size", value: "L", stock: 5 },
+    ],
+    shortDescription: "Soft, elevated loungewear built for comfort and repeat wear.",
+    fullDescription:
+      "This coordinated lounge set brings premium fabric, a relaxed silhouette, and a versatile finish that transitions beyond home.",
+    status: "active",
+  },
+  {
+    id: "product-ceramic-glow-diffuser",
+    name: "Ceramic Glow Diffuser",
+    slug: "ceramic-glow-diffuser",
+    sku: "AST-HME-009",
+    price: 46,
+    salePrice: 39,
+    stock: 31,
+    images: [],
+    category: {
+      id: "category-home-decor",
+      name: "Home & Decor",
+      slug: "home-decor",
+    },
+    brand: {
+      id: "brand-aster-living",
+      name: "Aster Living",
+      slug: "aster-living",
+    },
+    featured: false,
+    tags: ["home", "decor", "wellness"],
+    ratingSummary: {
+      average: 4.7,
+      max: 5,
+    },
+    reviewCount: 27,
+    specifications: [
+      { id: "spec-finish", label: "Finish", value: "Matte ceramic" },
+      { id: "spec-power", label: "Power", value: "USB-C" },
+    ],
+    variants: [],
+    shortDescription: "Ambient home fragrance with a calming ceramic finish.",
+    fullDescription:
+      "A softly lit diffuser designed to fit clean interiors while supporting your daily scent ritual.",
+    status: "active",
+  },
+  {
+    id: "product-hydration-repair-serum",
+    name: "Hydration Repair Serum",
+    slug: "hydration-repair-serum",
+    sku: "AST-BEA-004",
+    price: 38,
+    salePrice: null,
+    stock: 44,
+    images: [],
+    category: {
+      id: "category-beauty-rituals",
+      name: "Beauty Rituals",
+      slug: "beauty-rituals",
+    },
+    brand: {
+      id: "brand-aster-living",
+      name: "Aster Living",
+      slug: "aster-living",
+    },
+    featured: true,
+    tags: ["beauty", "serum", "skincare"],
+    ratingSummary: {
+      average: 4.9,
+      max: 5,
+    },
+    reviewCount: 52,
+    specifications: [
+      { id: "spec-volume", label: "Volume", value: "30ml" },
+      { id: "spec-skin", label: "Skin Type", value: "All skin types" },
+    ],
+    variants: [],
+    shortDescription: "A lightweight serum focused on hydration and barrier support.",
+    fullDescription:
+      "Packed with moisture-focused ingredients, this serum is positioned as a daily-use staple in your skincare lineup.",
+    status: "active",
+  },
+];

@@ -148,7 +148,6 @@ export function StorefrontHeader() {
                 ) : null}
                 <div className="flex h-11 items-center rounded-full border border-border bg-white px-1.5">
                   <UserButton
-                    afterSignOutUrl={ROUTES.storefront.home}
                     appearance={{
                       elements: {
                         avatarBox: "h-8 w-8",
@@ -252,7 +251,7 @@ export function StorefrontHeader() {
                     </Link>
                   ) : null}
                   <div className="flex flex-1 items-center justify-center rounded-full border border-border bg-white px-4 py-2">
-                    <UserButton afterSignOutUrl={ROUTES.storefront.home} />
+                    <UserButton />
                   </div>
                 </>
               ) : null}
