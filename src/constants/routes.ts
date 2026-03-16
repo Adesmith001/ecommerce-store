@@ -3,6 +3,7 @@ export const ROUTES = {
     home: "/",
     products: "/products",
     collections: "/collections",
+    designSystem: "/design-system",
   },
   admin: {
     dashboard: "/admin",
@@ -19,6 +20,7 @@ export const STOREFRONT_NAV_LINKS = [
   { label: "Home", href: ROUTES.storefront.home },
   { label: "Products", href: ROUTES.storefront.products },
   { label: "Collections", href: ROUTES.storefront.collections },
+  { label: "Design System", href: ROUTES.storefront.designSystem },
   { label: "Admin", href: ROUTES.admin.dashboard },
 ] as const;
 

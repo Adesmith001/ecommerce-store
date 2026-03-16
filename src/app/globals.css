@@ -1,23 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f6f4ef;
-  --foreground: #171717;
-  --muted: #ebe6db;
-  --muted-foreground: #5b554b;
-  --border: #d9d1c2;
-  --card: #fffdf8;
-  --card-foreground: #171717;
-  --primary: #1e3a2f;
-  --primary-foreground: #f8f5ee;
-  --accent: #c96f3b;
-  --accent-foreground: #fffaf3;
-  --danger: #c53b2c;
+  --background: #ffffff;
+  --foreground: #111827;
+  --surface: #f3f4f6;
+  --surface-foreground: #111827;
+  --muted: #eef2f7;
+  --muted-foreground: #6b7280;
+  --border: #d1d5db;
+  --card: #ffffff;
+  --card-foreground: #111827;
+  --primary: #2563eb;
+  --primary-foreground: #eff6ff;
+  --accent: #f97316;
+  --accent-foreground: #fff7ed;
+  --success: #16a34a;
+  --success-foreground: #f0fdf4;
+  --danger: #dc2626;
+  --danger-foreground: #fef2f2;
+  --ring: color-mix(in srgb, var(--primary) 25%, white);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-foreground: var(--surface-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
@@ -27,7 +35,11 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
   --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+  --color-ring: var(--ring);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -44,6 +56,9 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), sans-serif;
+  background-image:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 24%),
+    radial-gradient(circle at top right, rgba(249, 115, 22, 0.08), transparent 18%);
 }
 
 a,
@@ -59,10 +74,46 @@ button {
   background: color-mix(in srgb, var(--accent) 25%, white);
 }
 
+.ui-focus {
+  @apply outline-none ring-0 focus-visible:border-primary focus-visible:ring-4 focus-visible:ring-ring;
+}
+
 .app-shell {
   @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
 }
 
+.section-space {
+  @apply py-12 sm:py-16 lg:py-20;
+}
+
+.content-stack {
+  @apply space-y-6 sm:space-y-8;
+}
+
+.text-display {
+  @apply text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl;
+}
+
+.text-heading {
+  @apply text-2xl font-semibold tracking-tight sm:text-3xl;
+}
+
+.text-body {
+  @apply text-base leading-7 text-muted-foreground;
+}
+
 .surface {
+  @apply rounded-3xl border bg-surface text-surface-foreground shadow-sm;
+}
+
+.card-shell {
   @apply rounded-3xl border bg-card text-card-foreground shadow-sm;
+}
+
+.field-base {
+  @apply ui-focus flex w-full rounded-2xl border bg-white px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+.eyebrow {
+  @apply text-xs font-semibold uppercase tracking-[0.28em] text-primary;
 }

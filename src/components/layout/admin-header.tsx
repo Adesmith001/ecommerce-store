@@ -1,18 +1,20 @@
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 export function AdminHeader() {
   return (
-    <header className="surface flex items-center justify-between px-6 py-4">
-      <div>
+    <header className="card-shell flex items-center justify-between px-6 py-4">
+      <div className="space-y-2">
+        <Badge variant="outline">Operations</Badge>
+        <div>
         <p className="text-sm text-muted-foreground">Admin workspace</p>
         <h1 className="text-xl font-semibold">Dashboard</h1>
+        </div>
       </div>
-      <Link
-        className="rounded-full border border-border px-4 py-2 text-sm font-medium"
-        href={ROUTES.storefront.home}
-      >
-        View storefront
+      <Link href={ROUTES.storefront.home}>
+        <Button variant="outline">View storefront</Button>
       </Link>
     </header>
   );
