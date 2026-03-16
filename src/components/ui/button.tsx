@@ -25,6 +25,23 @@ const sizeClasses: Record<ButtonSize, string> = {
   lg: "h-12 px-6 text-base",
 };
 
+export function buttonVariants({
+  className,
+  size = "md",
+  variant = "primary",
+}: {
+  className?: string;
+  size?: ButtonSize;
+  variant?: ButtonVariant;
+}) {
+  return cn(
+    "ui-focus inline-flex items-center justify-center gap-2 rounded-full font-medium whitespace-nowrap shadow-sm disabled:pointer-events-none disabled:opacity-50",
+    variantClasses[variant],
+    sizeClasses[size],
+    className,
+  );
+}
+
 export function Button({
   className,
   type = "button",
@@ -34,12 +51,7 @@ export function Button({
 }: ButtonProps) {
   return (
     <button
-      className={cn(
-        "ui-focus inline-flex items-center justify-center gap-2 rounded-full font-medium whitespace-nowrap shadow-sm disabled:pointer-events-none disabled:opacity-50",
-        variantClasses[variant],
-        sizeClasses[size],
-        className,
-      )}
+      className={buttonVariants({ className, size, variant })}
       type={type}
       {...props}
     />

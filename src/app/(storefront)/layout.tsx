@@ -12,7 +12,7 @@ export default function StorefrontLayout({
   return (
     <div className="flex min-h-screen flex-col">
       <StorefrontHeader />
-      <main className="flex-1 py-10">{children}</main>
+      <main className="flex-1">{children}</main>
       <StorefrontFooter />
     </div>
   );

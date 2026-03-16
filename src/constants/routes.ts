@@ -1,8 +1,18 @@
 export const ROUTES = {
   storefront: {
     home: "/",
+    shop: "/shop",
+    categories: "/categories",
+    category: (slug: string) => `/categories/${slug}`,
     products: "/products",
+    product: (slug: string) => `/products/${slug}`,
     collections: "/collections",
+    contact: "/contact",
+    faq: "/faq",
+    policies: "/policies",
+    shippingPolicy: "/policies/shipping",
+    returnsPolicy: "/policies/returns",
+    privacyPolicy: "/policies/privacy",
     designSystem: "/design-system",
   },
   admin: {
@@ -18,10 +28,10 @@ export const ROUTES = {
 
 export const STOREFRONT_NAV_LINKS = [
   { label: "Home", href: ROUTES.storefront.home },
-  { label: "Products", href: ROUTES.storefront.products },
-  { label: "Collections", href: ROUTES.storefront.collections },
-  { label: "Design System", href: ROUTES.storefront.designSystem },
-  { label: "Admin", href: ROUTES.admin.dashboard },
+  { label: "Shop", href: ROUTES.storefront.shop },
+  { label: "Categories", href: ROUTES.storefront.categories },
+  { label: "Contact", href: ROUTES.storefront.contact },
+  { label: "FAQ", href: ROUTES.storefront.faq },
 ] as const;
 
 export const ADMIN_NAV_LINKS = [

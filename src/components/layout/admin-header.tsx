@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 
 export function AdminHeader() {
   return (
@@ -13,8 +13,8 @@ export function AdminHeader() {
         <h1 className="text-xl font-semibold">Dashboard</h1>
         </div>
       </div>
-      <Link href={ROUTES.storefront.home}>
-        <Button variant="outline">View storefront</Button>
+      <Link className={buttonVariants({ variant: "outline" })} href={ROUTES.storefront.home}>
+        View storefront
       </Link>
     </header>
   );
