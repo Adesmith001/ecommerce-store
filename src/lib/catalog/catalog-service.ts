@@ -178,6 +178,13 @@ export async function getRelatedProducts(slug: string, limit = 4) {
         score += 4;
       }
 
+      if (
+        product.brand?.slug &&
+        product.brand.slug === currentProduct.brand?.slug
+      ) {
+        score += 2;
+      }
+
       const overlappingTags = product.tags.filter((tag) =>
         currentProduct.tags.includes(tag),
       ).length;

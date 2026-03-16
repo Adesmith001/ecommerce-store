@@ -28,7 +28,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Card className="group overflow-hidden p-0">
-      <div className="relative aspect-[4/5] overflow-hidden rounded-t-[1.5rem] bg-[linear-gradient(180deg,#eff6ff,#f9fafb)]">
+      <div className="relative aspect-4/5 overflow-hidden rounded-t-3xl bg-[linear-gradient(180deg,#eff6ff,#f9fafb)]">
         {primaryImage?.url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -82,7 +82,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
         <div className="flex items-center justify-between gap-4 text-sm">
           <span className="font-medium text-foreground">
-            ★ {product.ratingSummary.average.toFixed(1)}
+            Rating {product.ratingSummary.average.toFixed(1)}
           </span>
           <span className="text-muted-foreground">
             {product.reviewCount} review{product.reviewCount === 1 ? "" : "s"}
