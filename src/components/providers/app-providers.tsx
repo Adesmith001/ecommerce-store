@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ROUTES } from "@/constants/routes";
 import { ReduxProvider } from "@/components/providers/redux-provider";
 
 type AppProvidersProps = {
@@ -10,7 +11,11 @@ type AppProvidersProps = {
 
 export function AppProviders({ children }: AppProvidersProps) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      afterSignOutUrl={ROUTES.storefront.home}
+      signInUrl={ROUTES.auth.signIn}
+      signUpUrl={ROUTES.auth.signUp}
+    >
       <ReduxProvider>{children}</ReduxProvider>
     </ClerkProvider>
   );

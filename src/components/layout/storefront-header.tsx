@@ -1,10 +1,16 @@
- "use client";
+"use client";
 
 import Link from "next/link";
 import { useState } from "react";
+import {
+  UserButton,
+  useAuth,
+  useUser,
+} from "@clerk/nextjs";
 import { APP_NAME } from "@/constants/app";
-import { STOREFRONT_NAV_LINKS } from "@/constants/routes";
+import { ROUTES, STOREFRONT_NAV_LINKS } from "@/constants/routes";
 import { STORE_TAGLINE } from "@/constants/storefront";
+import { getRoleFromMetadata, isAdminRole } from "@/lib/auth/roles";
 import { buttonVariants } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Input } from "@/components/ui/input";
@@ -68,6 +74,11 @@ function MenuIcon() {
 
 export function StorefrontHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isLoaded, userId } = useAuth();
+  const { user } = useUser();
+  const role = getRoleFromMetadata(user?.publicMetadata?.role);
+  const isSignedIn = Boolean(userId);
+  const showAdminLink = isAdminRole(role);
 
   return (
     <header className="sticky top-0 z-20 border-b border-border bg-white/85 backdrop-blur">
@@ -109,15 +120,45 @@ export function StorefrontHeader() {
             >
               <CartIcon />
             </button>
-            <Link
-              className={buttonVariants({
-                className: "h-11 w-11 rounded-full px-0",
-                variant: "outline",
-              })}
-              href="/sign-in"
-            >
-              <AccountIcon />
-            </Link>
+            {!isLoaded ? (
+              <div className="h-11 w-24 rounded-full bg-muted" />
+            ) : null}
+            {isLoaded && !isSignedIn ? (
+              <>
+                <Link
+                  className={buttonVariants({ variant: "outline" })}
+                  href={ROUTES.auth.signIn}
+                >
+                  Sign in
+                </Link>
+                <Link className={buttonVariants({})} href={ROUTES.auth.signUp}>
+                  Sign up
+                </Link>
+              </>
+            ) : null}
+            {isLoaded && isSignedIn ? (
+              <>
+                {showAdminLink ? (
+                  <Link
+                    className={buttonVariants({ variant: "outline" })}
+                    href={ROUTES.admin.dashboard}
+                  >
+                    Admin
+                  </Link>
+                ) : null}
+                <div className="flex h-11 items-center rounded-full border border-border bg-white px-1.5">
+                  <UserButton
+                    afterSignOutUrl={ROUTES.storefront.home}
+                    appearance={{
+                      elements: {
+                        avatarBox: "h-8 w-8",
+                        userButtonPopoverActionButtonIcon: "text-primary",
+                      },
+                    }}
+                  />
+                </div>
+              </>
+            ) : null}
           </div>
 
           <button
@@ -184,14 +225,37 @@ export function StorefrontHeader() {
                 <CartIcon />
                 Cart
               </button>
-              <Link
-                className={buttonVariants({ className: "flex-1", variant: "primary" })}
-                href="/sign-in"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <AccountIcon />
-                Sign in
-              </Link>
+              {!isLoaded ? (
+                <div className="h-11 flex-1 rounded-full bg-muted" />
+              ) : null}
+              {isLoaded && !isSignedIn ? (
+                <>
+                  <Link
+                    className={buttonVariants({ className: "flex-1", variant: "primary" })}
+                    href={ROUTES.auth.signIn}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <AccountIcon />
+                    Sign in
+                  </Link>
+                </>
+              ) : null}
+              {isLoaded && isSignedIn ? (
+                <>
+                  {showAdminLink ? (
+                    <Link
+                      className={buttonVariants({ className: "flex-1", variant: "outline" })}
+                      href={ROUTES.admin.dashboard}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Admin
+                    </Link>
+                  ) : null}
+                  <div className="flex flex-1 items-center justify-center rounded-full border border-border bg-white px-4 py-2">
+                    <UserButton afterSignOutUrl={ROUTES.storefront.home} />
+                  </div>
+                </>
+              ) : null}
             </div>
           </div>
         ) : null}
