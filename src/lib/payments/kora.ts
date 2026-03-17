@@ -5,6 +5,7 @@ import { APP_NAME } from "@/constants/app";
 import { ROUTES } from "@/constants/routes";
 import { decrementInventoryForOrderItems } from "@/lib/catalog/catalog-inventory";
 import { incrementCouponUsage } from "@/lib/coupons/coupon-service";
+import { createPaymentConfirmedNotifications } from "@/lib/notifications/notification-service";
 import {
   getOrderByPaymentReference,
   markOrderInventoryAdjusted,
@@ -248,6 +249,16 @@ export async function verifyAndFinalizeKoraOrder(paymentReference: string) {
       } catch (error) {
         console.error("Failed to increment coupon usage after payment verification.", error);
       }
+    }
+
+    try {
+      await createPaymentConfirmedNotifications({
+        clerkId: order.clerkId,
+        orderId: order.id,
+        orderNumber: order.orderNumber,
+      });
+    } catch (error) {
+      console.error("Failed to create payment confirmed notifications.", error);
     }
 
     order = await markOrderInventoryAdjusted(paymentReference);

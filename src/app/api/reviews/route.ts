@@ -1,6 +1,7 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { getProductsByIds } from "@/lib/catalog/catalog-service";
+import { createReviewSubmittedNotification } from "@/lib/notifications/notification-service";
 import {
   createReview,
   getReviewDataForProduct,
@@ -128,6 +129,16 @@ export async function POST(request: Request) {
       rating: payload.rating!,
       title: payload.title?.trim(),
     });
+
+    try {
+      await createReviewSubmittedNotification({
+        productId: product.id,
+        productName: product.name,
+        reviewerName: fullName,
+      });
+    } catch (error) {
+      console.error("Failed to create review notification.", error);
+    }
 
     const reviewData = await getReviewDataForProduct(product.id);
     const eligibility = await getReviewEligibility({

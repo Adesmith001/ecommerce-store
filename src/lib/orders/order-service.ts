@@ -3,6 +3,10 @@ import "server-only";
 import { Query } from "appwrite";
 import { buildAppwriteApiUrl, getAppwriteErrorMessage } from "@/lib/appwrite/server-api";
 import { appwriteConfig } from "@/lib/appwrite/config";
+import {
+  createAdminOrderPlacedNotification,
+  createCustomerOrderPlacedNotification,
+} from "@/lib/notifications/notification-service";
 import type { CheckoutPricing } from "@/types/checkout";
 import type {
   CreateOrderInput,
@@ -276,8 +280,26 @@ export async function createPendingOrder(input: CreateOrderInput) {
   }
 
   const document = (await response.json()) as AppwriteOrderDocument;
+  const order = toOrderRecord(document);
 
-  return toOrderRecord(document);
+  try {
+    await Promise.all([
+      createCustomerOrderPlacedNotification({
+        clerkId: order.clerkId,
+        orderId: order.id,
+        orderNumber: order.orderNumber,
+      }),
+      createAdminOrderPlacedNotification({
+        customerName: order.customer.fullName,
+        orderId: order.id,
+        orderNumber: order.orderNumber,
+      }),
+    ]);
+  } catch (error) {
+    console.error("Failed to create order placed notifications.", error);
+  }
+
+  return order;
 }
 
 export async function getOrderByPaymentReference(reference: string) {

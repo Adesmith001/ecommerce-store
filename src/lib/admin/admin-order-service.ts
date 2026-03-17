@@ -3,6 +3,7 @@ import "server-only";
 import { Query } from "appwrite";
 import { buildAppwriteApiUrl, getAppwriteErrorMessage } from "@/lib/appwrite/server-api";
 import { appwriteConfig } from "@/lib/appwrite/config";
+import { createOrderStatusUpdatedNotification } from "@/lib/notifications/notification-service";
 import type { CheckoutPricing } from "@/types/checkout";
 import type {
   AdminOrderListItem,
@@ -310,6 +311,18 @@ export async function updateAdminOrderStatus(input: {
   }
 
   const document = (await response.json()) as AppwriteOrderDocument;
+  const order = toOrderRecord(document);
 
-  return toOrderRecord(document);
+  try {
+    await createOrderStatusUpdatedNotification({
+      clerkId: order.clerkId,
+      nextStatus: order.orderStatus,
+      orderId: order.id,
+      orderNumber: order.orderNumber,
+    });
+  } catch (error) {
+    console.error("Failed to create order status notification.", error);
+  }
+
+  return order;
 }

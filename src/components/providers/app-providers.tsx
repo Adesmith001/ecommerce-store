@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ROUTES } from "@/constants/routes";
 import { ReduxProvider } from "@/components/providers/redux-provider";
@@ -18,7 +18,9 @@ export function AppProviders({ children }: AppProvidersProps) {
       signUpUrl={ROUTES.auth.signUp}
     >
       <ReduxProvider>
-        <WishlistProvider>{children}</WishlistProvider>
+        <Suspense fallback={children}>
+          <WishlistProvider>{children}</WishlistProvider>
+        </Suspense>
       </ReduxProvider>
     </ClerkProvider>
   );

@@ -11,6 +11,7 @@ export const appwriteConfig = {
   bucketId: APPWRITE_STORAGE_BUCKET_IDS.media,
   addressesCollectionId: APPWRITE_COLLECTION_IDS.addresses,
   ordersCollectionId: APPWRITE_COLLECTION_IDS.orders,
+  notificationsCollectionId: APPWRITE_COLLECTION_IDS.notifications,
   reviewsCollectionId: APPWRITE_COLLECTION_IDS.reviews,
   userProfilesCollectionId: APPWRITE_COLLECTION_IDS.userProfiles,
   wishlistsCollectionId: APPWRITE_COLLECTION_IDS.wishlists,

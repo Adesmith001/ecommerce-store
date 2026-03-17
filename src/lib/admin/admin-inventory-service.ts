@@ -3,6 +3,7 @@ import "server-only";
 import { Query } from "appwrite";
 import { PRODUCT_LOW_STOCK_THRESHOLD } from "@/constants/admin";
 import { appwriteConfig } from "@/lib/appwrite/config";
+import { createLowStockAlert } from "@/lib/notifications/notification-service";
 import {
   buildAppwriteApiUrl,
   getAppwriteErrorMessage,
@@ -114,6 +115,17 @@ export async function updateAdminProductStock(productId: string, stock: number) 
   }
 
   const document = (await response.json()) as AppwriteProductDocument;
+  const product = mapInventoryProduct(document);
 
-  return mapInventoryProduct(document);
+  try {
+    await createLowStockAlert({
+      productId: product.id,
+      productName: product.name,
+      stock: product.stock,
+    });
+  } catch (error) {
+    console.error("Failed to create inventory low stock alert.", error);
+  }
+
+  return product;
 }

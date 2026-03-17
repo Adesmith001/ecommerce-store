@@ -3,6 +3,7 @@ import "server-only";
 import type { CartItem } from "@/types/cart";
 import { buildAppwriteApiUrl, getAppwriteErrorMessage } from "@/lib/appwrite/server-api";
 import { appwriteConfig } from "@/lib/appwrite/config";
+import { createLowStockAlert } from "@/lib/notifications/notification-service";
 
 type AppwriteProductStockDocument = {
   $id: string;
@@ -99,5 +100,15 @@ export async function decrementInventoryForOrderItems(items: CartItem[]) {
     const nextStock = Math.max(currentStock - item.quantity, 0);
 
     await updateProductStock(item.productId, nextStock);
+
+    try {
+      await createLowStockAlert({
+        productId: item.productId,
+        productName: item.name,
+        stock: nextStock,
+      });
+    } catch (error) {
+      console.error("Failed to create low stock alert.", error);
+    }
   }
 }

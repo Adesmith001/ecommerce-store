@@ -7,6 +7,7 @@ export const ROUTES = {
     accountOrders: "/account/orders",
     accountOrder: (orderId: string) => `/account/orders/${orderId}`,
     accountWishlist: "/account/wishlist",
+    accountNotifications: "/account/notifications",
     accountAddresses: "/account/addresses",
     accountSettings: "/account/settings",
     orders: "/orders",
@@ -33,6 +34,7 @@ export const ROUTES = {
     dashboard: "/admin",
     inventory: "/admin/inventory",
     shipping: "/admin/shipping",
+    notifications: "/admin/notifications",
     products: "/admin/products",
     coupons: "/admin/coupons",
     orders: "/admin/orders",
@@ -49,17 +51,15 @@ export const ROUTES = {
 
 export const STOREFRONT_NAV_LINKS = [
   { label: "Home", href: ROUTES.storefront.home },
-  { label: "Cart", href: ROUTES.storefront.cart },
   { label: "Shop", href: ROUTES.storefront.shop },
   { label: "Categories", href: ROUTES.storefront.categories },
-  { label: "Contact", href: ROUTES.storefront.contact },
-  { label: "FAQ", href: ROUTES.storefront.faq },
 ] as const;
 
 export const ADMIN_NAV_LINKS = [
   { label: "Overview", href: ROUTES.admin.dashboard },
   { label: "Inventory", href: ROUTES.admin.inventory },
   { label: "Shipping", href: ROUTES.admin.shipping },
+  { label: "Notifications", href: ROUTES.admin.notifications },
   { label: "Products", href: ROUTES.admin.products },
   { label: "Coupons", href: ROUTES.admin.coupons },
   { label: "Categories", href: ROUTES.admin.categories },
@@ -74,6 +74,7 @@ export const ACCOUNT_NAV_LINKS = [
   { label: "Profile", href: ROUTES.storefront.accountProfile },
   { label: "Orders", href: ROUTES.storefront.accountOrders },
   { label: "Wishlist", href: ROUTES.storefront.accountWishlist },
+  { label: "Notifications", href: ROUTES.storefront.accountNotifications },
   { label: "Addresses", href: ROUTES.storefront.accountAddresses },
   { label: "Settings", href: ROUTES.storefront.accountSettings },
 ] as const;

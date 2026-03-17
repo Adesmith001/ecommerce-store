@@ -27,6 +27,10 @@ const ADMIN_PAGE_META: Record<string, { eyebrow: string; title: string }> = {
     eyebrow: "Shipping",
     title: "Delivery settings",
   },
+  [ROUTES.admin.notifications]: {
+    eyebrow: "Notifications",
+    title: "Operational alerts",
+  },
   [ROUTES.admin.coupons]: {
     eyebrow: "Coupons",
     title: "Promotion management",
