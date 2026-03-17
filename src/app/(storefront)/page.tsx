@@ -123,7 +123,7 @@ export default function StorefrontHomePage() {
                       View all catalog
                     </Link>
                   </div>
-                  <div className="rounded-[2rem] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.86),transparent_28%),linear-gradient(180deg,#d8ebf6,#edf5f9)] p-5">
+                  <div className="rounded-4xl bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.86),transparent_28%),linear-gradient(180deg,#d8ebf6,#edf5f9)] p-5">
                     <div className="h-full rounded-[1.8rem] border border-white/80 bg-white/60 p-4">
                       <div className="headline-marquee text-center">Malibu</div>
                     </div>
@@ -131,7 +131,7 @@ export default function StorefrontHomePage() {
                 </div>
               </Card>
 
-              <Card className="space-y-4 rounded-[2rem] p-6">
+              <Card className="space-y-4 rounded-4xl p-6">
                 <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
                   Payment in 3x
                 </p>
@@ -143,7 +143,7 @@ export default function StorefrontHomePage() {
                 </p>
               </Card>
 
-              <Card className="space-y-4 rounded-[2rem] p-6">
+              <Card className="space-y-4 rounded-4xl p-6">
                 <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
                   Coupon drop
                 </p>
@@ -216,7 +216,7 @@ export default function StorefrontHomePage() {
       >
         <div className="grid gap-4 lg:grid-cols-3">
           {TRUST_HIGHLIGHTS.slice(0, 3).map((item) => (
-            <Card key={item} className="rounded-[2rem] p-6">
+            <Card key={item} className="rounded-4xl p-6">
               <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
                 Promise
               </p>
@@ -230,7 +230,7 @@ export default function StorefrontHomePage() {
         <div className="grid gap-6 lg:grid-cols-2">
           <Card className="overflow-hidden p-0">
             <div className="grid gap-6 p-6 sm:grid-cols-[0.9fr_1.1fr] sm:p-8">
-              <div className="rounded-[2rem] bg-[linear-gradient(180deg,#f4f7fb,#ecf0f6)] p-5">
+              <div className="rounded-4xl bg-[linear-gradient(180deg,#f4f7fb,#ecf0f6)] p-5">
                 <div className="h-full rounded-[1.8rem] border border-white/80 bg-white/72" />
               </div>
               <div className="space-y-4">
@@ -262,7 +262,7 @@ export default function StorefrontHomePage() {
                   campaigns, imagery, and merchandising rules.
                 </p>
               </div>
-              <div className="rounded-[2rem] bg-[linear-gradient(180deg,#f7ede8,#f2dcd4)] p-5">
+              <div className="rounded-4xl bg-[linear-gradient(180deg,#f7ede8,#f2dcd4)] p-5">
                 <div className="h-full rounded-[1.8rem] border border-white/80 bg-white/72" />
               </div>
             </div>

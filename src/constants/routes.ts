@@ -33,6 +33,7 @@ export const ROUTES = {
     dashboard: "/admin",
     products: "/admin/products",
     orders: "/admin/orders",
+    customers: "/admin/customers",
   },
   auth: {
     signIn: "/sign-in",
@@ -53,6 +54,7 @@ export const ADMIN_NAV_LINKS = [
   { label: "Overview", href: ROUTES.admin.dashboard },
   { label: "Products", href: ROUTES.admin.products },
   { label: "Orders", href: ROUTES.admin.orders },
+  { label: "Customers", href: ROUTES.admin.customers },
 ] as const;
 
 export const ACCOUNT_NAV_LINKS = [

@@ -6,3 +6,4 @@ export * from "@/types/catalog";
 export * from "@/types/order";
 export * from "@/types/wishlist";
 export * from "@/types/review";
+export * from "@/types/admin";

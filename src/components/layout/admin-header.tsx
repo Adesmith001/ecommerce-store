@@ -1,21 +1,73 @@
+"use client";
+
 import Link from "next/link";
-import { ROUTES } from "@/constants/routes";
+import { usePathname } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
+import { ADMIN_NAV_LINKS, ROUTES } from "@/constants/routes";
+
+const ADMIN_PAGE_META: Record<string, { eyebrow: string; title: string }> = {
+  [ROUTES.admin.dashboard]: {
+    eyebrow: "Overview",
+    title: "Dashboard",
+  },
+  [ROUTES.admin.orders]: {
+    eyebrow: "Orders",
+    title: "Order operations",
+  },
+  [ROUTES.admin.products]: {
+    eyebrow: "Products",
+    title: "Catalog operations",
+  },
+  [ROUTES.admin.customers]: {
+    eyebrow: "Customers",
+    title: "Customer workspace",
+  },
+};
 
 export function AdminHeader() {
+  const pathname = usePathname();
+  const pageMeta = ADMIN_PAGE_META[pathname] ?? ADMIN_PAGE_META[ROUTES.admin.dashboard];
+
   return (
-    <header className="card-shell flex items-center justify-between px-6 py-4">
-      <div className="space-y-2">
-        <Badge variant="outline">Operations</Badge>
-        <div>
-        <p className="text-sm text-muted-foreground">Admin workspace</p>
-        <h1 className="text-xl font-semibold">Dashboard</h1>
+    <header className="space-y-4">
+      <div className="card-shell flex flex-col gap-4 px-6 py-5 md:flex-row md:items-center md:justify-between">
+        <div className="space-y-2">
+          <Badge variant="outline">{pageMeta.eyebrow}</Badge>
+          <div>
+            <p className="text-sm text-muted-foreground">Admin workspace</p>
+            <h1 className="font-display text-3xl font-semibold tracking-[-0.05em]">
+              {pageMeta.title}
+            </h1>
+          </div>
         </div>
+        <Link className={buttonVariants({ variant: "outline" })} href={ROUTES.storefront.home}>
+          View storefront
+        </Link>
       </div>
-      <Link className={buttonVariants({ variant: "outline" })} href={ROUTES.storefront.home}>
-        View storefront
-      </Link>
+
+      <div className="card-shell flex gap-2 overflow-x-auto p-3 lg:hidden">
+        {ADMIN_NAV_LINKS.map((link) => {
+          const active =
+            link.href === "/admin"
+              ? pathname === link.href
+              : pathname === link.href || pathname.startsWith(`${link.href}/`);
+
+          return (
+            <Link
+              key={link.href}
+              className={
+                active
+                  ? "rounded-full bg-foreground px-4 py-2 text-sm font-medium text-white"
+                  : "rounded-full border border-white/80 bg-white/70 px-4 py-2 text-sm font-medium text-muted-foreground"
+              }
+              href={link.href}
+            >
+              {link.label}
+            </Link>
+          );
+        })}
+      </div>
     </header>
   );
 }
