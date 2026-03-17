@@ -83,12 +83,12 @@ export function CatalogListingView({
   if (!queryState.initialized || isLoading) {
     return (
       <div className="space-y-6">
-        <Skeleton className="h-24 w-full rounded-[2rem]" />
+        <Skeleton className="h-28 w-full rounded-[2.2rem]" />
         <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
-          <Skeleton className="h-[420px] w-full rounded-[2rem]" />
+          <Skeleton className="h-[420px] w-full rounded-[2.2rem]" />
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {Array.from({ length: 6 }).map((_, index) => (
-              <Skeleton key={index} className="h-[420px] w-full rounded-[2rem]" />
+              <Skeleton key={index} className="h-[460px] w-full rounded-[2.2rem]" />
             ))}
           </div>
         </div>

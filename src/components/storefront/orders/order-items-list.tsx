@@ -12,10 +12,10 @@ export function OrderItemsList({ order }: OrderItemsListProps) {
   return (
     <Card className="space-y-6 p-6">
       <div>
-        <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
+        <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
           Purchased items
         </p>
-        <h2 className="mt-2 text-2xl font-semibold tracking-tight">
+        <h2 className="font-display mt-3 text-3xl font-semibold tracking-[-0.05em]">
           What you ordered
         </h2>
       </div>
@@ -28,10 +28,10 @@ export function OrderItemsList({ order }: OrderItemsListProps) {
           return (
             <div
               key={item.productId}
-              className="flex flex-col gap-4 rounded-3xl border border-border p-4 sm:flex-row sm:items-center sm:justify-between"
+              className="flex flex-col gap-4 rounded-[1.7rem] border border-white/80 bg-white/72 p-4 sm:flex-row sm:items-center sm:justify-between"
             >
               <div className="flex items-start gap-4">
-                <div className="h-20 w-20 overflow-hidden rounded-3xl bg-surface">
+                <div className="h-20 w-20 overflow-hidden rounded-[1.4rem] bg-surface">
                   {image ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img

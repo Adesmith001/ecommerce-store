@@ -34,7 +34,14 @@ export function CatalogFilterPanel({
   return (
     <Card className="space-y-5 p-5 sm:p-6">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="text-lg font-semibold">Filters</h2>
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">
+            Refine view
+          </p>
+          <h2 className="font-display mt-2 text-2xl font-semibold tracking-[-0.05em]">
+            Filters
+          </h2>
+        </div>
         <Button onClick={onReset} size="sm" variant="outline">
           Reset
         </Button>
@@ -112,7 +119,7 @@ export function CatalogFilterPanel({
         </div>
       </div>
 
-      <label className="flex items-center gap-3 rounded-2xl border border-border bg-surface px-4 py-3 text-sm font-medium">
+      <label className="flex items-center gap-3 rounded-[1.4rem] border border-white/80 bg-white/72 px-4 py-3 text-sm font-medium">
         <input
           checked={query.featured}
           className="h-4 w-4 accent-[var(--primary)]"

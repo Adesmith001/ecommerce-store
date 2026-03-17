@@ -9,10 +9,10 @@ type CardProps = ComponentPropsWithoutRef<"div"> & {
 };
 
 const cardVariants: Record<CardVariant, string> = {
-  primary: "border-primary/15 bg-white",
-  secondary: "border-accent/15 bg-white",
-  outline: "border-border bg-white",
-  danger: "border-danger/15 bg-white",
+  primary: "border-primary/20",
+  secondary: "border-accent/20",
+  outline: "border-border/80",
+  danger: "border-danger/20",
 };
 
 export function Card({
@@ -49,7 +49,13 @@ export function CardTitle({
   ...props
 }: ComponentPropsWithoutRef<"h3">) {
   return (
-    <h3 className={cn("text-xl font-semibold tracking-tight", className)} {...props}>
+    <h3
+      className={cn(
+        "font-display text-xl font-semibold tracking-[-0.04em] text-foreground",
+        className,
+      )}
+      {...props}
+    >
       {children}
     </h3>
   );

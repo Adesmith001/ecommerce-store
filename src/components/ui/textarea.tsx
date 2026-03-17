@@ -8,10 +8,10 @@ type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
 };
 
 const fieldVariants: Record<FieldVariant, string> = {
-  primary: "border-primary/20 focus-visible:border-primary",
-  secondary: "border-accent/20 focus-visible:border-accent",
-  outline: "border-border bg-white",
-  danger: "border-danger/25 focus-visible:border-danger",
+  primary: "border-primary/18",
+  secondary: "border-accent/18",
+  outline: "border-border/80",
+  danger: "border-danger/20",
 };
 
 export function Textarea({
@@ -23,7 +23,7 @@ export function Textarea({
   return (
     <textarea
       className={cn(
-        "field-base min-h-32 resize-y rounded-3xl py-3.5",
+        "field-base min-h-32 resize-y rounded-[1.6rem] py-3.5",
         fieldVariants[variant],
         className,
       )}

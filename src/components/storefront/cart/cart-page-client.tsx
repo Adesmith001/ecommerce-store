@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { EmptyState } from "@/components/ui/empty-state";
+import { CartSummary } from "@/components/storefront/cart/cart-summary";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ROUTES } from "@/constants/routes";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux";
@@ -18,7 +19,6 @@ import {
   selectCartTotalQuantity,
   updateCartItemQuantity,
 } from "@/store/features/cart/cart-slice";
-import { CartSummary } from "@/components/storefront/cart/cart-summary";
 
 function formatPrice(value: number) {
   return new Intl.NumberFormat("en-US", {
@@ -40,10 +40,10 @@ export function CartPageClient() {
     return (
       <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
         <div className="space-y-4">
-          <Skeleton className="h-32 w-full rounded-[2rem]" />
-          <Skeleton className="h-32 w-full rounded-[2rem]" />
+          <Skeleton className="h-36 w-full rounded-[2.2rem]" />
+          <Skeleton className="h-36 w-full rounded-[2.2rem]" />
         </div>
-        <Skeleton className="h-80 w-full rounded-[2rem]" />
+        <Skeleton className="h-96 w-full rounded-[2.2rem]" />
       </div>
     );
   }
@@ -81,18 +81,18 @@ export function CartPageClient() {
           return (
             <Card
               key={item.productId}
-              className="grid gap-4 p-4 sm:grid-cols-[120px_minmax(0,1fr)] sm:p-5"
+              className="grid gap-4 p-4 sm:grid-cols-[140px_minmax(0,1fr)] sm:p-5"
             >
-              <div className="overflow-hidden rounded-[1.5rem] border border-border bg-[linear-gradient(180deg,#eff6ff,#f9fafb)]">
+              <div className="overflow-hidden rounded-[1.6rem] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.76),transparent_28%),linear-gradient(180deg,#f8f4ee,#ece4db)] p-3">
                 {item.image?.url ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     alt={item.image.alt}
-                    className="aspect-square w-full object-cover"
+                    className="aspect-square w-full rounded-[1.2rem] object-cover"
                     src={item.image.url}
                   />
                 ) : (
-                  <div className="aspect-square bg-[radial-gradient(circle_at_top,rgba(249,115,22,0.16),transparent_28%),linear-gradient(180deg,#dbeafe,#f9fafb)]" />
+                  <div className="aspect-square rounded-[1.2rem] bg-[linear-gradient(180deg,#dbeafe,#f9fafb)]" />
                 )}
               </div>
 
@@ -100,7 +100,7 @@ export function CartPageClient() {
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div className="space-y-2">
                     <Link href={ROUTES.storefront.product(item.slug)}>
-                      <h2 className="text-lg font-semibold tracking-tight hover:text-primary">
+                      <h2 className="font-display text-2xl font-semibold tracking-[-0.05em] hover:text-primary">
                         {item.name}
                       </h2>
                     </Link>
@@ -111,7 +111,9 @@ export function CartPageClient() {
                   </div>
 
                   <div className="text-right">
-                    <p className="text-lg font-semibold">{formatPrice(unitPrice)}</p>
+                    <p className="font-display text-2xl font-semibold tracking-[-0.05em]">
+                      {formatPrice(unitPrice)}
+                    </p>
                     {item.salePrice !== null ? (
                       <p className="text-sm text-muted-foreground line-through">
                         {formatPrice(item.price)}
@@ -121,7 +123,7 @@ export function CartPageClient() {
                 </div>
 
                 <div className="flex flex-wrap items-center justify-between gap-4">
-                  <div className="inline-flex items-center gap-3 rounded-full border border-border bg-white px-3 py-2">
+                  <div className="inline-flex items-center gap-3 rounded-full border border-white/80 bg-white/80 px-3 py-2 shadow-[0_10px_24px_rgba(20,21,26,0.05)]">
                     <Button
                       className="h-9 w-9 rounded-full px-0"
                       disabled={item.quantity <= 1}

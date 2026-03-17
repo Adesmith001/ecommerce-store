@@ -45,7 +45,7 @@ export function WishlistToggleButton({
       <button
         aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
         className={cn(
-          "inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-white/90 text-foreground shadow-sm transition hover:scale-[1.02]",
+          "inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-white/88 text-foreground shadow-[0_12px_24px_rgba(20,21,26,0.08)] transition hover:scale-[1.02]",
           wishlisted ? "text-danger" : "text-foreground",
           className,
         )}

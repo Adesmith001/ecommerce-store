@@ -24,7 +24,7 @@ export function SectionWrapper({
 }: SectionWrapperProps) {
   return (
     <section className={cn("section-space", className)}>
-      <Container className={cn("space-y-8", contentClassName)}>
+      <Container className={cn("space-y-8 lg:space-y-10", contentClassName)}>
         {title ? (
           <SectionHeading
             actions={actions}

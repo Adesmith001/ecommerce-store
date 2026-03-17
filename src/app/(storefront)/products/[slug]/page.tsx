@@ -1,15 +1,18 @@
 import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
 import { ProductCard } from "@/components/storefront/catalog";
+import { ProductGallery } from "@/components/storefront/product/product-gallery";
 import { ProductPurchaseActions } from "@/components/storefront/product/product-purchase-actions";
 import { ProductReviewsSection } from "@/components/storefront/reviews";
 import { SectionWrapper, StorePageHero } from "@/components/storefront";
-import { ProductGallery } from "@/components/storefront/product/product-gallery";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { ROUTES } from "@/constants/routes";
 import { getProductBySlug, getRelatedProducts } from "@/lib/catalog";
-import { getReviewDataForProduct, getReviewEligibility } from "@/lib/reviews/review-service";
+import {
+  getReviewDataForProduct,
+  getReviewEligibility,
+} from "@/lib/reviews/review-service";
 import type { ReviewEligibility, ReviewSummary } from "@/types/review";
 
 type ProductDetailsPageProps = {
@@ -84,90 +87,115 @@ export default async function ProductDetailsPage({
           { label: product.name },
         ]}
         description={product.shortDescription}
-        eyebrow="Product Details"
+        eyebrow="Product details"
         title={product.name}
       />
 
       <SectionWrapper className="pb-12">
-        <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="grid gap-8 xl:grid-cols-[1.05fr_0.95fr]">
           <ProductGallery images={product.images} productName={product.name} />
 
           <div className="space-y-6">
-            <div className="space-y-4">
-              <div className="flex flex-wrap gap-2">
-                {product.featured ? <Badge>Featured</Badge> : null}
-                {hasDiscount ? (
-                  <Badge variant="danger">
-                    Save {getDiscountPercentage(product.price, product.salePrice!)}%
+            <div className="editorial-panel p-6 sm:p-8">
+              <div className="space-y-6">
+                <div className="flex flex-wrap gap-2">
+                  {product.featured ? <Badge>Featured</Badge> : null}
+                  {hasDiscount ? (
+                    <Badge variant="danger">
+                      Save {getDiscountPercentage(product.price, product.salePrice!)}%
+                    </Badge>
+                  ) : null}
+                  <Badge variant="outline">
+                    {product.stock > 0 ? "In stock" : "Out of stock"}
                   </Badge>
-                ) : null}
-                <Badge variant="outline">
-                  {product.stock > 0 ? "In stock" : "Out of stock"}
-                </Badge>
-              </div>
+                </div>
 
-              <div className="space-y-2">
-                <h1 className="text-4xl font-semibold tracking-tight">
-                  {product.name}
-                </h1>
-                <p className="text-base leading-7 text-muted-foreground">
-                  {product.shortDescription}
-                </p>
-              </div>
+                <div className="space-y-3">
+                  <h1 className="font-display text-4xl font-semibold tracking-[-0.06em] sm:text-5xl">
+                    {product.name}
+                  </h1>
+                  <p className="max-w-2xl text-base leading-7 text-muted-foreground">
+                    {product.shortDescription}
+                  </p>
+                </div>
 
-              <div className="flex flex-wrap items-end gap-3">
-                <span className="text-3xl font-semibold text-foreground">
-                  {formatPrice(product.salePrice ?? product.price)}
-                </span>
-                {hasDiscount ? (
-                  <span className="text-lg text-muted-foreground line-through">
-                    {formatPrice(product.price)}
+                <div className="flex flex-wrap items-end gap-3">
+                  <span className="font-display text-4xl font-semibold tracking-[-0.06em] text-foreground">
+                    {formatPrice(product.salePrice ?? product.price)}
                   </span>
-                ) : null}
-              </div>
+                  {hasDiscount ? (
+                    <span className="pb-1 text-lg text-muted-foreground line-through">
+                      {formatPrice(product.price)}
+                    </span>
+                  ) : null}
+                </div>
 
-              <div className="grid gap-3 rounded-3xl bg-surface p-5 text-sm sm:grid-cols-2">
-                <div>
-                  <p className="text-muted-foreground">Rating</p>
-                  <p className="mt-1 font-semibold">
-                    {reviewSummary.averageRating.toFixed(1)} /{" "}
-                    {product.ratingSummary.max.toFixed(0)}
-                  </p>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-[1.6rem] border border-white/80 bg-white/72 p-4">
+                    <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+                      Rating
+                    </p>
+                    <p className="font-display mt-3 text-2xl font-semibold tracking-[-0.05em]">
+                      {reviewSummary.averageRating.toFixed(1)} /{" "}
+                      {product.ratingSummary.max.toFixed(0)}
+                    </p>
+                  </div>
+                  <div className="rounded-[1.6rem] border border-white/80 bg-white/72 p-4">
+                    <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+                      Reviews
+                    </p>
+                    <p className="font-display mt-3 text-2xl font-semibold tracking-[-0.05em]">
+                      {reviewSummary.totalReviews}
+                    </p>
+                  </div>
+                  <div className="rounded-[1.6rem] border border-white/80 bg-white/72 p-4">
+                    <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+                      SKU
+                    </p>
+                    <p className="mt-3 text-sm font-semibold">{product.sku}</p>
+                  </div>
+                  <div className="rounded-[1.6rem] border border-white/80 bg-white/72 p-4">
+                    <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+                      Availability
+                    </p>
+                    <p className="mt-3 text-sm font-semibold">
+                      {product.stock > 0 ? `${product.stock} available` : "Out of stock"}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-muted-foreground">Reviews</p>
-                  <p className="mt-1 font-semibold">{reviewSummary.totalReviews}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">SKU</p>
-                  <p className="mt-1 font-semibold">{product.sku}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Brand</p>
-                  <p className="mt-1 font-semibold">
-                    {product.brand?.name ?? "Unbranded"}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Category</p>
-                  <p className="mt-1 font-semibold">
-                    {product.category?.name ?? "Catalog"}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Availability</p>
-                  <p className="mt-1 font-semibold">
-                    {product.stock > 0 ? `${product.stock} available` : "Out of stock"}
-                  </p>
-                </div>
+
+                <ProductPurchaseActions product={product} />
               </div>
             </div>
 
-            <ProductPurchaseActions product={product} />
-
-            <Card className="space-y-4">
-              <h2 className="text-xl font-semibold">Product details</h2>
+            <Card className="space-y-5">
+              <div className="space-y-2">
+                <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+                  Product narrative
+                </p>
+                <h2 className="font-display text-2xl font-semibold tracking-[-0.05em]">
+                  Details and construction
+                </h2>
+              </div>
               <p className="text-body">{product.fullDescription}</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-[1.4rem] border border-white/80 bg-white/72 p-4">
+                  <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+                    Brand
+                  </p>
+                  <p className="mt-3 text-sm font-semibold">
+                    {product.brand?.name ?? "Unbranded"}
+                  </p>
+                </div>
+                <div className="rounded-[1.4rem] border border-white/80 bg-white/72 p-4">
+                  <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+                    Category
+                  </p>
+                  <p className="mt-3 text-sm font-semibold">
+                    {product.category?.name ?? "Catalog"}
+                  </p>
+                </div>
+              </div>
               {product.tags.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
                   {product.tags.map((tag) => (
@@ -180,22 +208,40 @@ export default async function ProductDetailsPage({
             </Card>
 
             <div className="grid gap-4 sm:grid-cols-3">
-              <Card className="space-y-2">
-                <p className="text-sm font-medium">Delivery</p>
-                <p className="text-sm leading-6 text-muted-foreground">
-                  Shipping details and delivery estimates will plug in here later.
+              <Card className="space-y-3 p-5">
+                <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+                  Delivery
+                </p>
+                <h3 className="font-display text-xl font-semibold tracking-[-0.05em]">
+                  Signature shipping
+                </h3>
+                <p className="text-sm leading-7 text-muted-foreground">
+                  Delivery timing and carrier details can slot in here without
+                  redesigning the product page later.
                 </p>
               </Card>
-              <Card className="space-y-2">
-                <p className="text-sm font-medium">Returns</p>
-                <p className="text-sm leading-6 text-muted-foreground">
-                  Easy return policy placeholder ready for final support content.
+              <Card className="space-y-3 p-5">
+                <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+                  Returns
+                </p>
+                <h3 className="font-display text-xl font-semibold tracking-[-0.05em]">
+                  Easy exchanges
+                </h3>
+                <p className="text-sm leading-7 text-muted-foreground">
+                  Return-policy messaging stays close to the buy action for calmer
+                  customer reassurance.
                 </p>
               </Card>
-              <Card className="space-y-2">
-                <p className="text-sm font-medium">Secure payment</p>
-                <p className="text-sm leading-6 text-muted-foreground">
-                  Secure checkout reassurance placeholder for future payment flow.
+              <Card className="space-y-3 p-5">
+                <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+                  Payment
+                </p>
+                <h3 className="font-display text-xl font-semibold tracking-[-0.05em]">
+                  Secure checkout
+                </h3>
+                <p className="text-sm leading-7 text-muted-foreground">
+                  Payment trust remains visible but understated, matching the rest of
+                  the premium flow.
                 </p>
               </Card>
             </div>
@@ -205,17 +251,17 @@ export default async function ProductDetailsPage({
 
       <SectionWrapper
         className="pt-0"
-        description="Specifications are rendered from the catalog data layer so they can later map directly from Appwrite."
+        description="Specifications are rendered from the catalog data layer so they can grow without changing the layout."
         eyebrow="Specifications"
-        title="What to know before you buy"
+        title="Everything shoppers may want to know"
       >
         <Card className="overflow-hidden p-0">
-          <div className="divide-y divide-border">
+          <div className="divide-y divide-border/70">
             {product.specifications.length > 0 ? (
               product.specifications.map((specification) => (
                 <div
                   key={specification.id}
-                  className="grid gap-2 px-5 py-4 sm:grid-cols-[220px_minmax(0,1fr)]"
+                  className="grid gap-2 px-5 py-4 sm:grid-cols-[220px_minmax(0,1fr)] sm:px-6"
                 >
                   <p className="text-sm font-medium text-muted-foreground">
                     {specification.label}
@@ -234,7 +280,7 @@ export default async function ProductDetailsPage({
 
       <SectionWrapper
         className="pt-0"
-        description="Reviews are tied to verified purchased products so the storefront feedback stays useful and credible."
+        description="Reviews are tied to verified purchases so the feedback stays useful and credible."
         eyebrow="Reviews"
         title="What customers are saying"
       >
@@ -248,10 +294,10 @@ export default async function ProductDetailsPage({
       </SectionWrapper>
 
       <SectionWrapper
-        className="pt-0 pb-20"
-        description="Related products currently prioritize the same category, then the same brand, then shared tags."
-        eyebrow="Related Products"
-        title="You may also like"
+        className="pb-20 pt-0"
+        description="Related products prioritize the same category, then the same brand, then shared tags."
+        eyebrow="Related products"
+        title="Continue the collection"
       >
         {relatedProducts.length > 0 ? (
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">

@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ROUTES } from "@/constants/routes";
-import { listOrdersForClerkUser } from "@/lib/orders/order-service";
 import { requireAuthenticatedUser } from "@/lib/auth/guards";
+import { listOrdersForClerkUser } from "@/lib/orders/order-service";
 
 export default async function AccountOrdersPage() {
   const session = await requireAuthenticatedUser(ROUTES.storefront.accountOrders);
@@ -14,11 +14,14 @@ export default async function AccountOrdersPage() {
   return (
     <div className="space-y-6">
       <Card className="space-y-3 p-6">
-        <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
+        <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
           Account
         </p>
-        <h1 className="text-3xl font-semibold tracking-tight">Orders</h1>
+        <h1 className="font-display text-4xl font-semibold tracking-[-0.06em]">
+          Orders
+        </h1>
       </Card>
+
       {orders.length === 0 ? (
         <EmptyState
           action={

@@ -171,10 +171,10 @@ export function AccountAddressesManager({
       <div className="space-y-5">
         <Card className="space-y-5 p-6">
           <div>
-            <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
+            <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
               Addresses
             </p>
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight">
+            <h1 className="font-display mt-3 text-3xl font-semibold tracking-[-0.05em]">
               Saved addresses
             </h1>
           </div>
@@ -213,7 +213,7 @@ export function AccountAddressesManager({
                     </div>
                   </div>
 
-                  <div className="space-y-1 text-sm text-muted-foreground">
+                  <div className="space-y-1 text-sm leading-7 text-muted-foreground">
                     <p className="font-medium text-foreground">{address.fullName}</p>
                     <p>{address.phoneNumber}</p>
                     <p>{address.addressLine}</p>
@@ -233,10 +233,10 @@ export function AccountAddressesManager({
 
       <Card className="space-y-5 p-6">
         <div>
-          <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
+          <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
             {form.id ? "Edit address" : "New address"}
           </p>
-          <h2 className="mt-2 text-2xl font-semibold tracking-tight">
+          <h2 className="font-display mt-3 text-3xl font-semibold tracking-[-0.05em]">
             {form.id ? "Update saved address" : "Add a delivery address"}
           </h2>
         </div>
@@ -288,7 +288,7 @@ export function AccountAddressesManager({
             placeholder="Postal code"
             value={form.postalCode}
           />
-          <label className="flex items-center gap-3 text-sm font-medium">
+          <label className="flex items-center gap-3 rounded-[1.4rem] border border-white/80 bg-white/72 px-4 py-3 text-sm font-medium">
             <input
               checked={form.isDefault}
               className="h-4 w-4 accent-primary"

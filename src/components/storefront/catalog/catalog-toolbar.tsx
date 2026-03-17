@@ -19,13 +19,13 @@ export function CatalogToolbar({
   response,
 }: CatalogToolbarProps) {
   return (
-    <div className="space-y-4 rounded-[2rem] border border-border bg-white p-4 sm:p-5">
+    <div className="editorial-panel space-y-4 p-4 sm:p-5">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">
             {response.total} product{response.total === 1 ? "" : "s"} found
           </p>
-          <h2 className="text-2xl font-semibold tracking-tight">
+          <h2 className="font-display mt-3 text-3xl font-semibold tracking-[-0.06em]">
             {query.q ? `Results for "${query.q}"` : "Discover the catalog"}
           </h2>
         </div>

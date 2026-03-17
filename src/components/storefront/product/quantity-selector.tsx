@@ -15,8 +15,10 @@ export function QuantitySelector({
 }: QuantitySelectorProps) {
   return (
     <div className="space-y-2">
-      <p className="text-sm font-medium">Quantity</p>
-      <div className="inline-flex items-center gap-3 rounded-full border border-border bg-white px-3 py-2">
+      <p className="text-sm font-medium uppercase tracking-[0.18em] text-muted-foreground">
+        Quantity
+      </p>
+      <div className="inline-flex items-center gap-3 rounded-full border border-white/80 bg-white/80 px-3 py-2 shadow-[0_10px_24px_rgba(20,21,26,0.05)]">
         <Button
           aria-label="Decrease quantity"
           className="h-9 w-9 rounded-full px-0"

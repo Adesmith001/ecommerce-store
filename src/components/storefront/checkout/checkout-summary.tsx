@@ -20,10 +20,10 @@ export function CheckoutSummary({ items, pricing }: CheckoutSummaryProps) {
   return (
     <Card className="space-y-5 p-6">
       <div>
-        <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
-          Order Summary
+        <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
+          Order summary
         </p>
-        <h2 className="mt-2 text-2xl font-semibold tracking-tight">
+        <h2 className="font-display mt-3 text-3xl font-semibold tracking-[-0.05em]">
           Review your order
         </h2>
       </div>
@@ -35,7 +35,7 @@ export function CheckoutSummary({ items, pricing }: CheckoutSummaryProps) {
           return (
             <div
               key={item.productId}
-              className="flex items-start justify-between gap-4 border-b border-border pb-4 last:border-b-0 last:pb-0"
+              className="flex items-start justify-between gap-4 rounded-[1.35rem] border border-white/80 bg-white/72 p-4"
             >
               <div className="min-w-0">
                 <p className="font-medium">{item.name}</p>
@@ -64,9 +64,9 @@ export function CheckoutSummary({ items, pricing }: CheckoutSummaryProps) {
           <span className="text-muted-foreground">Total quantity</span>
           <span className="font-medium">{pricing.totalQuantity}</span>
         </div>
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center justify-between gap-3 rounded-[1.35rem] border border-white/80 bg-white/72 px-4 py-4">
           <span className="text-muted-foreground">Estimated total</span>
-          <span className="text-lg font-semibold">
+          <span className="font-display text-2xl font-semibold tracking-[-0.05em]">
             {formatPrice(pricing.estimatedTotal)}
           </span>
         </div>

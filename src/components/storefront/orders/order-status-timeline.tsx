@@ -13,10 +13,10 @@ export function OrderStatusTimeline({ order }: OrderStatusTimelineProps) {
   return (
     <Card className="space-y-6 p-6">
       <div>
-        <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
+        <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
           Tracking
         </p>
-        <h2 className="mt-2 text-2xl font-semibold tracking-tight">
+        <h2 className="font-display mt-3 text-3xl font-semibold tracking-[-0.05em]">
           Order status timeline
         </h2>
       </div>
@@ -26,12 +26,12 @@ export function OrderStatusTimeline({ order }: OrderStatusTimelineProps) {
           <div
             key={step.value}
             className={cn(
-              "rounded-3xl border p-4",
+              "rounded-[1.6rem] border p-4",
               step.isActive
-                ? "border-primary bg-primary/5"
+                ? "border-primary bg-primary/6"
                 : step.isCompleted
-                  ? "border-accent/20 bg-accent/5"
-                  : "border-border bg-white",
+                  ? "border-accent/16 bg-accent/8"
+                  : "border-white/80 bg-white/70",
             )}
           >
             <div className="flex items-center gap-3">

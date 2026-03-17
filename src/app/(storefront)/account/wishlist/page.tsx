@@ -5,10 +5,12 @@ export default async function WishlistPage() {
   return (
     <div className="space-y-6">
       <Card className="space-y-3 p-6">
-        <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
+        <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
           Account
         </p>
-        <h1 className="text-3xl font-semibold tracking-tight">Wishlist</h1>
+        <h1 className="font-display text-4xl font-semibold tracking-[-0.06em]">
+          Wishlist
+        </h1>
       </Card>
       <WishlistPageClient />
     </div>

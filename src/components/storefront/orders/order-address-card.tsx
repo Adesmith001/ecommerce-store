@@ -11,15 +11,15 @@ export function OrderAddressCard({ order }: OrderAddressCardProps) {
   return (
     <Card className="space-y-5 p-6">
       <div>
-        <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
+        <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
           Delivery details
         </p>
-        <h2 className="mt-2 text-2xl font-semibold tracking-tight">
+        <h2 className="font-display mt-3 text-3xl font-semibold tracking-[-0.05em]">
           Shipping address
         </h2>
       </div>
 
-      <div className="space-y-2 text-sm leading-6 text-muted-foreground">
+      <div className="space-y-2 text-sm leading-7 text-muted-foreground">
         <p className="font-medium text-foreground">{customer.fullName}</p>
         <p>{customer.email}</p>
         <p>{customer.phoneNumber}</p>

@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Sora } from "next/font/google";
 import { AuthProfileSync } from "@/components/auth/auth-profile-sync";
 import { AppProviders } from "@/components/providers/app-providers";
 import { APP_DESCRIPTION, APP_NAME } from "@/constants/app";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const sora = Sora({
+  variable: "--font-sora",
   subsets: ["latin"],
 });
 
@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background text-foreground antialiased`}
+        className={`${jakarta.variable} ${sora.variable} min-h-screen bg-background text-foreground antialiased`}
       >
         <AuthProfileSync />
         <AppProviders>{children}</AppProviders>

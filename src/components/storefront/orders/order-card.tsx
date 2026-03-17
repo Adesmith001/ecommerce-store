@@ -22,7 +22,7 @@ export function OrderCard({ order }: OrderCardProps) {
     <Card className="space-y-5 p-6">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="space-y-2">
-          <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
+          <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
             Order {order.orderNumber}
           </p>
           <div className="flex flex-wrap items-center gap-2">
@@ -41,21 +41,21 @@ export function OrderCard({ order }: OrderCardProps) {
       </div>
 
       <div className="grid gap-4 text-sm sm:grid-cols-2 xl:grid-cols-4">
-        <div>
+        <div className="rounded-[1.35rem] border border-white/80 bg-white/72 p-4">
           <p className="text-muted-foreground">Order date</p>
           <p className="mt-1 font-medium">{formatOrderDate(order.createdAt)}</p>
         </div>
-        <div>
+        <div className="rounded-[1.35rem] border border-white/80 bg-white/72 p-4">
           <p className="text-muted-foreground">Items</p>
           <p className="mt-1 font-medium">{order.pricing.totalQuantity}</p>
         </div>
-        <div>
+        <div className="rounded-[1.35rem] border border-white/80 bg-white/72 p-4">
           <p className="text-muted-foreground">Delivery method</p>
           <p className="mt-1 font-medium capitalize">
             {order.deliveryMethod.replace("-", " ")}
           </p>
         </div>
-        <div>
+        <div className="rounded-[1.35rem] border border-white/80 bg-white/72 p-4">
           <p className="text-muted-foreground">Total amount</p>
           <p className="mt-1 font-medium">
             {formatOrderCurrency(order.pricing.estimatedTotal, order.currency)}
@@ -63,7 +63,7 @@ export function OrderCard({ order }: OrderCardProps) {
         </div>
       </div>
 
-      <div className="rounded-3xl bg-surface p-4 text-sm text-muted-foreground">
+      <div className="rounded-[1.5rem] border border-white/80 bg-white/72 p-4 text-sm text-muted-foreground">
         {order.items.length > 0
           ? `${order.items[0]?.name}${order.items.length > 1 ? ` and ${order.items.length - 1} more item(s)` : ""}`
           : "No items available for this order."}
