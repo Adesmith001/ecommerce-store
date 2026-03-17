@@ -10,6 +10,7 @@ export const appwriteConfig = {
   databaseId: APPWRITE_DATABASE_IDS.core,
   bucketId: APPWRITE_STORAGE_BUCKET_IDS.media,
   ordersCollectionId: APPWRITE_COLLECTION_IDS.orders,
+  reviewsCollectionId: APPWRITE_COLLECTION_IDS.reviews,
   userProfilesCollectionId: APPWRITE_COLLECTION_IDS.userProfiles,
   wishlistsCollectionId: APPWRITE_COLLECTION_IDS.wishlists,
   apiKey: process.env.APPWRITE_API_KEY ?? "",

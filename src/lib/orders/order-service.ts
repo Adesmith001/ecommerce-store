@@ -309,6 +309,33 @@ export async function listOrdersForClerkUser(clerkId: string) {
   return result.documents.map(toOrderRecord);
 }
 
+export async function hasPaidOrderForProduct(input: {
+  clerkId: string;
+  productId: string;
+}) {
+  const orders = await listOrdersForClerkUser(input.clerkId);
+
+  return orders.some(
+    (order) =>
+      order.paymentStatus === "paid" &&
+      order.items.some((item) => item.productId === input.productId),
+  );
+}
+
+export async function getLatestPaidOrderIdForProduct(input: {
+  clerkId: string;
+  productId: string;
+}) {
+  const orders = await listOrdersForClerkUser(input.clerkId);
+  const matchingOrder = orders.find(
+    (order) =>
+      order.paymentStatus === "paid" &&
+      order.items.some((item) => item.productId === input.productId),
+  );
+
+  return matchingOrder?.id ?? null;
+}
+
 export async function getOrderForClerkUser(input: {
   clerkId: string;
   orderId: string;

@@ -1,12 +1,16 @@
+import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
 import { ProductCard } from "@/components/storefront/catalog";
 import { ProductPurchaseActions } from "@/components/storefront/product/product-purchase-actions";
+import { ProductReviewsSection } from "@/components/storefront/reviews";
 import { SectionWrapper, StorePageHero } from "@/components/storefront";
 import { ProductGallery } from "@/components/storefront/product/product-gallery";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { ROUTES } from "@/constants/routes";
 import { getProductBySlug, getRelatedProducts } from "@/lib/catalog";
+import { getReviewDataForProduct, getReviewEligibility } from "@/lib/reviews/review-service";
+import type { ReviewEligibility, ReviewSummary } from "@/types/review";
 
 type ProductDetailsPageProps = {
   params: Promise<{ slug: string }>;
@@ -36,6 +40,40 @@ export default async function ProductDetailsPage({
   const relatedProducts = await getRelatedProducts(product.slug, 4);
   const hasDiscount =
     product.salePrice !== null && product.salePrice < product.price;
+  const { userId } = await auth();
+  let reviewLoadError: string | null = null;
+  let reviewSummary: ReviewSummary = {
+    averageRating: product.ratingSummary.average,
+    totalReviews: product.reviewCount,
+    breakdown: [5, 4, 3, 2, 1].map((rating) => ({
+      rating,
+      count: 0,
+      percentage: 0,
+    })),
+  };
+  let reviewEligibility: ReviewEligibility = {
+    alreadyReviewed: false,
+    canSubmit: false,
+    reason: userId ? "not-purchased" : "not-authenticated",
+  };
+  let reviews = [] as Awaited<ReturnType<typeof getReviewDataForProduct>>["reviews"];
+
+  try {
+    const [reviewData, eligibility] = await Promise.all([
+      getReviewDataForProduct(product.id),
+      getReviewEligibility({
+        clerkId: userId ?? null,
+        productId: product.id,
+      }),
+    ]);
+
+    reviews = reviewData.reviews;
+    reviewSummary = reviewData.summary;
+    reviewEligibility = eligibility;
+  } catch (error) {
+    reviewLoadError =
+      error instanceof Error ? error.message : "Failed to load product reviews.";
+  }
 
   return (
     <>
@@ -92,13 +130,13 @@ export default async function ProductDetailsPage({
                 <div>
                   <p className="text-muted-foreground">Rating</p>
                   <p className="mt-1 font-semibold">
-                    {product.ratingSummary.average.toFixed(1)} /{" "}
+                    {reviewSummary.averageRating.toFixed(1)} /{" "}
                     {product.ratingSummary.max.toFixed(0)}
                   </p>
                 </div>
                 <div>
                   <p className="text-muted-foreground">Reviews</p>
-                  <p className="mt-1 font-semibold">{product.reviewCount} placeholders</p>
+                  <p className="mt-1 font-semibold">{reviewSummary.totalReviews}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground">SKU</p>
@@ -192,6 +230,21 @@ export default async function ProductDetailsPage({
             )}
           </div>
         </Card>
+      </SectionWrapper>
+
+      <SectionWrapper
+        className="pt-0"
+        description="Reviews are tied to verified purchased products so the storefront feedback stays useful and credible."
+        eyebrow="Reviews"
+        title="What customers are saying"
+      >
+        <ProductReviewsSection
+          initialEligibility={reviewEligibility}
+          initialLoadError={reviewLoadError}
+          initialReviews={reviews}
+          initialSummary={reviewSummary}
+          productId={product.id}
+        />
       </SectionWrapper>
 
       <SectionWrapper
