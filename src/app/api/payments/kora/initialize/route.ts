@@ -1,6 +1,8 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { buildCheckoutOrderDraft } from "@/lib/checkout/checkout-order";
 import { normalizeCheckoutOrderDraftPayload, validateCheckoutForm } from "@/lib/checkout/checkout-validation";
+import { validateCouponApplication } from "@/lib/coupons/coupon-service";
 import {
   createPendingOrder,
   markOrderInitializationFailed,
@@ -72,6 +74,43 @@ export async function POST(request: Request) {
     );
   }
 
+  let serverDraft = buildCheckoutOrderDraft({
+    deliveryMethod: draft.deliveryMethod,
+    items: draft.items,
+    values: draft.customer,
+  });
+
+  if (draft.pricing.couponCode) {
+    try {
+      const validation = await validateCouponApplication({
+        code: draft.pricing.couponCode,
+        items: draft.items,
+        subtotal: draft.items.reduce(
+          (total, item) => total + (item.salePrice ?? item.price) * item.quantity,
+          0,
+        ),
+      });
+
+      serverDraft = buildCheckoutOrderDraft({
+        appliedCoupon: validation.appliedCoupon,
+        couponCode: validation.appliedCoupon.code,
+        deliveryMethod: draft.deliveryMethod,
+        items: draft.items,
+        values: draft.customer,
+      });
+    } catch (error) {
+      return NextResponse.json(
+        {
+          message:
+            error instanceof Error
+              ? error.message
+              : "This coupon could not be applied.",
+        },
+        { status: 400 },
+      );
+    }
+  }
+
   const paymentReference = buildKoraPaymentReference();
   const currency = getKoraCurrency();
 
@@ -81,14 +120,14 @@ export async function POST(request: Request) {
     const order = await createPendingOrder({
       clerkId: userId,
       currency,
-      draft,
+      draft: serverDraft,
       paymentProvider: "kora",
       paymentReference,
     });
 
     try {
       const payment = await initializeKoraCheckout({
-        draft,
+        draft: serverDraft,
         orderId: order.id,
         paymentReference,
       });

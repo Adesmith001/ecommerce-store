@@ -7,6 +7,7 @@ export const APPWRITE_COLLECTION_IDS = {
   banners: process.env.NEXT_PUBLIC_APPWRITE_BANNERS_COLLECTION_ID ?? "",
   brands: process.env.NEXT_PUBLIC_APPWRITE_BRANDS_COLLECTION_ID ?? "",
   categories: process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID ?? "",
+  coupons: process.env.NEXT_PUBLIC_APPWRITE_COUPONS_COLLECTION_ID ?? "",
   orders: process.env.NEXT_PUBLIC_APPWRITE_ORDERS_COLLECTION_ID ?? "",
   products: process.env.NEXT_PUBLIC_APPWRITE_PRODUCTS_COLLECTION_ID ?? "",
   reviews: process.env.NEXT_PUBLIC_APPWRITE_REVIEWS_COLLECTION_ID ?? "",

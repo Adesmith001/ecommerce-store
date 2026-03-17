@@ -60,6 +60,14 @@ export function CheckoutSummary({ items, pricing }: CheckoutSummaryProps) {
           <span className="text-muted-foreground">Shipping fee</span>
           <span className="font-medium">{formatPrice(pricing.shippingFee)}</span>
         </div>
+        {pricing.discountAmount > 0 ? (
+          <div className="flex items-center justify-between gap-3 text-success">
+            <span>
+              Discount{pricing.appliedCoupon ? ` (${pricing.appliedCoupon.code})` : ""}
+            </span>
+            <span className="font-medium">-{formatPrice(pricing.discountAmount)}</span>
+          </div>
+        ) : null}
         <div className="flex items-center justify-between gap-3">
           <span className="text-muted-foreground">Total quantity</span>
           <span className="font-medium">{pricing.totalQuantity}</span>

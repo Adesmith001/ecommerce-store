@@ -3,6 +3,7 @@ import "server-only";
 import { Query } from "appwrite";
 import { buildAppwriteApiUrl, getAppwriteErrorMessage } from "@/lib/appwrite/server-api";
 import { appwriteConfig } from "@/lib/appwrite/config";
+import type { CheckoutPricing } from "@/types/checkout";
 import type {
   CreateOrderInput,
   KoraVerificationSnapshot,
@@ -90,6 +91,9 @@ function parseJsonSafely<T>(value: string, fallback: T) {
 }
 
 function toOrderRecord(document: AppwriteOrderDocument): OrderRecord {
+  const pricingSnapshot = document.pricingSnapshot
+    ? parseJsonSafely<Partial<CheckoutPricing>>(document.pricingSnapshot, {})
+    : {};
   const customer = {
     fullName: document.fullName,
     email: document.email,
@@ -110,7 +114,12 @@ function toOrderRecord(document: AppwriteOrderDocument): OrderRecord {
     deliveryMethod: document.deliveryMethod,
     items: parseJsonSafely(document.items, []),
     pricing: {
-      couponCode: document.couponCode || null,
+      appliedCoupon: pricingSnapshot.appliedCoupon ?? null,
+      couponCode:
+        document.couponCode || pricingSnapshot.couponCode || null,
+      discountAmount: typeof pricingSnapshot.discountAmount === "number"
+        ? pricingSnapshot.discountAmount
+        : 0,
       estimatedTotal: document.estimatedTotal,
       shippingFee: document.shippingFee,
       subtotal: document.subtotal,

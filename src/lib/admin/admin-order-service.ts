@@ -3,6 +3,7 @@ import "server-only";
 import { Query } from "appwrite";
 import { buildAppwriteApiUrl, getAppwriteErrorMessage } from "@/lib/appwrite/server-api";
 import { appwriteConfig } from "@/lib/appwrite/config";
+import type { CheckoutPricing } from "@/types/checkout";
 import type {
   AdminOrderListItem,
   AdminOrderStatusTransition,
@@ -118,6 +119,10 @@ function toNumber(value: number | string | null | undefined) {
 }
 
 function toOrderRecord(document: AppwriteOrderDocument): OrderRecord {
+  const pricingSnapshot = document.pricingSnapshot
+    ? parseJsonSafely<Partial<CheckoutPricing>>(document.pricingSnapshot, {})
+    : {};
+
   return {
     clerkId: document.clerkId,
     createdAt: document.createdAt,
@@ -149,7 +154,12 @@ function toOrderRecord(document: AppwriteOrderDocument): OrderRecord {
     paymentStatus: document.paymentStatus,
     paymentUrl: document.paymentUrl || null,
     pricing: {
-      couponCode: document.couponCode || null,
+      appliedCoupon: pricingSnapshot.appliedCoupon ?? null,
+      couponCode:
+        document.couponCode || pricingSnapshot.couponCode || null,
+      discountAmount: typeof pricingSnapshot.discountAmount === "number"
+        ? pricingSnapshot.discountAmount
+        : 0,
       estimatedTotal: toNumber(document.estimatedTotal),
       shippingFee: toNumber(document.shippingFee),
       subtotal: toNumber(document.subtotal),

@@ -1,5 +1,6 @@
 import type { CartItem } from "@/types/cart";
 import type { CheckoutFormValues, CheckoutPricing, DeliveryMethod } from "@/types/checkout";
+import type { AppliedCoupon } from "@/types/coupon";
 
 export type OrderPaymentStatus = "pending" | "paid" | "failed" | "cancelled";
 export type OrderStatus =
@@ -32,6 +33,10 @@ export type OrderRecord = {
   paymentMeta: Record<string, unknown> | null;
   createdAt: string;
   updatedAt: string;
+};
+
+export type OrderCouponSnapshot = AppliedCoupon & {
+  discountAmount: number;
 };
 
 export type CreateOrderInput = {

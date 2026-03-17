@@ -11,11 +11,10 @@ import { useAppDispatch, useAppSelector } from "@/hooks/use-redux";
 import {
   clearCart,
   removeFromCart,
-  selectCartEstimatedTotal,
   selectCartHydrated,
   selectCartItems,
   selectCartLineItemCount,
-  selectCartSubtotal,
+  selectCartPricing,
   selectCartTotalQuantity,
   updateCartItemQuantity,
 } from "@/store/features/cart/cart-slice";
@@ -33,8 +32,7 @@ export function CartPageClient() {
   const items = useAppSelector(selectCartItems);
   const lineItemCount = useAppSelector(selectCartLineItemCount);
   const totalQuantity = useAppSelector(selectCartTotalQuantity);
-  const subtotal = useAppSelector(selectCartSubtotal);
-  const estimatedTotal = useAppSelector(selectCartEstimatedTotal);
+  const pricing = useAppSelector(selectCartPricing);
 
   if (!hydrated) {
     return (
@@ -185,9 +183,8 @@ export function CartPageClient() {
 
       <div>
         <CartSummary
-          estimatedTotal={estimatedTotal}
           lineItemCount={lineItemCount}
-          subtotal={subtotal}
+          pricing={pricing}
           totalQuantity={totalQuantity}
         />
       </div>

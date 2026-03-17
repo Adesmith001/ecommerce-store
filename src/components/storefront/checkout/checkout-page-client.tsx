@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { CouponApplicationCard } from "@/components/storefront/promotions/coupon-application-card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -13,7 +14,11 @@ import { useAppSelector } from "@/hooks/use-redux";
 import { buildCheckoutOrderDraft } from "@/lib/checkout/checkout-order";
 import { buildCheckoutPricing, DELIVERY_METHODS } from "@/lib/checkout/checkout-pricing";
 import { validateCheckoutForm } from "@/lib/checkout/checkout-validation";
-import { selectCartHydrated, selectCartItems } from "@/store/features/cart/cart-slice";
+import {
+  selectCartAppliedCoupon,
+  selectCartHydrated,
+  selectCartItems,
+} from "@/store/features/cart/cart-slice";
 import type { CheckoutFormErrors, CheckoutFormValues, DeliveryMethod } from "@/types/checkout";
 import { CheckoutSummary } from "@/components/storefront/checkout/checkout-summary";
 
@@ -27,10 +32,10 @@ export function CheckoutPageClient({
   initialValues,
 }: CheckoutPageClientProps) {
   const hydrated = useAppSelector(selectCartHydrated);
+  const appliedCoupon = useAppSelector(selectCartAppliedCoupon);
   const items = useAppSelector(selectCartItems);
   const [values, setValues] = useState<CheckoutFormValues>(initialValues);
   const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>("standard");
-  const [couponCode, setCouponCode] = useState("");
   const [errors, setErrors] = useState<CheckoutFormErrors>(EMPTY_ERRORS);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -38,11 +43,11 @@ export function CheckoutPageClient({
   const pricing = useMemo(
     () =>
       buildCheckoutPricing({
-        couponCode,
+        appliedCoupon,
         deliveryMethod,
         items,
       }),
-    [couponCode, deliveryMethod, items],
+    [appliedCoupon, deliveryMethod, items],
   );
 
   if (!hydrated) {
@@ -299,30 +304,7 @@ export function CheckoutPageClient({
           </div>
         </Card>
 
-        <Card className="space-y-4 p-6">
-          <div>
-            <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
-              Coupon
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight">
-              Discounts placeholder
-            </h2>
-          </div>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Input
-              onChange={(event) => setCouponCode(event.target.value)}
-              placeholder="Enter coupon code"
-              value={couponCode}
-            />
-            <Button disabled variant="outline">
-              Apply later
-            </Button>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            Coupon logic is intentionally not active yet, but the field is ready for
-            the next pricing phase.
-          </p>
-        </Card>
+        <CouponApplicationCard title="Apply a promotion" />
 
         <div className="flex flex-wrap gap-3">
           <Button
@@ -337,7 +319,8 @@ export function CheckoutPageClient({
               }
 
               const orderDraft = buildCheckoutOrderDraft({
-                couponCode,
+                appliedCoupon,
+                couponCode: appliedCoupon?.code,
                 deliveryMethod,
                 items,
                 values,

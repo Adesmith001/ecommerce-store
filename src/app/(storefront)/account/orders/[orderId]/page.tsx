@@ -120,6 +120,16 @@ export default async function AccountOrderDetailPage({
                   {formatOrderCurrency(order.pricing.shippingFee, order.currency)}
                 </span>
               </div>
+              {order.pricing.discountAmount > 0 ? (
+                <div className="flex items-center justify-between gap-3 text-success">
+                  <span>
+                    Discount{order.pricing.couponCode ? ` (${order.pricing.couponCode})` : ""}
+                  </span>
+                  <span className="font-medium">
+                    -{formatOrderCurrency(order.pricing.discountAmount, order.currency)}
+                  </span>
+                </div>
+              ) : null}
               <div className="flex items-center justify-between gap-3 rounded-[1.35rem] border border-white/80 bg-white/72 px-4 py-4">
                 <span className="text-muted-foreground">Total amount</span>
                 <span className="font-display text-2xl font-semibold tracking-[-0.05em]">

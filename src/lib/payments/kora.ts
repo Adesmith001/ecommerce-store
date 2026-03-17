@@ -4,6 +4,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import { APP_NAME } from "@/constants/app";
 import { ROUTES } from "@/constants/routes";
 import { decrementInventoryForOrderItems } from "@/lib/catalog/catalog-inventory";
+import { incrementCouponUsage } from "@/lib/coupons/coupon-service";
 import {
   getOrderByPaymentReference,
   markOrderInventoryAdjusted,
@@ -232,9 +233,23 @@ export async function verifyAndFinalizeKoraOrder(paymentReference: string) {
   });
 
   if (mappedState.paymentStatus === "paid" && !existingOrder.inventoryAdjusted) {
-    // Inventory only moves after an explicit verified payment result. This keeps
-    // stock changes aligned with confirmed money movement instead of checkout intent.
-    await decrementInventoryForOrderItems(order.items);
+    // These side effects only run once after verified payment. We mark the order
+    // after attempting them so later verification checks do not double-apply stock
+    // or coupon usage adjustments if Kora retries callbacks.
+    try {
+      await decrementInventoryForOrderItems(order.items);
+    } catch (error) {
+      console.error("Failed to decrement inventory after payment verification.", error);
+    }
+
+    if (order.pricing.appliedCoupon?.couponId) {
+      try {
+        await incrementCouponUsage(order.pricing.appliedCoupon.couponId);
+      } catch (error) {
+        console.error("Failed to increment coupon usage after payment verification.", error);
+      }
+    }
+
     order = await markOrderInventoryAdjusted(paymentReference);
   }
 

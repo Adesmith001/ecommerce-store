@@ -120,6 +120,14 @@ export default async function AdminOrderDetailPage({
                 <span className="text-muted-foreground">Coupon</span>
                 <span className="font-medium">{order.pricing.couponCode ?? "None"}</span>
               </div>
+              {order.pricing.discountAmount > 0 ? (
+                <div className="flex items-center justify-between gap-3 text-success">
+                  <span>Discount</span>
+                  <span className="font-medium">
+                    -{formatOrderCurrency(order.pricing.discountAmount, order.currency)}
+                  </span>
+                </div>
+              ) : null}
               <div className="flex items-center justify-between gap-3 border-t border-border pt-3">
                 <span className="font-medium">Estimated total</span>
                 <span className="font-semibold">

@@ -11,6 +11,11 @@ export const PRODUCT_STATUS_OPTIONS: {
 
 export const PRODUCT_LOW_STOCK_THRESHOLD = 5;
 
+export const COUPON_DISCOUNT_TYPE_OPTIONS = [
+  { label: "Percentage", value: "percentage" },
+  { label: "Fixed amount", value: "fixed" },
+] as const;
+
 export const MERCHANDISING_STATUS_OPTIONS: {
   label: string;
   value: MerchandisingStatus;

@@ -1,16 +1,34 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { buildCartPricing } from "@/lib/checkout/checkout-pricing";
 import type { RootState } from "@/store";
+import type { AppliedCoupon } from "@/types/coupon";
 import type { AddToCartPayload, CartItem } from "@/types/cart";
 
 type CartState = {
+  appliedCoupon: AppliedCoupon | null;
   hydrated: boolean;
   items: CartItem[];
 };
 
 const initialState: CartState = {
+  appliedCoupon: null,
   hydrated: false,
   items: [],
 };
+
+function reconcileCouponState(state: CartState) {
+  if (!state.appliedCoupon || state.items.length === 0) {
+    state.appliedCoupon = state.items.length === 0 ? null : state.appliedCoupon;
+    return;
+  }
+
+  const pricing = buildCartPricing({
+    appliedCoupon: state.appliedCoupon,
+    items: state.items,
+  });
+
+  state.appliedCoupon = pricing.appliedCoupon;
+}
 
 function clampQuantity(quantity: number, stock: number) {
   if (stock <= 0) {
@@ -41,8 +59,13 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    hydrateCart: (state, action: PayloadAction<CartItem[]>) => {
-      state.items = action.payload.filter((item) => item.quantity > 0);
+    hydrateCart: (
+      state,
+      action: PayloadAction<{ appliedCoupon: AppliedCoupon | null; items: CartItem[] }>,
+    ) => {
+      state.items = action.payload.items.filter((item) => item.quantity > 0);
+      state.appliedCoupon = action.payload.appliedCoupon;
+      reconcileCouponState(state);
       state.hydrated = true;
     },
     addToCart: (state, action: PayloadAction<AddToCartPayload>) => {
@@ -66,10 +89,12 @@ const cartSlice = createSlice({
         existingItem.image = nextItem.image;
         existingItem.stock = nextItem.stock;
         existingItem.category = nextItem.category;
+        reconcileCouponState(state);
         return;
       }
 
       state.items.push(nextItem);
+      reconcileCouponState(state);
     },
     updateCartItemQuantity: (
       state,
@@ -89,33 +114,47 @@ const cartSlice = createSlice({
         state.items = state.items.filter(
           (entry) => entry.productId !== action.payload.productId,
         );
+        reconcileCouponState(state);
         return;
       }
 
       item.quantity = nextQuantity;
+      reconcileCouponState(state);
     },
     removeFromCart: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter(
         (item) => item.productId !== action.payload,
       );
+      reconcileCouponState(state);
     },
     clearCart: (state) => {
+      state.appliedCoupon = null;
       state.items = [];
+    },
+    setAppliedCoupon: (state, action: PayloadAction<AppliedCoupon>) => {
+      state.appliedCoupon = action.payload;
+      reconcileCouponState(state);
+    },
+    clearAppliedCoupon: (state) => {
+      state.appliedCoupon = null;
     },
   },
 });
 
 export const {
   addToCart,
+  clearAppliedCoupon,
   clearCart,
   hydrateCart,
   removeFromCart,
+  setAppliedCoupon,
   updateCartItemQuantity,
 } = cartSlice.actions;
 
 export const cartReducer = cartSlice.reducer;
 
 export const selectCart = (state: RootState) => state.cart;
+export const selectCartAppliedCoupon = (state: RootState) => state.cart.appliedCoupon;
 export const selectCartItems = (state: RootState) => state.cart.items;
 export const selectCartHydrated = (state: RootState) => state.cart.hydrated;
 export const selectCartLineItemCount = (state: RootState) => state.cart.items.length;
@@ -126,4 +165,18 @@ export const selectCartSubtotal = (state: RootState) =>
     (total, item) => total + (item.salePrice ?? item.price) * item.quantity,
     0,
   );
-export const selectCartEstimatedTotal = selectCartSubtotal;
+export const selectCartDiscountAmount = (state: RootState) =>
+  buildCartPricing({
+    appliedCoupon: state.cart.appliedCoupon,
+    items: state.cart.items,
+  }).discountAmount;
+export const selectCartPricing = (state: RootState) =>
+  buildCartPricing({
+    appliedCoupon: state.cart.appliedCoupon,
+    items: state.cart.items,
+  });
+export const selectCartEstimatedTotal = (state: RootState) =>
+  buildCartPricing({
+    appliedCoupon: state.cart.appliedCoupon,
+    items: state.cart.items,
+  }).estimatedTotal;

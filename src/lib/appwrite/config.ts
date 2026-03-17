@@ -19,6 +19,7 @@ export const appwriteConfig = {
     bannersCollectionId: APPWRITE_COLLECTION_IDS.banners,
     brandsCollectionId: APPWRITE_COLLECTION_IDS.brands,
     categoriesCollectionId: APPWRITE_COLLECTION_IDS.categories,
+    couponsCollectionId: APPWRITE_COLLECTION_IDS.coupons,
     productsCollectionId: APPWRITE_COLLECTION_IDS.products,
     enableMockFallback:
       process.env.NEXT_PUBLIC_ENABLE_CATALOG_MOCKS === "true",

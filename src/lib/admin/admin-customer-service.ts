@@ -6,6 +6,7 @@ import { appwriteConfig } from "@/lib/appwrite/config";
 import type { AccountAddress, AccountProfile } from "@/types/account";
 import type { AdminCustomerDetail, AdminCustomerListItem } from "@/types/admin-customer";
 import type { AppwriteUserProfile } from "@/types/auth";
+import type { CheckoutPricing } from "@/types/checkout";
 import type { OrderRecord, OrderStatus, OrderPaymentStatus } from "@/types/order";
 
 type AppwriteDocumentListResponse<T> = {
@@ -148,6 +149,10 @@ function toAccountAddress(document: AppwriteAddressDocument): AccountAddress {
 }
 
 function toOrderRecord(document: AppwriteOrderDocument): OrderRecord {
+  const pricingSnapshot = document.pricingSnapshot
+    ? parseJsonSafely<Partial<CheckoutPricing>>(document.pricingSnapshot, {})
+    : {};
+
   return {
     clerkId: document.clerkId,
     createdAt: document.createdAt,
@@ -179,7 +184,12 @@ function toOrderRecord(document: AppwriteOrderDocument): OrderRecord {
     paymentStatus: document.paymentStatus,
     paymentUrl: document.paymentUrl || null,
     pricing: {
-      couponCode: document.couponCode || null,
+      appliedCoupon: pricingSnapshot.appliedCoupon ?? null,
+      couponCode:
+        document.couponCode || pricingSnapshot.couponCode || null,
+      discountAmount: typeof pricingSnapshot.discountAmount === "number"
+        ? pricingSnapshot.discountAmount
+        : 0,
       estimatedTotal: toNumber(document.estimatedTotal),
       shippingFee: toNumber(document.shippingFee),
       subtotal: toNumber(document.subtotal),
