@@ -108,6 +108,33 @@ export async function getAllProducts() {
   }
 }
 
+export async function getProductsByIds(productIds: string[]) {
+  if (productIds.length === 0) {
+    return [];
+  }
+
+  if (!canReadCatalogFromAppwrite()) {
+    return shouldUseCatalogMocks()
+      ? getActiveMockProducts().filter((product) => productIds.includes(product.id))
+      : [];
+  }
+
+  try {
+    const products = await listProductDocuments([
+      Query.equal("status", "active"),
+      Query.equal("$id", productIds),
+    ]);
+
+    return sortProducts(products).filter((product) => productIds.includes(product.id));
+  } catch (error) {
+    handleCatalogError(error, "getProductsByIds");
+
+    return shouldUseCatalogMocks()
+      ? getActiveMockProducts().filter((product) => productIds.includes(product.id))
+      : [];
+  }
+}
+
 export async function getFeaturedProducts(limit = 8) {
   if (!canReadCatalogFromAppwrite()) {
     return shouldUseCatalogMocks()
@@ -281,6 +308,7 @@ export async function searchProducts(searchTerm: string) {
 export type CatalogService = {
   getAllCategories: typeof getAllCategories;
   getAllProducts: typeof getAllProducts;
+  getProductsByIds: typeof getProductsByIds;
   getCategoryBySlug: typeof getCategoryBySlug;
   getFeaturedProducts: typeof getFeaturedProducts;
   getProductBySlug: typeof getProductBySlug;
@@ -292,6 +320,7 @@ export type CatalogService = {
 export const catalogService: CatalogService = {
   getAllCategories,
   getAllProducts,
+  getProductsByIds,
   getCategoryBySlug,
   getFeaturedProducts,
   getProductBySlug,

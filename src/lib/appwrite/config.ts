@@ -11,6 +11,7 @@ export const appwriteConfig = {
   bucketId: APPWRITE_STORAGE_BUCKET_IDS.media,
   ordersCollectionId: APPWRITE_COLLECTION_IDS.orders,
   userProfilesCollectionId: APPWRITE_COLLECTION_IDS.userProfiles,
+  wishlistsCollectionId: APPWRITE_COLLECTION_IDS.wishlists,
   apiKey: process.env.APPWRITE_API_KEY ?? "",
   catalog: {
     brandsCollectionId: APPWRITE_COLLECTION_IDS.brands,

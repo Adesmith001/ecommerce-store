@@ -9,6 +9,10 @@ export const APPWRITE_COLLECTION_IDS = {
   products: process.env.NEXT_PUBLIC_APPWRITE_PRODUCTS_COLLECTION_ID ?? "",
   userProfiles:
     process.env.NEXT_PUBLIC_APPWRITE_USER_PROFILES_COLLECTION_ID ?? "",
+  wishlists:
+    process.env.NEXT_PUBLIC_APPWRITE_WISHLISTS_COLLECTION_ID ??
+    process.env.NEXT_PUBLIC_APPWRITE_WISHLIST_COLLECTION_ID ??
+    "",
 } as const;
 
 export const APPWRITE_STORAGE_BUCKET_IDS = {

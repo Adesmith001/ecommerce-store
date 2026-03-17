@@ -2,6 +2,7 @@ export const ROUTES = {
   storefront: {
     home: "/",
     cart: "/cart",
+    account: "/account",
     orders: "/orders",
     order: (orderId: string) => `/orders/${orderId}`,
     checkout: "/checkout",
@@ -20,6 +21,7 @@ export const ROUTES = {
     returnsPolicy: "/policies/returns",
     privacyPolicy: "/policies/privacy",
     designSystem: "/design-system",
+    wishlist: "/account/wishlist",
   },
   admin: {
     dashboard: "/admin",

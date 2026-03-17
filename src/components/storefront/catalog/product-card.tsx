@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { WishlistToggleButton } from "@/components/storefront/wishlist";
 import { ROUTES } from "@/constants/routes";
 import type { Product } from "@/types/catalog";
 
@@ -47,6 +48,9 @@ export function ProductCard({ product }: ProductCardProps) {
             </Badge>
           ) : null}
           {product.featured ? <Badge>Featured</Badge> : null}
+        </div>
+        <div className="absolute right-4 top-4">
+          <WishlistToggleButton product={product} variant="ghost" />
         </div>
       </div>
 

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { addToCart } from "@/store/features/cart/cart-slice";
 import { useAppDispatch } from "@/hooks/use-redux";
 import { QuantitySelector } from "@/components/storefront/product/quantity-selector";
+import { WishlistToggleButton } from "@/components/storefront/wishlist";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/constants/routes";
 import type { Product } from "@/types/catalog";
@@ -61,9 +62,7 @@ export function ProductPurchaseActions({
         >
           Buy Now
         </Button>
-        <Button size="lg" variant="outline">
-          Add to Wishlist
-        </Button>
+        <WishlistToggleButton product={product} showLabel />
       </div>
     </div>
   );
