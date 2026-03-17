@@ -32,6 +32,7 @@ export const ROUTES = {
   },
   admin: {
     dashboard: "/admin",
+    analytics: "/admin/analytics",
     inventory: "/admin/inventory",
     shipping: "/admin/shipping",
     notifications: "/admin/notifications",
@@ -57,6 +58,7 @@ export const STOREFRONT_NAV_LINKS = [
 
 export const ADMIN_NAV_LINKS = [
   { label: "Overview", href: ROUTES.admin.dashboard },
+  { label: "Analytics", href: ROUTES.admin.analytics },
   { label: "Inventory", href: ROUTES.admin.inventory },
   { label: "Shipping", href: ROUTES.admin.shipping },
   { label: "Notifications", href: ROUTES.admin.notifications },

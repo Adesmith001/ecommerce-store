@@ -49,3 +49,37 @@ export type AdminDashboardData = {
   topProducts: AdminTopProduct[];
   warnings: string[];
 };
+
+export type AdminAnalyticsRange = "7d" | "30d" | "month";
+
+export type AdminAnalyticsSummary = {
+  averageOrderValue: number;
+  paidOrders: number;
+  repeatCustomers: number;
+  totalCustomers: number;
+  totalOrders: number;
+  totalRevenue: number;
+};
+
+export type AdminAnalyticsTimePoint = {
+  label: string;
+  orders: number;
+  revenue: number;
+};
+
+export type AdminAnalyticsRankingPoint = {
+  label: string;
+  orders: number;
+  quantity: number;
+  revenue: number;
+};
+
+export type AdminAnalyticsData = {
+  categoryPerformance: AdminAnalyticsRankingPoint[];
+  isUsingFallback: boolean;
+  range: AdminAnalyticsRange;
+  summary: AdminAnalyticsSummary;
+  timeline: AdminAnalyticsTimePoint[];
+  topProducts: AdminAnalyticsRankingPoint[];
+  warnings: string[];
+};

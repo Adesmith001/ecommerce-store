@@ -1,5 +1,7 @@
 export * from "./admin-archive-product-button";
 export * from "./admin-archive-record-button";
+export * from "./admin-analytics-range-filter";
+export * from "./admin-analytics-ranking-chart-card";
 export * from "./admin-banner-form";
 export * from "./admin-banners-list";
 export * from "./admin-brand-form";

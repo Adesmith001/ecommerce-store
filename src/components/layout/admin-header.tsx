@@ -11,6 +11,10 @@ const ADMIN_PAGE_META: Record<string, { eyebrow: string; title: string }> = {
     eyebrow: "Overview",
     title: "Dashboard",
   },
+  [ROUTES.admin.analytics]: {
+    eyebrow: "Analytics",
+    title: "Reporting overview",
+  },
   [ROUTES.admin.orders]: {
     eyebrow: "Orders",
     title: "Order operations",
