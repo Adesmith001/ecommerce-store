@@ -13,6 +13,7 @@ import {
   getKoraCurrency,
   initializeKoraCheckout,
 } from "@/lib/payments/kora";
+import { listActiveShippingMethods } from "@/lib/shipping/shipping-service";
 
 export async function POST(request: Request) {
   const { userId } = await auth();
@@ -74,9 +75,30 @@ export async function POST(request: Request) {
     );
   }
 
+  const shippingMethods = await listActiveShippingMethods();
+
+  if (shippingMethods.length === 0) {
+    return NextResponse.json(
+      { message: "No shipping methods are currently available." },
+      { status: 400 },
+    );
+  }
+
+  const selectedShippingMethod = shippingMethods.find(
+    (method) => method.code === draft.deliveryMethod,
+  );
+
+  if (!selectedShippingMethod) {
+    return NextResponse.json(
+      { message: "The selected delivery method is no longer available." },
+      { status: 400 },
+    );
+  }
+
   let serverDraft = buildCheckoutOrderDraft({
     deliveryMethod: draft.deliveryMethod,
     items: draft.items,
+    shippingMethods,
     values: draft.customer,
   });
 
@@ -96,6 +118,7 @@ export async function POST(request: Request) {
         couponCode: validation.appliedCoupon.code,
         deliveryMethod: draft.deliveryMethod,
         items: draft.items,
+        shippingMethods,
         values: draft.customer,
       });
     } catch (error) {

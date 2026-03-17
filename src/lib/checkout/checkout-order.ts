@@ -1,6 +1,7 @@
 import { buildCheckoutPricing } from "@/lib/checkout/checkout-pricing";
 import type { CartItem } from "@/types/cart";
 import type { AppliedCoupon } from "@/types/coupon";
+import type { ShippingMethod } from "@/types/shipping";
 import type {
   CheckoutFormValues,
   CheckoutOrderDraft,
@@ -12,6 +13,7 @@ export function buildCheckoutOrderDraft(input: {
   couponCode?: string;
   deliveryMethod: DeliveryMethod;
   items: CartItem[];
+  shippingMethods?: ShippingMethod[];
   values: CheckoutFormValues;
 }): CheckoutOrderDraft {
   return {
@@ -23,6 +25,7 @@ export function buildCheckoutOrderDraft(input: {
       couponCode: input.couponCode,
       deliveryMethod: input.deliveryMethod,
       items: input.items,
+      shippingMethods: input.shippingMethods,
     }),
   };
 }

@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ROUTES } from "@/constants/routes";
 import { useAppSelector } from "@/hooks/use-redux";
 import { buildCheckoutOrderDraft } from "@/lib/checkout/checkout-order";
-import { buildCheckoutPricing, DELIVERY_METHODS } from "@/lib/checkout/checkout-pricing";
+import { buildCheckoutPricing } from "@/lib/checkout/checkout-pricing";
 import { validateCheckoutForm } from "@/lib/checkout/checkout-validation";
 import {
   selectCartAppliedCoupon,
@@ -20,22 +20,27 @@ import {
   selectCartItems,
 } from "@/store/features/cart/cart-slice";
 import type { CheckoutFormErrors, CheckoutFormValues, DeliveryMethod } from "@/types/checkout";
+import type { ShippingMethod } from "@/types/shipping";
 import { CheckoutSummary } from "@/components/storefront/checkout/checkout-summary";
 
 type CheckoutPageClientProps = {
   initialValues: CheckoutFormValues;
+  shippingMethods: ShippingMethod[];
 };
 
 const EMPTY_ERRORS: CheckoutFormErrors = {};
 
 export function CheckoutPageClient({
   initialValues,
+  shippingMethods,
 }: CheckoutPageClientProps) {
   const hydrated = useAppSelector(selectCartHydrated);
   const appliedCoupon = useAppSelector(selectCartAppliedCoupon);
   const items = useAppSelector(selectCartItems);
   const [values, setValues] = useState<CheckoutFormValues>(initialValues);
-  const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>("standard");
+  const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>(
+    shippingMethods[0]?.code ?? "pickup",
+  );
   const [errors, setErrors] = useState<CheckoutFormErrors>(EMPTY_ERRORS);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -46,8 +51,9 @@ export function CheckoutPageClient({
         appliedCoupon,
         deliveryMethod,
         items,
+        shippingMethods,
       }),
-    [appliedCoupon, deliveryMethod, items],
+    [appliedCoupon, deliveryMethod, items, shippingMethods],
   );
 
   if (!hydrated) {
@@ -69,6 +75,15 @@ export function CheckoutPageClient({
         }
         description="Add products to your cart before proceeding to checkout."
         title="Your cart is empty"
+      />
+    );
+  }
+
+  if (shippingMethods.length === 0) {
+    return (
+      <EmptyState
+        description="There are no active delivery methods right now. Please check back after the store updates shipping settings."
+        title="Shipping is temporarily unavailable"
       />
     );
   }
@@ -267,25 +282,25 @@ export function CheckoutPageClient({
           </div>
 
           <div className="grid gap-3">
-            {DELIVERY_METHODS.map((method) => (
+            {shippingMethods.map((method) => (
               <label
-                key={method.value}
+                key={method.id}
                 className={`flex cursor-pointer items-start gap-4 rounded-3xl border px-4 py-4 ${
-                  deliveryMethod === method.value
+                  deliveryMethod === method.code
                     ? "border-primary bg-primary/5"
                     : "border-border bg-white"
                 }`}
               >
                 <input
-                  checked={deliveryMethod === method.value}
+                  checked={deliveryMethod === method.code}
                   className="mt-1 h-4 w-4 accent-primary"
                   name="deliveryMethod"
-                  onChange={() => setDeliveryMethod(method.value)}
+                  onChange={() => setDeliveryMethod(method.code)}
                   type="radio"
                 />
                 <div className="flex-1">
                   <div className="flex items-center justify-between gap-3">
-                    <p className="font-medium">{method.label}</p>
+                    <p className="font-medium">{method.name}</p>
                     <p className="font-semibold">
                       {method.fee === 0
                         ? "Free"
@@ -296,7 +311,7 @@ export function CheckoutPageClient({
                     </p>
                   </div>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    {method.description}
+                    {method.description} {method.estimatedDelivery ? `| ${method.estimatedDelivery}` : ""}
                   </p>
                 </div>
               </label>
@@ -323,6 +338,7 @@ export function CheckoutPageClient({
                 couponCode: appliedCoupon?.code,
                 deliveryMethod,
                 items,
+                shippingMethods,
                 values,
               });
 

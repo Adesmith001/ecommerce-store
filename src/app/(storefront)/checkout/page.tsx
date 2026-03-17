@@ -2,9 +2,11 @@ import { StorePageHero, SectionWrapper } from "@/components/storefront";
 import { CheckoutPageClient } from "@/components/storefront/checkout/checkout-page-client";
 import { ROUTES } from "@/constants/routes";
 import { requireAuthenticatedUser } from "@/lib/auth/guards";
+import { listActiveShippingMethods } from "@/lib/shipping/shipping-service";
 
 export default async function CheckoutPage() {
   const session = await requireAuthenticatedUser(ROUTES.storefront.checkout);
+  const shippingMethods = await listActiveShippingMethods();
 
   return (
     <>
@@ -31,6 +33,7 @@ export default async function CheckoutPage() {
             landmark: "",
             postalCode: "",
           }}
+          shippingMethods={shippingMethods}
         />
       </SectionWrapper>
     </>

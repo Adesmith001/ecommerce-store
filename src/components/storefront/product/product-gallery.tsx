@@ -68,11 +68,11 @@ export function ProductGallery({
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   alt={image.alt}
-                  className="aspect-square w-full rounded-[1rem] object-cover"
+                  className="aspect-square w-full rounded-2xl object-cover"
                   src={image.url}
                 />
               ) : (
-                <div className="aspect-square rounded-[1rem] bg-[linear-gradient(180deg,#eff6ff,#f9fafb)]" />
+                <div className="aspect-square rounded-2xl bg-[linear-gradient(180deg,#eff6ff,#f9fafb)]" />
               )}
             </button>
           );

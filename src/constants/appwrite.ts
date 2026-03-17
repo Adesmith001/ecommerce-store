@@ -11,6 +11,8 @@ export const APPWRITE_COLLECTION_IDS = {
   orders: process.env.NEXT_PUBLIC_APPWRITE_ORDERS_COLLECTION_ID ?? "",
   products: process.env.NEXT_PUBLIC_APPWRITE_PRODUCTS_COLLECTION_ID ?? "",
   reviews: process.env.NEXT_PUBLIC_APPWRITE_REVIEWS_COLLECTION_ID ?? "",
+  shippingMethods:
+    process.env.NEXT_PUBLIC_APPWRITE_SHIPPING_METHODS_COLLECTION_ID ?? "",
   userProfiles:
     process.env.NEXT_PUBLIC_APPWRITE_USER_PROFILES_COLLECTION_ID ?? "",
   wishlists:

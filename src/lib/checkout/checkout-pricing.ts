@@ -2,30 +2,41 @@ import { evaluateCoupon } from "@/lib/coupons/coupon-pricing";
 import type { CartItem } from "@/types/cart";
 import type { AppliedCoupon } from "@/types/coupon";
 import type { CheckoutPricing, DeliveryMethod } from "@/types/checkout";
+import type { ShippingMethod } from "@/types/shipping";
 
-export const DELIVERY_METHODS: Array<{
-  description: string;
-  fee: number;
-  label: string;
-  value: DeliveryMethod;
-}> = [
+export const DEFAULT_DELIVERY_METHODS: ShippingMethod[] = [
   {
-    value: "standard",
-    label: "Standard delivery",
-    description: "3-5 business days",
+    code: "standard",
+    createdAt: "",
+    description: "Reliable delivery for everyday orders.",
+    estimatedDelivery: "3-5 business days",
     fee: 8,
+    active: true,
+    id: "standard",
+    name: "Standard delivery",
+    updatedAt: "",
   },
   {
-    value: "express",
-    label: "Express delivery",
-    description: "1-2 business days",
+    code: "express",
+    createdAt: "",
+    description: "Priority handling for faster delivery.",
+    estimatedDelivery: "1-2 business days",
     fee: 18,
+    active: true,
+    id: "express",
+    name: "Express delivery",
+    updatedAt: "",
   },
   {
-    value: "pickup",
-    label: "Pickup",
-    description: "Pickup placeholder",
+    code: "pickup",
+    createdAt: "",
+    description: "Collect your order from the pickup point.",
+    estimatedDelivery: "Ready for pickup today",
     fee: 0,
+    active: true,
+    id: "pickup",
+    name: "Pickup",
+    updatedAt: "",
   },
 ] as const;
 
@@ -44,8 +55,11 @@ export function getCartTotalQuantity(items: CartItem[]) {
   return items.reduce((total, item) => total + item.quantity, 0);
 }
 
-export function getDeliveryMethodFee(deliveryMethod: DeliveryMethod) {
-  return DELIVERY_METHODS.find((option) => option.value === deliveryMethod)?.fee ?? 0;
+export function getDeliveryMethodFee(
+  deliveryMethod: DeliveryMethod,
+  shippingMethods: ShippingMethod[] = DEFAULT_DELIVERY_METHODS,
+) {
+  return shippingMethods.find((option) => option.code === deliveryMethod)?.fee ?? 0;
 }
 
 export function buildCheckoutPricing(input: {
@@ -53,9 +67,13 @@ export function buildCheckoutPricing(input: {
   couponCode?: string;
   deliveryMethod: DeliveryMethod;
   items: CartItem[];
+  shippingMethods?: ShippingMethod[];
 }): CheckoutPricing {
   const subtotal = getCartSubtotal(input.items);
-  const shippingFee = getDeliveryMethodFee(input.deliveryMethod);
+  const shippingFee = getDeliveryMethodFee(
+    input.deliveryMethod,
+    input.shippingMethods ?? DEFAULT_DELIVERY_METHODS,
+  );
   const couponEvaluation = input.appliedCoupon
     ? evaluateCoupon({
         code: input.appliedCoupon.code,
@@ -90,5 +108,6 @@ export function buildCartPricing(input: {
     appliedCoupon: input.appliedCoupon,
     deliveryMethod: "pickup",
     items: input.items,
+    shippingMethods: DEFAULT_DELIVERY_METHODS,
   });
 }

@@ -5,6 +5,7 @@ export * from "@/types/checkout";
 export * from "@/types/catalog";
 export * from "@/types/coupon";
 export * from "@/types/admin-coupon";
+export * from "@/types/shipping";
 export * from "@/types/order";
 export * from "@/types/wishlist";
 export * from "@/types/review";
