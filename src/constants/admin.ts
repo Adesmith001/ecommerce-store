@@ -1,4 +1,4 @@
-import type { ProductStatus } from "@/types/catalog";
+import type { MerchandisingStatus, ProductStatus } from "@/types/catalog";
 
 export const PRODUCT_STATUS_OPTIONS: {
   label: string;
@@ -10,3 +10,11 @@ export const PRODUCT_STATUS_OPTIONS: {
 ];
 
 export const PRODUCT_LOW_STOCK_THRESHOLD = 5;
+
+export const MERCHANDISING_STATUS_OPTIONS: {
+  label: string;
+  value: MerchandisingStatus;
+}[] = [
+  { label: "Active", value: "active" },
+  { label: "Archived", value: "archived" },
+];

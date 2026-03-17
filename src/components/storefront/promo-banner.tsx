@@ -9,6 +9,8 @@ type PromoBannerProps = {
   description: string;
   ctaLabel: string;
   ctaHref: string;
+  imageUrl?: string;
+  imageAlt?: string;
   secondaryLabel?: string;
   secondaryHref?: string;
   className?: string;
@@ -20,6 +22,8 @@ export function PromoBanner({
   description,
   ctaLabel,
   ctaHref,
+  imageUrl,
+  imageAlt,
   secondaryLabel,
   secondaryHref,
   className,
@@ -31,7 +35,7 @@ export function PromoBanner({
         className,
       )}
     >
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_260px] lg:items-end">
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-end">
         <div className="space-y-5">
           <Badge className="border-white/10 bg-white/10 text-white" variant="outline">
             {eyebrow}
@@ -67,24 +71,35 @@ export function PromoBanner({
           </div>
         </div>
 
-        <div className="grid gap-3">
-          <div className="rounded-[1.8rem] border border-white/10 bg-white/8 p-5 backdrop-blur-md">
-            <p className="text-xs uppercase tracking-[0.24em] text-white/55">
-              Campaign code
-            </p>
-            <p className="font-display mt-2 text-3xl font-semibold tracking-[-0.06em]">
-              BAG20
-            </p>
+        {imageUrl ? (
+          <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 p-3 backdrop-blur-md">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              alt={imageAlt ?? title}
+              className="aspect-[4/5] w-full rounded-[1.5rem] object-cover"
+              src={imageUrl}
+            />
           </div>
-          <div className="rounded-[1.8rem] border border-white/10 bg-white/8 p-5 backdrop-blur-md">
-            <p className="text-xs uppercase tracking-[0.24em] text-white/55">
-              Included
-            </p>
-            <p className="mt-2 text-sm leading-6 text-white/75">
-              Signature wrapping, delivery updates, and thoughtful support.
-            </p>
+        ) : (
+          <div className="grid gap-3">
+            <div className="rounded-[1.8rem] border border-white/10 bg-white/8 p-5 backdrop-blur-md">
+              <p className="text-xs uppercase tracking-[0.24em] text-white/55">
+                Campaign code
+              </p>
+              <p className="font-display mt-2 text-3xl font-semibold tracking-[-0.06em]">
+                BAG20
+              </p>
+            </div>
+            <div className="rounded-[1.8rem] border border-white/10 bg-white/8 p-5 backdrop-blur-md">
+              <p className="text-xs uppercase tracking-[0.24em] text-white/55">
+                Included
+              </p>
+              <p className="mt-2 text-sm leading-6 text-white/75">
+                Signature wrapping, delivery updates, and thoughtful support.
+              </p>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

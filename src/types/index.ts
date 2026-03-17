@@ -8,3 +8,4 @@ export * from "@/types/wishlist";
 export * from "@/types/review";
 export * from "@/types/admin";
 export * from "@/types/admin-product";
+export * from "@/types/admin-merchandising";

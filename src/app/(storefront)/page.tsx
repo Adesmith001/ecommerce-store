@@ -19,6 +19,7 @@ import {
   TESTIMONIALS,
   TRUST_HIGHLIGHTS,
 } from "@/constants/storefront";
+import { getHomepageBanners } from "@/lib/marketing/banner-service";
 
 const SUPPORTING_BRANDS = [
   "Nike",
@@ -31,7 +32,10 @@ const SUPPORTING_BRANDS = [
   "adidas",
 ];
 
-export default function StorefrontHomePage() {
+export default async function StorefrontHomePage() {
+  const banners = await getHomepageBanners();
+  const featuredBanner = banners[0] ?? null;
+
   return (
     <>
       <section className="section-space overflow-hidden pb-8 pt-2">
@@ -277,13 +281,20 @@ export default function StorefrontHomePage() {
         title="Launch limited offers without breaking the premium feel"
       >
         <PromoBanner
-          ctaHref={ROUTES.storefront.shop}
-          ctaLabel="Shop the campaign"
-          description="A darker, fashion-led campaign surface for coupon drops, capsule releases, or time-sensitive storytelling."
-          eyebrow="Promotional banner"
+          ctaHref={featuredBanner?.ctaLink || ROUTES.storefront.shop}
+          ctaLabel={featuredBanner?.ctaText || "Shop the campaign"}
+          description={
+            featuredBanner?.subtitle ||
+            "A darker, fashion-led campaign surface for coupon drops, capsule releases, or time-sensitive storytelling."
+          }
+          eyebrow={featuredBanner ? "Homepage banner" : "Promotional banner"}
+          imageAlt={featuredBanner?.image?.alt}
+          imageUrl={featuredBanner?.image?.url}
           secondaryHref={ROUTES.storefront.contact}
           secondaryLabel="Talk to us"
-          title="Give BAG20 a home that feels considered, not noisy"
+          title={
+            featuredBanner?.title || "Give BAG20 a home that feels considered, not noisy"
+          }
         />
       </SectionWrapper>
 

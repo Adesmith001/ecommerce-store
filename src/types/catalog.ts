@@ -1,6 +1,7 @@
 import type { Models } from "appwrite";
 
 export type ProductStatus = "draft" | "active" | "archived";
+export type MerchandisingStatus = "active" | "archived";
 
 export type ProductImage = {
   id: string;
@@ -36,6 +37,7 @@ export type Brand = {
   description?: string;
   logo?: ProductImage | null;
   featured?: boolean;
+  status: MerchandisingStatus;
 };
 
 export type CategoryReference = {
@@ -52,6 +54,20 @@ export type Category = {
   image: ProductImage | null;
   parentCategory: CategoryReference | null;
   featured: boolean;
+  status: MerchandisingStatus;
+};
+
+export type HomepageBanner = {
+  id: string;
+  title: string;
+  subtitle: string;
+  image: ProductImage | null;
+  ctaText: string;
+  ctaLink: string;
+  active: boolean;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type RatingSummary = {
@@ -93,6 +109,26 @@ export type AppwriteCategoryDocument = Models.Document & {
   parentCategoryName?: string;
   parentCategorySlug?: string;
   featured?: boolean;
+  status?: string;
+};
+
+export type AppwriteBrandDocument = Models.Document & {
+  name?: string;
+  slug?: string;
+  description?: string;
+  logo?: unknown;
+  featured?: boolean;
+  status?: string;
+};
+
+export type AppwriteBannerDocument = Models.Document & {
+  title?: string;
+  subtitle?: string;
+  image?: unknown;
+  ctaText?: string;
+  ctaLink?: string;
+  active?: boolean;
+  sortOrder?: number | string;
 };
 
 export type AppwriteProductDocument = Models.Document & {

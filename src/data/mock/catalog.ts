@@ -8,6 +8,7 @@ export const mockBrands: Brand[] = [
     description: "Thoughtful essentials for home, wardrobe, and daily rituals.",
     featured: true,
     logo: null,
+    status: "active",
   },
   {
     id: "brand-north-harbor",
@@ -16,6 +17,7 @@ export const mockBrands: Brand[] = [
     description: "Minimal design with durable materials and clean lines.",
     featured: false,
     logo: null,
+    status: "active",
   },
 ] as const;
 
@@ -28,6 +30,7 @@ export const mockCategories: Category[] = [
     image: null,
     parentCategory: null,
     featured: true,
+    status: "active",
   },
   {
     id: "category-home-decor",
@@ -37,6 +40,7 @@ export const mockCategories: Category[] = [
     image: null,
     parentCategory: null,
     featured: true,
+    status: "active",
   },
   {
     id: "category-beauty-rituals",
@@ -46,6 +50,7 @@ export const mockCategories: Category[] = [
     image: null,
     parentCategory: null,
     featured: false,
+    status: "active",
   },
 ] as const;
 

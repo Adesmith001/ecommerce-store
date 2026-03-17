@@ -16,6 +16,7 @@ export const appwriteConfig = {
   wishlistsCollectionId: APPWRITE_COLLECTION_IDS.wishlists,
   apiKey: process.env.APPWRITE_API_KEY ?? "",
   catalog: {
+    bannersCollectionId: APPWRITE_COLLECTION_IDS.banners,
     brandsCollectionId: APPWRITE_COLLECTION_IDS.brands,
     categoriesCollectionId: APPWRITE_COLLECTION_IDS.categories,
     productsCollectionId: APPWRITE_COLLECTION_IDS.products,

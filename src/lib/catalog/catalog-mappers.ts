@@ -1,10 +1,14 @@
 import { resolveCatalogAssetUrl } from "@/lib/catalog/catalog-media";
 import type {
+  AppwriteBannerDocument,
+  AppwriteBrandDocument,
   AppwriteCategoryDocument,
   AppwriteProductDocument,
   Brand,
   Category,
   CategoryReference,
+  HomepageBanner,
+  MerchandisingStatus,
   Product,
   ProductImage,
   ProductSpecification,
@@ -72,6 +76,10 @@ function toStatus(value: unknown): ProductStatus {
   return value === "draft" || value === "archived" || value === "active"
     ? value
     : "draft";
+}
+
+function toMerchandisingStatus(value: unknown): MerchandisingStatus {
+  return value === "archived" ? "archived" : "active";
 }
 
 function normalizeImage(value: unknown, fallbackAlt: string): ProductImage | null {
@@ -273,6 +281,36 @@ export function mapCategoryDocumentToCategory(
       slug: document.parentCategorySlug,
     }),
     featured: Boolean(document.featured),
+    status: toMerchandisingStatus(document.status),
+  };
+}
+
+export function mapBrandDocumentToBrand(document: AppwriteBrandDocument): Brand {
+  return {
+    id: document.$id,
+    name: document.name ?? "",
+    slug: document.slug ?? "",
+    description: document.description ?? "",
+    logo: normalizeImage(document.logo, document.name ?? "Brand logo"),
+    featured: Boolean(document.featured),
+    status: toMerchandisingStatus(document.status),
+  };
+}
+
+export function mapBannerDocumentToHomepageBanner(
+  document: AppwriteBannerDocument,
+): HomepageBanner {
+  return {
+    id: document.$id,
+    title: document.title ?? "",
+    subtitle: document.subtitle ?? "",
+    image: normalizeImage(document.image, document.title ?? "Banner image"),
+    ctaText: document.ctaText ?? "",
+    ctaLink: document.ctaLink ?? "",
+    active: Boolean(document.active),
+    sortOrder: toNumber(document.sortOrder),
+    createdAt: document.$createdAt,
+    updatedAt: document.$updatedAt,
   };
 }
 

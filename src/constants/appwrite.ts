@@ -4,6 +4,7 @@ export const APPWRITE_DATABASE_IDS = {
 
 export const APPWRITE_COLLECTION_IDS = {
   addresses: process.env.NEXT_PUBLIC_APPWRITE_ADDRESSES_COLLECTION_ID ?? "",
+  banners: process.env.NEXT_PUBLIC_APPWRITE_BANNERS_COLLECTION_ID ?? "",
   brands: process.env.NEXT_PUBLIC_APPWRITE_BRANDS_COLLECTION_ID ?? "",
   categories: process.env.NEXT_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID ?? "",
   orders: process.env.NEXT_PUBLIC_APPWRITE_ORDERS_COLLECTION_ID ?? "",

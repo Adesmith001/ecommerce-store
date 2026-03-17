@@ -19,6 +19,18 @@ const ADMIN_PAGE_META: Record<string, { eyebrow: string; title: string }> = {
     eyebrow: "Products",
     title: "Catalog operations",
   },
+  [ROUTES.admin.categories]: {
+    eyebrow: "Categories",
+    title: "Category management",
+  },
+  [ROUTES.admin.brands]: {
+    eyebrow: "Brands",
+    title: "Brand management",
+  },
+  [ROUTES.admin.banners]: {
+    eyebrow: "Banners",
+    title: "Campaign management",
+  },
   [ROUTES.admin.customers]: {
     eyebrow: "Customers",
     title: "Customer workspace",
@@ -27,7 +39,12 @@ const ADMIN_PAGE_META: Record<string, { eyebrow: string; title: string }> = {
 
 export function AdminHeader() {
   const pathname = usePathname();
-  const pageMeta = ADMIN_PAGE_META[pathname] ?? ADMIN_PAGE_META[ROUTES.admin.dashboard];
+  const pageMeta =
+    Object.entries(ADMIN_PAGE_META).find(([route]) =>
+      route === ROUTES.admin.dashboard
+        ? pathname === route
+        : pathname === route || pathname.startsWith(`${route}/`),
+    )?.[1] ?? ADMIN_PAGE_META[ROUTES.admin.dashboard];
 
   return (
     <header className="space-y-4">

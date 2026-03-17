@@ -34,6 +34,9 @@ export const ROUTES = {
     products: "/admin/products",
     orders: "/admin/orders",
     customers: "/admin/customers",
+    categories: "/admin/categories",
+    brands: "/admin/brands",
+    banners: "/admin/banners",
   },
   auth: {
     signIn: "/sign-in",
@@ -53,6 +56,9 @@ export const STOREFRONT_NAV_LINKS = [
 export const ADMIN_NAV_LINKS = [
   { label: "Overview", href: ROUTES.admin.dashboard },
   { label: "Products", href: ROUTES.admin.products },
+  { label: "Categories", href: ROUTES.admin.categories },
+  { label: "Brands", href: ROUTES.admin.brands },
+  { label: "Banners", href: ROUTES.admin.banners },
   { label: "Orders", href: ROUTES.admin.orders },
   { label: "Customers", href: ROUTES.admin.customers },
 ] as const;

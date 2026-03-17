@@ -1,12 +1,11 @@
 import "server-only";
 
 import { ID, Query } from "appwrite";
-import type { Models } from "appwrite";
 import { mockBrands, mockCategories, mockProducts } from "@/data/mock/catalog";
 import { appwriteDatabases } from "@/lib/appwrite/client";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import { buildAppwriteApiUrl, getAppwriteErrorMessage } from "@/lib/appwrite/server-api";
-import { mapProductDocumentToProduct } from "@/lib/catalog/catalog-mappers";
+import { mapBrandDocumentToBrand, mapProductDocumentToProduct } from "@/lib/catalog/catalog-mappers";
 import { slugifyProductName, validateAdminProductForm } from "@/lib/admin/admin-product-validation";
 import type {
   AdminManagedProduct,
@@ -18,20 +17,12 @@ import type {
   AdminProductReferenceOption,
 } from "@/types/admin-product";
 import type {
+  AppwriteBrandDocument,
   AppwriteCategoryDocument,
   AppwriteProductDocument,
-  Brand,
   Category,
   Product,
 } from "@/types/catalog";
-
-type AppwriteBrandDocument = Models.Document & {
-  description?: string;
-  featured?: boolean;
-  logo?: unknown;
-  name?: string;
-  slug?: string;
-};
 
 type ProductReference = {
   id: string;
@@ -173,14 +164,7 @@ async function listBrandDocuments() {
     total: false,
   });
 
-  return response.documents.map<Brand>((document) => ({
-    description: document.description ?? "",
-    featured: Boolean(document.featured),
-    id: document.$id,
-    logo: null,
-    name: document.name ?? "",
-    slug: document.slug ?? "",
-  }));
+  return response.documents.map(mapBrandDocumentToBrand);
 }
 
 async function getCategoryReference(categoryId: string): Promise<ProductReference | null> {
@@ -389,6 +373,7 @@ export async function getAdminProductFormOptions(): Promise<AdminProductFormOpti
             name: document.name ?? "",
             parentCategory: null,
             slug: document.slug ?? "",
+            status: document.status === "archived" ? "archived" : "active",
           })),
         )
     : [...mockCategories];
@@ -396,8 +381,8 @@ export async function getAdminProductFormOptions(): Promise<AdminProductFormOpti
   const brands = canReadBrands() ? await listBrandDocuments() : [...mockBrands];
 
   return {
-    brands,
-    categories,
+    brands: brands.filter((brand) => brand.status !== "archived"),
+    categories: categories.filter((category) => category.status !== "archived"),
   };
 }
 
