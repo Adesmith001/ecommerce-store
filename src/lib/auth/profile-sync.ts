@@ -1,6 +1,7 @@
 import "server-only";
 
 import { Query } from "appwrite";
+import { buildAppwriteApiUrl, getAppwriteErrorMessage } from "@/lib/appwrite/server-api";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import type { AppwriteUserProfile, UserRole } from "@/types/auth";
 
@@ -21,9 +22,8 @@ function isProfileSyncConfigured() {
 }
 
 function getAppwriteDocumentUrl() {
-  return new URL(
-    `/databases/${appwriteConfig.databaseId}/collections/${appwriteConfig.userProfilesCollectionId}/documents`,
-    appwriteConfig.endpoint,
+  return buildAppwriteApiUrl(
+    `databases/${appwriteConfig.databaseId}/collections/${appwriteConfig.userProfilesCollectionId}/documents`,
   );
 }
 
@@ -52,7 +52,12 @@ async function findProfileByClerkId(clerkId: string) {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to query Appwrite user profiles.");
+    throw new Error(
+      await getAppwriteErrorMessage(
+        response,
+        "Failed to query Appwrite user profiles.",
+      ),
+    );
   }
 
   const result =
@@ -76,7 +81,12 @@ async function createProfileDocument(profile: SyncableProfile) {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to create Appwrite user profile.");
+    throw new Error(
+      await getAppwriteErrorMessage(
+        response,
+        "Failed to create Appwrite user profile.",
+      ),
+    );
   }
 }
 

@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { CartItem } from "@/types/cart";
+import { buildAppwriteApiUrl, getAppwriteErrorMessage } from "@/lib/appwrite/server-api";
 import { appwriteConfig } from "@/lib/appwrite/config";
 
 type AppwriteProductStockDocument = {
@@ -27,9 +28,8 @@ function getAppwriteHeaders() {
 }
 
 function getProductDocumentUrl(productId: string) {
-  return new URL(
-    `/databases/${appwriteConfig.databaseId}/collections/${appwriteConfig.catalog.productsCollectionId}/documents/${productId}`,
-    appwriteConfig.endpoint,
+  return buildAppwriteApiUrl(
+    `databases/${appwriteConfig.databaseId}/collections/${appwriteConfig.catalog.productsCollectionId}/documents/${productId}`,
   );
 }
 
@@ -55,7 +55,12 @@ async function getProductStockDocument(productId: string) {
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to read product stock for ${productId}.`);
+    throw new Error(
+      await getAppwriteErrorMessage(
+        response,
+        `Failed to read product stock for ${productId}.`,
+      ),
+    );
   }
 
   return (await response.json()) as AppwriteProductStockDocument;
@@ -74,7 +79,12 @@ async function updateProductStock(productId: string, nextStock: number) {
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to update product stock for ${productId}.`);
+    throw new Error(
+      await getAppwriteErrorMessage(
+        response,
+        `Failed to update product stock for ${productId}.`,
+      ),
+    );
   }
 }
 

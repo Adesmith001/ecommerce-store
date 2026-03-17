@@ -2,11 +2,19 @@ import type { CartItem } from "@/types/cart";
 import type { CheckoutFormValues, CheckoutPricing, DeliveryMethod } from "@/types/checkout";
 
 export type OrderPaymentStatus = "pending" | "paid" | "failed" | "cancelled";
-export type OrderStatus = "pending" | "confirmed" | "failed" | "cancelled";
+export type OrderStatus =
+  | "pending"
+  | "processing"
+  | "shipped"
+  | "delivered"
+  | "cancelled"
+  | "confirmed"
+  | "failed";
 export type PaymentProvider = "kora";
 
 export type OrderRecord = {
   id: string;
+  orderNumber: string;
   clerkId: string;
   customer: CheckoutFormValues;
   deliveryMethod: DeliveryMethod;
@@ -48,3 +56,10 @@ export type KoraVerificationSnapshot = {
   reference: string;
   successful: boolean;
 };
+
+export type OrderTimelineStatus =
+  | "pending"
+  | "processing"
+  | "shipped"
+  | "delivered"
+  | "cancelled";

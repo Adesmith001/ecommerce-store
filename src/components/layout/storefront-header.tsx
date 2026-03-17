@@ -146,6 +146,12 @@ export function StorefrontHeader() {
             ) : null}
             {isLoaded && isSignedIn ? (
               <>
+                <Link
+                  className={buttonVariants({ variant: "outline" })}
+                  href={ROUTES.storefront.orders}
+                >
+                  Orders
+                </Link>
                 {showAdminLink ? (
                   <Link
                     className={buttonVariants({ variant: "outline" })}
@@ -252,6 +258,13 @@ export function StorefrontHeader() {
               ) : null}
               {isLoaded && isSignedIn ? (
                 <>
+                  <Link
+                    className={buttonVariants({ className: "flex-1", variant: "outline" })}
+                    href={ROUTES.storefront.orders}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Orders
+                  </Link>
                   {showAdminLink ? (
                     <Link
                       className={buttonVariants({ className: "flex-1", variant: "outline" })}

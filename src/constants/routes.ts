@@ -2,6 +2,8 @@ export const ROUTES = {
   storefront: {
     home: "/",
     cart: "/cart",
+    orders: "/orders",
+    order: (orderId: string) => `/orders/${orderId}`,
     checkout: "/checkout",
     checkoutSuccess: "/checkout/success",
     checkoutFailed: "/checkout/failed",

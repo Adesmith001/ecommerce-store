@@ -183,7 +183,7 @@ function mapKoraStatusToOrderState(rawStatus: string): {
 } {
   switch (rawStatus) {
     case "success":
-      return { paymentStatus: "paid", orderStatus: "confirmed" };
+      return { paymentStatus: "paid", orderStatus: "processing" };
     case "failed":
       return { paymentStatus: "failed", orderStatus: "failed" };
     case "cancelled":

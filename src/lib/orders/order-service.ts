@@ -1,6 +1,7 @@
 import "server-only";
 
 import { Query } from "appwrite";
+import { buildAppwriteApiUrl, getAppwriteErrorMessage } from "@/lib/appwrite/server-api";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import type {
   CreateOrderInput,
@@ -29,6 +30,7 @@ type AppwriteOrderDocument = {
   inventoryAdjusted: boolean;
   items: string;
   landmark: string;
+  orderNumber: string;
   orderStatus: OrderStatus;
   paymentMessage: string;
   paymentMeta: string;
@@ -60,16 +62,14 @@ function isOrderServiceConfigured() {
 }
 
 function getOrderCollectionUrl() {
-  return new URL(
-    `/databases/${appwriteConfig.databaseId}/collections/${appwriteConfig.ordersCollectionId}/documents`,
-    appwriteConfig.endpoint,
+  return buildAppwriteApiUrl(
+    `databases/${appwriteConfig.databaseId}/collections/${appwriteConfig.ordersCollectionId}/documents`,
   );
 }
 
 function getOrderDocumentUrl(documentId: string) {
-  return new URL(
-    `/databases/${appwriteConfig.databaseId}/collections/${appwriteConfig.ordersCollectionId}/documents/${documentId}`,
-    appwriteConfig.endpoint,
+  return buildAppwriteApiUrl(
+    `databases/${appwriteConfig.databaseId}/collections/${appwriteConfig.ordersCollectionId}/documents/${documentId}`,
   );
 }
 
@@ -104,6 +104,7 @@ function toOrderRecord(document: AppwriteOrderDocument): OrderRecord {
 
   return {
     id: document.$id,
+    orderNumber: document.orderNumber || document.$id,
     clerkId: document.clerkId,
     customer,
     deliveryMethod: document.deliveryMethod,
@@ -146,13 +147,45 @@ async function findOrderDocumentByPaymentReference(reference: string) {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to query Appwrite orders.");
+    throw new Error(
+      await getAppwriteErrorMessage(response, "Failed to query Appwrite orders."),
+    );
   }
 
   const result =
     (await response.json()) as AppwriteDocumentListResponse<AppwriteOrderDocument>;
 
   return result.documents[0] ?? null;
+}
+
+async function getOrderDocumentById(documentId: string) {
+  const response = await fetch(getOrderDocumentUrl(documentId), {
+    cache: "no-store",
+    headers: getAppwriteHeaders(),
+    method: "GET",
+  });
+
+  if (response.status === 404) {
+    return null;
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      await getAppwriteErrorMessage(response, "Failed to read Appwrite order."),
+    );
+  }
+
+  return (await response.json()) as AppwriteOrderDocument;
+}
+
+function buildOrderNumber() {
+  const timestamp = new Date()
+    .toISOString()
+    .slice(0, 10)
+    .replaceAll("-", "");
+  const suffix = crypto.randomUUID().replaceAll("-", "").slice(0, 8).toUpperCase();
+
+  return `ORD-${timestamp}-${suffix}`;
 }
 
 async function patchOrderDocument(
@@ -167,7 +200,9 @@ async function patchOrderDocument(
   });
 
   if (!response.ok) {
-    throw new Error("Failed to update Appwrite order.");
+    throw new Error(
+      await getAppwriteErrorMessage(response, "Failed to update Appwrite order."),
+    );
   }
 
   const nextDocument = (await response.json()) as AppwriteOrderDocument;
@@ -181,9 +216,11 @@ export async function createPendingOrder(input: CreateOrderInput) {
   }
 
   const now = new Date().toISOString();
+  const orderNumber = buildOrderNumber();
   const response = await fetch(getOrderCollectionUrl(), {
     body: JSON.stringify({
       data: {
+        orderNumber,
         clerkId: input.clerkId,
         fullName: input.draft.customer.fullName,
         email: input.draft.customer.email,
@@ -224,7 +261,9 @@ export async function createPendingOrder(input: CreateOrderInput) {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to create Appwrite order.");
+    throw new Error(
+      await getAppwriteErrorMessage(response, "Failed to create Appwrite order."),
+    );
   }
 
   const document = (await response.json()) as AppwriteOrderDocument;
@@ -240,6 +279,51 @@ export async function getOrderByPaymentReference(reference: string) {
   const document = await findOrderDocumentByPaymentReference(reference);
 
   return document ? toOrderRecord(document) : null;
+}
+
+export async function listOrdersForClerkUser(clerkId: string) {
+  if (!isOrderServiceConfigured()) {
+    throw new Error("Appwrite order storage is not configured.");
+  }
+
+  const url = getOrderCollectionUrl();
+
+  url.searchParams.append("queries[]", Query.equal("clerkId", clerkId));
+  url.searchParams.append("queries[]", Query.orderDesc("$createdAt"));
+
+  const response = await fetch(url, {
+    cache: "no-store",
+    headers: getAppwriteHeaders(),
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      await getAppwriteErrorMessage(response, "Failed to list Appwrite orders."),
+    );
+  }
+
+  const result =
+    (await response.json()) as AppwriteDocumentListResponse<AppwriteOrderDocument>;
+
+  return result.documents.map(toOrderRecord);
+}
+
+export async function getOrderForClerkUser(input: {
+  clerkId: string;
+  orderId: string;
+}) {
+  if (!isOrderServiceConfigured()) {
+    throw new Error("Appwrite order storage is not configured.");
+  }
+
+  const document = await getOrderDocumentById(input.orderId);
+
+  if (!document || document.clerkId !== input.clerkId) {
+    return null;
+  }
+
+  return toOrderRecord(document);
 }
 
 export async function updateOrderPaymentInitialization(input: {
