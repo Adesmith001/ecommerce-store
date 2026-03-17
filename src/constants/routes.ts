@@ -3,6 +3,12 @@ export const ROUTES = {
     home: "/",
     cart: "/cart",
     account: "/account",
+    accountProfile: "/account/profile",
+    accountOrders: "/account/orders",
+    accountOrder: (orderId: string) => `/account/orders/${orderId}`,
+    accountWishlist: "/account/wishlist",
+    accountAddresses: "/account/addresses",
+    accountSettings: "/account/settings",
     orders: "/orders",
     order: (orderId: string) => `/orders/${orderId}`,
     checkout: "/checkout",
@@ -47,4 +53,13 @@ export const ADMIN_NAV_LINKS = [
   { label: "Overview", href: ROUTES.admin.dashboard },
   { label: "Products", href: ROUTES.admin.products },
   { label: "Orders", href: ROUTES.admin.orders },
+] as const;
+
+export const ACCOUNT_NAV_LINKS = [
+  { label: "Dashboard", href: ROUTES.storefront.account },
+  { label: "Profile", href: ROUTES.storefront.accountProfile },
+  { label: "Orders", href: ROUTES.storefront.accountOrders },
+  { label: "Wishlist", href: ROUTES.storefront.accountWishlist },
+  { label: "Addresses", href: ROUTES.storefront.accountAddresses },
+  { label: "Settings", href: ROUTES.storefront.accountSettings },
 ] as const;

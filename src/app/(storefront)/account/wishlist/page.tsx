@@ -1,26 +1,16 @@
-import { StorePageHero, SectionWrapper } from "@/components/storefront";
 import { WishlistPageClient } from "@/components/storefront/wishlist";
-import { ROUTES } from "@/constants/routes";
-import { requireAuthenticatedUser } from "@/lib/auth/guards";
+import { Card } from "@/components/ui/card";
 
 export default async function WishlistPage() {
-  await requireAuthenticatedUser(ROUTES.storefront.wishlist);
-
   return (
-    <>
-      <StorePageHero
-        breadcrumbs={[
-          { label: "Home", href: ROUTES.storefront.home },
-          { label: "Account", href: ROUTES.storefront.account },
-          { label: "Wishlist" },
-        ]}
-        description="Keep track of saved products, revisit them later, or move them straight into your cart."
-        eyebrow="Account"
-        title="Your wishlist"
-      />
-      <SectionWrapper>
-        <WishlistPageClient />
-      </SectionWrapper>
-    </>
+    <div className="space-y-6">
+      <Card className="space-y-3 p-6">
+        <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
+          Account
+        </p>
+        <h1 className="text-3xl font-semibold tracking-tight">Wishlist</h1>
+      </Card>
+      <WishlistPageClient />
+    </div>
   );
 }

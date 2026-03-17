@@ -9,6 +9,7 @@ export const appwriteConfig = {
   projectId: process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID ?? "",
   databaseId: APPWRITE_DATABASE_IDS.core,
   bucketId: APPWRITE_STORAGE_BUCKET_IDS.media,
+  addressesCollectionId: APPWRITE_COLLECTION_IDS.addresses,
   ordersCollectionId: APPWRITE_COLLECTION_IDS.orders,
   reviewsCollectionId: APPWRITE_COLLECTION_IDS.reviews,
   userProfilesCollectionId: APPWRITE_COLLECTION_IDS.userProfiles,

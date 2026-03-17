@@ -35,7 +35,7 @@ export function OrderCard({ order }: OrderCardProps) {
           </div>
         </div>
 
-        <Link href={ROUTES.storefront.order(order.id)}>
+        <Link href={ROUTES.storefront.accountOrder(order.id)}>
           <Button variant="outline">View details</Button>
         </Link>
       </div>

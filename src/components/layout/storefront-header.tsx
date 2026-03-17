@@ -148,15 +148,9 @@ export function StorefrontHeader() {
               <>
                 <Link
                   className={buttonVariants({ variant: "outline" })}
-                  href={ROUTES.storefront.orders}
+                  href={ROUTES.storefront.account}
                 >
-                  Orders
-                </Link>
-                <Link
-                  className={buttonVariants({ variant: "outline" })}
-                  href={ROUTES.storefront.wishlist}
-                >
-                  Wishlist
+                  Account
                 </Link>
                 {showAdminLink ? (
                   <Link
@@ -266,17 +260,10 @@ export function StorefrontHeader() {
                 <>
                   <Link
                     className={buttonVariants({ className: "flex-1", variant: "outline" })}
-                    href={ROUTES.storefront.orders}
+                    href={ROUTES.storefront.account}
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Orders
-                  </Link>
-                  <Link
-                    className={buttonVariants({ className: "flex-1", variant: "outline" })}
-                    href={ROUTES.storefront.wishlist}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Wishlist
+                    Account
                   </Link>
                   {showAdminLink ? (
                     <Link
