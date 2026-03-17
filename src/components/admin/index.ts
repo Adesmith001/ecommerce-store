@@ -7,6 +7,7 @@ export * from "./admin-brands-list";
 export * from "./admin-categories-list";
 export * from "./admin-category-form";
 export * from "./admin-image-field";
+export * from "./admin-inventory-list";
 export * from "./admin-merchandising-status-badge";
 export * from "./admin-product-form";
 export * from "./admin-product-status-badge";

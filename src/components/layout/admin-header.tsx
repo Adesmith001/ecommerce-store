@@ -19,6 +19,10 @@ const ADMIN_PAGE_META: Record<string, { eyebrow: string; title: string }> = {
     eyebrow: "Products",
     title: "Catalog operations",
   },
+  [ROUTES.admin.inventory]: {
+    eyebrow: "Inventory",
+    title: "Stock operations",
+  },
   [ROUTES.admin.categories]: {
     eyebrow: "Categories",
     title: "Category management",

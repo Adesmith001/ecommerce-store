@@ -31,6 +31,7 @@ export const ROUTES = {
   },
   admin: {
     dashboard: "/admin",
+    inventory: "/admin/inventory",
     products: "/admin/products",
     orders: "/admin/orders",
     customers: "/admin/customers",
@@ -55,6 +56,7 @@ export const STOREFRONT_NAV_LINKS = [
 
 export const ADMIN_NAV_LINKS = [
   { label: "Overview", href: ROUTES.admin.dashboard },
+  { label: "Inventory", href: ROUTES.admin.inventory },
   { label: "Products", href: ROUTES.admin.products },
   { label: "Categories", href: ROUTES.admin.categories },
   { label: "Brands", href: ROUTES.admin.brands },
