@@ -1,7 +1,6 @@
 import "server-only";
 
 import { ID, Query } from "appwrite";
-import { mockBrands, mockCategories, mockProducts } from "@/data/mock/catalog";
 import { appwriteDatabases } from "@/lib/appwrite/client";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import { buildAppwriteApiUrl, getAppwriteErrorMessage } from "@/lib/appwrite/server-api";
@@ -192,8 +191,7 @@ async function getCategoryReference(categoryId: string): Promise<ProductReferenc
   }
 
   if (!appwriteConfig.catalog.categoriesCollectionId) {
-    const fallback = mockCategories.find((category) => category.id === categoryId);
-    return fallback ? { id: fallback.id, name: fallback.name, slug: fallback.slug } : null;
+    return null;
   }
 
   const category = await appwriteDatabases.getDocument<AppwriteCategoryDocument>({
@@ -213,8 +211,7 @@ async function getBrandReference(brandId: string): Promise<ProductReference | nu
   }
 
   if (!appwriteConfig.catalog.brandsCollectionId) {
-    const fallback = mockBrands.find((brand) => brand.id === brandId);
-    return fallback ? { id: fallback.id, name: fallback.name, slug: fallback.slug } : null;
+    return null;
   }
 
   const brand = await appwriteDatabases.getDocument<AppwriteBrandDocument>({
@@ -348,7 +345,7 @@ async function persistProductDocument(
 
 export async function listAdminProducts() {
   if (!appwriteConfig.databaseId || !appwriteConfig.catalog.productsCollectionId) {
-    return mockProducts.map(mapProductForAdmin);
+    return [];
   }
 
   const response = await appwriteDatabases.listDocuments<AppwriteProductDocument>({
@@ -365,8 +362,7 @@ export async function listAdminProducts() {
 
 export async function getAdminProductById(productId: string) {
   if (!appwriteConfig.databaseId || !appwriteConfig.catalog.productsCollectionId) {
-    const fallback = mockProducts.find((product) => product.id === productId);
-    return fallback ? mapProductForAdmin(fallback) : null;
+    return null;
   }
 
   try {
@@ -403,9 +399,9 @@ export async function getAdminProductFormOptions(): Promise<AdminProductFormOpti
             status: document.status === "archived" ? "archived" : "active",
           })),
         )
-    : [...mockCategories];
+    : [];
 
-  const brands = canReadBrands() ? await listBrandDocuments() : [...mockBrands];
+  const brands = canReadBrands() ? await listBrandDocuments() : [];
 
   return {
     brands: brands.filter((brand) => brand.status !== "archived"),

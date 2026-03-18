@@ -1,5 +1,4 @@
 import { Query } from "appwrite";
-import { mockHomepageBanners } from "@/data/mock/banners";
 import { appwriteDatabases } from "@/lib/appwrite/client";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import { mapBannerDocumentToHomepageBanner } from "@/lib/catalog/catalog-mappers";
@@ -17,9 +16,7 @@ function sortBannersByPriority(documents: HomepageBanner[]) {
 
 export async function getHomepageBanners() {
   if (!canReadBanners()) {
-    return sortBannersByPriority(
-      mockHomepageBanners.filter((banner) => banner.active),
-    );
+    return [];
   }
 
   try {
@@ -36,8 +33,6 @@ export async function getHomepageBanners() {
   } catch (error) {
     console.error("Failed to load homepage banners.", error);
 
-    return sortBannersByPriority(
-      mockHomepageBanners.filter((banner) => banner.active),
-    );
+    return [];
   }
 }

@@ -1,8 +1,6 @@
 import "server-only";
 
 import { ID, Query } from "appwrite";
-import { mockBrands, mockCategories } from "@/data/mock/catalog";
-import { mockHomepageBanners } from "@/data/mock/banners";
 import { appwriteDatabases } from "@/lib/appwrite/client";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import {
@@ -223,7 +221,7 @@ async function saveDocument<TDocument>({
 
 export async function listAdminCategories() {
   if (!appwriteConfig.databaseId || !appwriteConfig.catalog.categoriesCollectionId) {
-    return [...mockCategories].sort((left, right) => left.name.localeCompare(right.name));
+    return [];
   }
 
   const response = await appwriteDatabases.listDocuments<AppwriteCategoryDocument>({
@@ -238,7 +236,7 @@ export async function listAdminCategories() {
 
 export async function getAdminCategoryById(categoryId: string) {
   if (!appwriteConfig.databaseId || !appwriteConfig.catalog.categoriesCollectionId) {
-    return mockCategories.find((category) => category.id === categoryId) ?? null;
+    return null;
   }
 
   try {
@@ -392,7 +390,7 @@ export async function archiveAdminCategory(categoryId: string) {
 
 export async function listAdminBrands() {
   if (!appwriteConfig.databaseId || !appwriteConfig.catalog.brandsCollectionId) {
-    return [...mockBrands].sort((left, right) => left.name.localeCompare(right.name));
+    return [];
   }
 
   const response = await appwriteDatabases.listDocuments<AppwriteBrandDocument>({
@@ -407,7 +405,7 @@ export async function listAdminBrands() {
 
 export async function getAdminBrandById(brandId: string) {
   if (!appwriteConfig.databaseId || !appwriteConfig.catalog.brandsCollectionId) {
-    return mockBrands.find((brand) => brand.id === brandId) ?? null;
+    return null;
   }
 
   try {
@@ -529,7 +527,7 @@ export async function archiveAdminBrand(brandId: string) {
 
 export async function listAdminBanners() {
   if (!appwriteConfig.databaseId || !appwriteConfig.catalog.bannersCollectionId) {
-    return [...mockHomepageBanners].sort((left, right) => left.sortOrder - right.sortOrder);
+    return [];
   }
 
   const response = await appwriteDatabases.listDocuments<AppwriteBannerDocument>({
@@ -544,7 +542,7 @@ export async function listAdminBanners() {
 
 export async function getAdminBannerById(bannerId: string) {
   if (!appwriteConfig.databaseId || !appwriteConfig.catalog.bannersCollectionId) {
-    return mockHomepageBanners.find((banner) => banner.id === bannerId) ?? null;
+    return null;
   }
 
   try {

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ProductCard } from "@/components/storefront/catalog";
 import {
-  CategoryCardPlaceholder,
+  CategoryCard,
   PromoBanner,
   SectionWrapper,
 } from "@/components/storefront";
@@ -59,7 +59,7 @@ export default async function StorefrontHomePage() {
       description: category.description,
       href: ROUTES.storefront.category(category.slug),
       imageUrl: category.image?.url,
-      itemCount: `${itemCount} item${itemCount === 1 ? "" : "s"}`,
+      itemCount,
       name: category.name,
     };
   });
@@ -204,7 +204,7 @@ export default async function StorefrontHomePage() {
           ) : (
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {categoryCards.map((category) => (
-                <CategoryCardPlaceholder key={category.href} {...category} />
+                <CategoryCard key={category.href} {...category} />
               ))}
             </div>
           )}

@@ -1,5 +1,4 @@
 import { Query } from "appwrite";
-import { mockCategories, mockProducts } from "@/data/mock/catalog";
 import { appwriteDatabases } from "@/lib/appwrite/client";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import {
@@ -18,10 +17,6 @@ function canReadCatalogFromAppwrite() {
       appwriteConfig.catalog.categoriesCollectionId &&
       appwriteConfig.catalog.productsCollectionId,
   );
-}
-
-function shouldUseCatalogMocks() {
-  return appwriteConfig.catalog.enableMockFallback;
 }
 
 function handleCatalogError(error: unknown, context: string) {
@@ -58,10 +53,6 @@ async function listCategoryDocuments(queries: string[] = []) {
   return response.documents.map(mapCategoryDocumentToCategory);
 }
 
-function getActiveMockProducts() {
-  return sortProducts(mockProducts.filter((product) => product.status === "active"));
-}
-
 function filterProductsBySearch(products: Product[], searchTerm: string) {
   const normalizedSearchTerm = searchTerm.trim().toLowerCase();
 
@@ -90,7 +81,7 @@ function filterProductsBySearch(products: Product[], searchTerm: string) {
 
 export async function getAllProducts() {
   if (!canReadCatalogFromAppwrite()) {
-    return shouldUseCatalogMocks() ? getActiveMockProducts() : [];
+    return [];
   }
 
   try {
@@ -104,7 +95,7 @@ export async function getAllProducts() {
   } catch (error) {
     handleCatalogError(error, "getAllProducts");
 
-    return shouldUseCatalogMocks() ? getActiveMockProducts() : [];
+    return [];
   }
 }
 
@@ -114,9 +105,7 @@ export async function getProductsByIds(productIds: string[]) {
   }
 
   if (!canReadCatalogFromAppwrite()) {
-    return shouldUseCatalogMocks()
-      ? getActiveMockProducts().filter((product) => productIds.includes(product.id))
-      : [];
+    return [];
   }
 
   try {
@@ -129,17 +118,13 @@ export async function getProductsByIds(productIds: string[]) {
   } catch (error) {
     handleCatalogError(error, "getProductsByIds");
 
-    return shouldUseCatalogMocks()
-      ? getActiveMockProducts().filter((product) => productIds.includes(product.id))
-      : [];
+    return [];
   }
 }
 
 export async function getFeaturedProducts(limit = 8) {
   if (!canReadCatalogFromAppwrite()) {
-    return shouldUseCatalogMocks()
-      ? getActiveMockProducts().filter((product) => product.featured).slice(0, limit)
-      : [];
+    return [];
   }
 
   try {
@@ -154,17 +139,13 @@ export async function getFeaturedProducts(limit = 8) {
   } catch (error) {
     handleCatalogError(error, "getFeaturedProducts");
 
-    return shouldUseCatalogMocks()
-      ? getActiveMockProducts().filter((product) => product.featured).slice(0, limit)
-      : [];
+    return [];
   }
 }
 
 export async function getProductBySlug(slug: string) {
   if (!canReadCatalogFromAppwrite()) {
-    return shouldUseCatalogMocks()
-      ? getActiveMockProducts().find((product) => product.slug === slug) ?? null
-      : null;
+    return null;
   }
 
   try {
@@ -178,9 +159,7 @@ export async function getProductBySlug(slug: string) {
   } catch (error) {
     handleCatalogError(error, "getProductBySlug");
 
-    return shouldUseCatalogMocks()
-      ? getActiveMockProducts().find((product) => product.slug === slug) ?? null
-      : null;
+    return null;
   }
 }
 
@@ -228,7 +207,7 @@ export async function getRelatedProducts(slug: string, limit = 4) {
 
 export async function getAllCategories() {
   if (!canReadCatalogFromAppwrite()) {
-    return shouldUseCatalogMocks() ? [...mockCategories] : [];
+    return [];
   }
 
   try {
@@ -236,15 +215,13 @@ export async function getAllCategories() {
   } catch (error) {
     handleCatalogError(error, "getAllCategories");
 
-    return shouldUseCatalogMocks() ? [...mockCategories] : [];
+    return [];
   }
 }
 
 export async function getCategoryBySlug(slug: string) {
   if (!canReadCatalogFromAppwrite()) {
-    return shouldUseCatalogMocks()
-      ? mockCategories.find((category) => category.slug === slug) ?? null
-      : null;
+    return null;
   }
 
   try {
@@ -257,19 +234,13 @@ export async function getCategoryBySlug(slug: string) {
   } catch (error) {
     handleCatalogError(error, "getCategoryBySlug");
 
-    return shouldUseCatalogMocks()
-      ? mockCategories.find((category) => category.slug === slug) ?? null
-      : null;
+    return null;
   }
 }
 
 export async function getProductsByCategory(categorySlug: string) {
   if (!canReadCatalogFromAppwrite()) {
-    return shouldUseCatalogMocks()
-      ? getActiveMockProducts().filter(
-          (product) => product.category?.slug === categorySlug,
-        )
-      : [];
+    return [];
   }
 
   try {
@@ -284,11 +255,7 @@ export async function getProductsByCategory(categorySlug: string) {
   } catch (error) {
     handleCatalogError(error, "getProductsByCategory");
 
-    return shouldUseCatalogMocks()
-      ? getActiveMockProducts().filter(
-          (product) => product.category?.slug === categorySlug,
-        )
-      : [];
+    return [];
   }
 }
 

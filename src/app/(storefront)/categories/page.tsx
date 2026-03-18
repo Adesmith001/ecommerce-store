@@ -1,8 +1,20 @@
-import { CategoryCardPlaceholder, SectionWrapper, StorePageHero } from "@/components/storefront";
-import { FEATURED_CATEGORIES } from "@/constants/storefront";
+import { CategoryCard, SectionWrapper, StorePageHero } from "@/components/storefront";
+import { EmptyState } from "@/components/ui/empty-state";
 import { ROUTES } from "@/constants/routes";
+import { getAllCategories, getAllProducts } from "@/lib/catalog/catalog-service";
 
-export default function CategoriesPage() {
+export default async function CategoriesPage() {
+  const [categories, products] = await Promise.all([getAllCategories(), getAllProducts()]);
+
+  const activeCategories = categories.filter((category) => category.status === "active");
+  const categoryCards = activeCategories.map((category) => ({
+    description: category.description,
+    href: ROUTES.storefront.category(category.slug),
+    imageUrl: category.image?.url,
+    itemCount: products.filter((product) => product.category?.slug === category.slug).length,
+    name: category.name,
+  }));
+
   return (
     <>
       <StorePageHero
@@ -15,11 +27,18 @@ export default function CategoriesPage() {
         title="Discover the catalog by collection"
       />
       <SectionWrapper>
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {FEATURED_CATEGORIES.map((category) => (
-            <CategoryCardPlaceholder key={category.href} {...category} />
-          ))}
-        </div>
+        {categoryCards.length === 0 ? (
+          <EmptyState
+            description="No live categories are available yet. Add active categories in the admin to populate this page."
+            title="No categories available"
+          />
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {categoryCards.map((category) => (
+              <CategoryCard key={category.href} {...category} />
+            ))}
+          </div>
+        )}
       </SectionWrapper>
     </>
   );

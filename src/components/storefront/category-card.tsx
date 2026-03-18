@@ -1,31 +1,36 @@
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 
-type CategoryCardPlaceholderProps = {
+type CategoryCardProps = {
   description: string;
   href: string;
-  imageUrl?: string;
-  itemCount: string;
+  imageUrl?: string | null;
+  itemCount?: number;
   name: string;
 };
 
-export function CategoryCardPlaceholder({
+export function CategoryCard({
   description,
   href,
   imageUrl,
   itemCount,
   name,
-}: CategoryCardPlaceholderProps) {
+}: CategoryCardProps) {
+  const itemCountLabel =
+    typeof itemCount === "number"
+      ? `${itemCount} item${itemCount === 1 ? "" : "s"}`
+      : null;
+
   return (
     <Link href={href}>
       <Card className="group h-full overflow-hidden p-0">
         <div className="flex h-full flex-col justify-between gap-8 p-5 sm:p-6">
-          <div className="relative overflow-hidden rounded-[1.75rem] bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.12),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(249,115,22,0.12),transparent_42%),linear-gradient(180deg,#fcfaf7,#efe8df)] p-5">
+          <div className="storefront-panel-dark relative overflow-hidden rounded-[1.1rem] p-5 text-left">
             <div className="flex items-start justify-between gap-4">
-              <span className="rounded-full border border-white/80 bg-white/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                {itemCount}
+              <span className="storefront-tag">
+                {itemCountLabel ?? "Collection"}
               </span>
-              <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/80 bg-white/75 text-lg transition-transform group-hover:translate-x-1">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-current bg-transparent text-lg transition-transform group-hover:translate-x-1">
                 &rarr;
               </span>
             </div>
@@ -33,11 +38,11 @@ export function CategoryCardPlaceholder({
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 alt={name}
-                className="mt-6 aspect-[4/3] w-full rounded-[1.35rem] object-cover"
+                className="mt-6 aspect-[4/3] w-full rounded-[0.8rem] border-2 border-accent object-cover"
                 src={imageUrl}
               />
             ) : (
-              <div className="headline-marquee mt-8">Edit</div>
+              <div className="headline-marquee mt-8 text-accent/20">Category</div>
             )}
           </div>
 
