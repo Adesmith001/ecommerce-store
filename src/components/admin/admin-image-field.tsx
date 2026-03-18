@@ -168,11 +168,6 @@ export function AdminImageField({
             placeholder="Alt text"
             value={image?.alt ?? ""}
           />
-          <Input
-            onChange={(event) => updateImage({ publicId: event.target.value })}
-            placeholder="Cloudinary public ID (optional)"
-            value={image?.publicId ?? ""}
-          />
 
           {uploadError ? <p className="text-sm text-danger">{uploadError}</p> : null}
         </div>

@@ -262,7 +262,7 @@ function summarizeOrders(orders: OrderRecord[]) {
       return summary;
     },
     {
-      currency: "USD",
+      currency: "NGN",
       mostRecentOrderDate: null as string | null,
       totalOrders: 0,
       totalSpend: 0,

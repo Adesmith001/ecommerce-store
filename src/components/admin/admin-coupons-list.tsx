@@ -9,6 +9,7 @@ import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { ROUTES } from "@/constants/routes";
+import { formatCurrency } from "@/helpers/format-currency";
 import type { AdminCouponRecord } from "@/types/admin-coupon";
 
 function formatDate(value: string) {
@@ -101,7 +102,7 @@ export function AdminCouponsList({
                     <span className="rounded-full border border-white/80 bg-white/72 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                       {coupon.discountType === "percentage"
                         ? `${coupon.discountValue}% off`
-                        : `$${coupon.discountValue.toFixed(2)} off`}
+                        : `${formatCurrency(coupon.discountValue)} off`}
                     </span>
                   </div>
                   <div>
@@ -115,7 +116,7 @@ export function AdminCouponsList({
                   <div className="grid gap-3 text-sm sm:grid-cols-4">
                     <div className="rounded-[1.2rem] border border-white/80 bg-white/72 px-3 py-3">
                       <p className="text-muted-foreground">Minimum spend</p>
-                      <p className="mt-1 font-medium">${coupon.minimumSpend.toFixed(2)}</p>
+                      <p className="mt-1 font-medium">{formatCurrency(coupon.minimumSpend)}</p>
                     </div>
                     <div className="rounded-[1.2rem] border border-white/80 bg-white/72 px-3 py-3">
                       <p className="text-muted-foreground">Usage</p>

@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
+import { formatCurrency } from "@/helpers/format-currency";
 import { DEFAULT_DELIVERY_METHODS } from "@/lib/checkout/checkout-pricing";
 import type {
   DeliveryMethod,
@@ -13,13 +14,6 @@ import type {
   ShippingMethodFormErrors,
   ShippingMethodFormValues,
 } from "@/types";
-
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    currency: "USD",
-    style: "currency",
-  }).format(value);
-}
 
 function validateShippingMethodForm(values: ShippingMethodFormValues) {
   const errors: ShippingMethodFormErrors = {};
@@ -146,7 +140,7 @@ export function AdminShippingSettingsManager({
                     <div className="grid gap-3 text-sm sm:grid-cols-2">
                       <div className="rounded-[1.2rem] border border-white/80 bg-white/72 px-3 py-3">
                         <p className="text-muted-foreground">Fee</p>
-                        <p className="mt-1 font-medium">{formatPrice(method.fee)}</p>
+                        <p className="mt-1 font-medium">{formatCurrency(method.fee)}</p>
                       </div>
                       <div className="rounded-[1.2rem] border border-white/80 bg-white/72 px-3 py-3">
                         <p className="text-muted-foreground">Estimated delivery</p>

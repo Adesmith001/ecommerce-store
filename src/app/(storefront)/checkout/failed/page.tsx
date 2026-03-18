@@ -3,6 +3,7 @@ import { StorePageHero, SectionWrapper } from "@/components/storefront";
 import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ROUTES } from "@/constants/routes";
+import { formatCurrency } from "@/helpers/format-currency";
 import { getOrderByPaymentReference } from "@/lib/orders/order-service";
 
 type CheckoutFailedPageProps = {
@@ -69,10 +70,9 @@ export default async function CheckoutFailedPage({
               <div>
                 <p className="text-muted-foreground">Estimated total</p>
                 <p className="mt-1 font-medium">
-                  {new Intl.NumberFormat("en-US", {
+                  {formatCurrency(order.pricing.estimatedTotal, {
                     currency: order.currency,
-                    style: "currency",
-                  }).format(order.pricing.estimatedTotal)}
+                  })}
                 </p>
               </div>
             </div>

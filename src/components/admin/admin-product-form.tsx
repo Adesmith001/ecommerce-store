@@ -11,7 +11,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { PRODUCT_STATUS_OPTIONS } from "@/constants/admin";
 import { ROUTES } from "@/constants/routes";
 import {
-  slugifyProductName,
   validateAdminProductForm,
 } from "@/lib/admin/admin-product-validation";
 import {
@@ -174,38 +173,6 @@ export function AdminProductForm({
                   value={values.name}
                 />
                 {errors.name ? <p className="text-sm text-danger">{errors.name}</p> : null}
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Slug</label>
-                <div className="flex gap-2">
-                  <Input
-                    onChange={(event) => updateValues({ ...values, slug: event.target.value })}
-                    value={values.slug}
-                  />
-                  <Button
-                    onClick={() =>
-                      updateValues({
-                        ...values,
-                        slug: slugifyProductName(values.name),
-                      })
-                    }
-                    type="button"
-                    variant="outline"
-                  >
-                    Generate
-                  </Button>
-                </div>
-                {errors.slug ? <p className="text-sm text-danger">{errors.slug}</p> : null}
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">SKU</label>
-                <Input
-                  onChange={(event) => updateValues({ ...values, sku: event.target.value })}
-                  value={values.sku}
-                />
-                {errors.sku ? <p className="text-sm text-danger">{errors.sku}</p> : null}
               </div>
 
               <div className="space-y-2 sm:col-span-2">
@@ -391,7 +358,6 @@ export function AdminProductForm({
                         alt: "",
                         id: `image-${Date.now()}`,
                         isPrimary: values.images.length === 0,
-                        publicId: "",
                         url: "",
                       },
                     ],
@@ -458,14 +424,6 @@ export function AdminProductForm({
                       onChange={(event) => setImage(image.id, { alt: event.target.value })}
                       placeholder="Alt text"
                       value={image.alt}
-                    />
-                    <Input
-                      className="sm:col-span-2"
-                      onChange={(event) =>
-                        setImage(image.id, { publicId: event.target.value })
-                      }
-                      placeholder="Cloudinary public ID (optional)"
-                      value={image.publicId ?? ""}
                     />
                     <div className="sm:col-span-2 flex justify-end">
                       <Button

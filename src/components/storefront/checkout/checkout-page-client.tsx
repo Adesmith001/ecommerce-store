@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { ROUTES } from "@/constants/routes";
+import { formatCurrency } from "@/helpers/format-currency";
 import { useAppSelector } from "@/hooks/use-redux";
 import { buildCheckoutOrderDraft } from "@/lib/checkout/checkout-order";
 import { buildCheckoutPricing } from "@/lib/checkout/checkout-pricing";
@@ -304,10 +305,7 @@ export function CheckoutPageClient({
                     <p className="font-semibold">
                       {method.fee === 0
                         ? "Free"
-                        : new Intl.NumberFormat("en-US", {
-                            currency: "USD",
-                            style: "currency",
-                          }).format(method.fee)}
+                        : formatCurrency(method.fee)}
                     </p>
                   </div>
                   <p className="mt-1 text-sm text-muted-foreground">

@@ -43,7 +43,7 @@ export function CatalogToolbar({
             <Input
               defaultValue={query.q}
               name="q"
-              placeholder="Search products, brands, tags, or SKU"
+              placeholder="Search products, brands, or tags"
             />
             <Button type="submit">Search</Button>
           </form>

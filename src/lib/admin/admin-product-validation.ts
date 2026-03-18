@@ -20,14 +20,6 @@ export function validateAdminProductForm(
     errors.name = "Product name is required.";
   }
 
-  if (!values.slug.trim()) {
-    errors.slug = "Slug is required.";
-  }
-
-  if (!values.sku.trim()) {
-    errors.sku = "SKU is required.";
-  }
-
   if (!values.categoryId) {
     errors.categoryId = "Category is required.";
   }

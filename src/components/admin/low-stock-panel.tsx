@@ -31,7 +31,6 @@ export function LowStockPanel({ products }: LowStockPanelProps) {
             >
               <div className="min-w-0">
                 <p className="break-words font-medium">{product.name}</p>
-                <p className="break-words text-sm text-muted-foreground">SKU: {product.sku}</p>
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 <Badge variant="danger">{product.stock} left</Badge>

@@ -68,7 +68,7 @@ export function AdminInventoryList({ products }: AdminInventoryListProps) {
     }
 
     return filtered.filter((product) =>
-      [product.name, product.sku, product.categoryName, product.status]
+      [product.name, product.categoryName, product.status]
         .join(" ")
         .toLowerCase()
         .includes(normalizedQuery),
@@ -113,7 +113,7 @@ export function AdminInventoryList({ products }: AdminInventoryListProps) {
           <div className="flex flex-col gap-3 sm:flex-row">
             <Input
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search by product, SKU, category..."
+              placeholder="Search by product or category..."
               value={query}
             />
             <Link href={ROUTES.admin.products}>
@@ -193,7 +193,7 @@ export function AdminInventoryList({ products }: AdminInventoryListProps) {
                       {product.name}
                     </h3>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      {product.sku} · {product.categoryName}
+                      {product.categoryName}
                     </p>
                   </div>
 
@@ -319,3 +319,4 @@ export function AdminInventoryList({ products }: AdminInventoryListProps) {
     </div>
   );
 }
+

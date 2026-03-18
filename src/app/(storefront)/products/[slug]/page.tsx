@@ -8,6 +8,7 @@ import { SectionWrapper, StorePageHero } from "@/components/storefront";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { ROUTES } from "@/constants/routes";
+import { formatCurrency } from "@/helpers/format-currency";
 import { getProductBySlug, getRelatedProducts } from "@/lib/catalog";
 import {
   getReviewDataForProduct,
@@ -18,13 +19,6 @@ import type { ReviewEligibility, ReviewSummary } from "@/types/review";
 type ProductDetailsPageProps = {
   params: Promise<{ slug: string }>;
 };
-
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    currency: "USD",
-    style: "currency",
-  }).format(value);
-}
 
 function getDiscountPercentage(price: number, salePrice: number) {
   return Math.round(((price - salePrice) / price) * 100);
@@ -121,11 +115,11 @@ export default async function ProductDetailsPage({
 
                 <div className="flex flex-wrap items-end gap-3">
                   <span className="font-display text-4xl font-semibold tracking-[-0.06em] text-foreground">
-                    {formatPrice(product.salePrice ?? product.price)}
+                    {formatCurrency(product.salePrice ?? product.price)}
                   </span>
                   {hasDiscount ? (
                     <span className="pb-1 text-lg text-muted-foreground line-through">
-                      {formatPrice(product.price)}
+                      {formatCurrency(product.price)}
                     </span>
                   ) : null}
                 </div>
@@ -147,12 +141,6 @@ export default async function ProductDetailsPage({
                     <p className="font-display mt-3 text-2xl font-semibold tracking-[-0.05em]">
                       {reviewSummary.totalReviews}
                     </p>
-                  </div>
-                  <div className="rounded-[1.6rem] border border-white/80 bg-white/72 p-4">
-                    <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
-                      SKU
-                    </p>
-                    <p className="mt-3 text-sm font-semibold">{product.sku}</p>
                   </div>
                   <div className="rounded-[1.6rem] border border-white/80 bg-white/72 p-4">
                     <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">

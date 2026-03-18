@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ROUTES } from "@/constants/routes";
+import { formatCurrency } from "@/helpers/format-currency";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux";
 import {
   clearCart,
@@ -18,13 +19,6 @@ import {
   selectCartTotalQuantity,
   updateCartItemQuantity,
 } from "@/store/features/cart/cart-slice";
-
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    currency: "USD",
-    style: "currency",
-  }).format(value);
-}
 
 export function CartPageClient() {
   const dispatch = useAppDispatch();
@@ -103,18 +97,17 @@ export function CartPageClient() {
                       </h2>
                     </Link>
                     <div className="text-sm text-muted-foreground">
-                      <p>SKU: {item.sku}</p>
                       <p>{item.category?.name ?? "Catalog"}</p>
                     </div>
                   </div>
 
                   <div className="text-right">
                     <p className="font-display text-2xl font-semibold tracking-[-0.05em]">
-                      {formatPrice(unitPrice)}
+                      {formatCurrency(unitPrice)}
                     </p>
                     {item.salePrice !== null ? (
                       <p className="text-sm text-muted-foreground line-through">
-                        {formatPrice(item.price)}
+                        {formatCurrency(item.price)}
                       </p>
                     ) : null}
                   </div>
@@ -163,7 +156,7 @@ export function CartPageClient() {
                     <p className="text-sm text-muted-foreground">
                       Subtotal:{" "}
                       <span className="font-semibold text-foreground">
-                        {formatPrice(lineSubtotal)}
+                        {formatCurrency(lineSubtotal)}
                       </span>
                     </p>
                     <Button

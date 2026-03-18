@@ -5,6 +5,7 @@ import { CouponApplicationCard } from "@/components/storefront/promotions/coupon
 import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ROUTES } from "@/constants/routes";
+import { formatCurrency } from "@/helpers/format-currency";
 import type { CheckoutPricing } from "@/types/checkout";
 
 type CartSummaryProps = {
@@ -12,13 +13,6 @@ type CartSummaryProps = {
   pricing: CheckoutPricing;
   totalQuantity: number;
 };
-
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    currency: "USD",
-    style: "currency",
-  }).format(value);
-}
 
 export function CartSummary({
   lineItemCount,
@@ -48,20 +42,20 @@ export function CartSummary({
           </div>
           <div className="flex items-center justify-between gap-3">
             <span className="text-muted-foreground">Cart subtotal</span>
-            <span className="font-medium">{formatPrice(pricing.subtotal)}</span>
+            <span className="font-medium">{formatCurrency(pricing.subtotal)}</span>
           </div>
           {pricing.discountAmount > 0 ? (
             <div className="flex items-center justify-between gap-3 text-success">
               <span>
                 Discount{pricing.appliedCoupon ? ` (${pricing.appliedCoupon.code})` : ""}
               </span>
-              <span className="font-medium">-{formatPrice(pricing.discountAmount)}</span>
+              <span className="font-medium">-{formatCurrency(pricing.discountAmount)}</span>
             </div>
           ) : null}
           <div className="flex items-center justify-between gap-3 rounded-[1.35rem] border border-white/80 bg-white/72 px-4 py-4">
             <span className="text-muted-foreground">Estimated total</span>
             <span className="font-display text-2xl font-semibold tracking-[-0.05em]">
-              {formatPrice(pricing.estimatedTotal)}
+              {formatCurrency(pricing.estimatedTotal)}
             </span>
           </div>
         </div>

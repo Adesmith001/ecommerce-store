@@ -7,6 +7,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ROUTES } from "@/constants/routes";
+import { formatCurrency } from "@/helpers/format-currency";
 import { getAdminCouponById } from "@/lib/coupons/coupon-service";
 
 function formatDate(value: string) {
@@ -39,7 +40,7 @@ export default async function AdminCouponDetailPage({
               <span className="rounded-full border border-white/80 bg-white/72 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                 {coupon.discountType === "percentage"
                   ? `${coupon.discountValue}% off`
-                  : `$${coupon.discountValue.toFixed(2)} off`}
+                  : `${formatCurrency(coupon.discountValue)} off`}
               </span>
             </div>
             <div>
@@ -76,7 +77,7 @@ export default async function AdminCouponDetailPage({
         <div className="grid gap-4 text-sm sm:grid-cols-2 xl:grid-cols-4">
           <div className="rounded-[1.3rem] border border-white/80 bg-white/72 p-4">
             <p className="text-muted-foreground">Minimum spend</p>
-            <p className="mt-1 font-medium">${coupon.minimumSpend.toFixed(2)}</p>
+            <p className="mt-1 font-medium">{formatCurrency(coupon.minimumSpend)}</p>
           </div>
           <div className="rounded-[1.3rem] border border-white/80 bg-white/72 p-4">
             <p className="text-muted-foreground">Usage count</p>
@@ -164,7 +165,7 @@ export default async function AdminCouponDetailPage({
                 <span className="font-medium">
                   {coupon.discountType === "percentage"
                     ? `${coupon.discountValue}%`
-                    : `$${coupon.discountValue.toFixed(2)}`}
+                    : formatCurrency(coupon.discountValue)}
                 </span>
               </div>
               <div className="flex items-center justify-between gap-3">

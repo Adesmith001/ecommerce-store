@@ -7,15 +7,9 @@ import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ROUTES } from "@/constants/routes";
+import { formatCurrency } from "@/helpers/format-currency";
 import { addToCart } from "@/store/features/cart/cart-slice";
 import { useAppDispatch } from "@/hooks/use-redux";
-
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    currency: "USD",
-    style: "currency",
-  }).format(value);
-}
 
 export function WishlistPageClient() {
   const dispatch = useAppDispatch();
@@ -102,11 +96,11 @@ export function WishlistPageClient() {
             <div className="space-y-4 p-5">
               <div className="flex items-end gap-2">
                 <span className="font-display text-2xl font-semibold tracking-[-0.05em]">
-                  {formatPrice(product.salePrice ?? product.price)}
+                  {formatCurrency(product.salePrice ?? product.price)}
                 </span>
                 {hasDiscount ? (
                   <span className="pb-1 text-sm text-muted-foreground line-through">
-                    {formatPrice(product.price)}
+                    {formatCurrency(product.price)}
                   </span>
                 ) : null}
               </div>

@@ -38,7 +38,7 @@ export const ORDER_TIMELINE_STEPS: Array<{
 ] as const;
 
 export function formatOrderCurrency(value: number, currency: string) {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("en-NG", {
     currency,
     style: "currency",
   }).format(value);

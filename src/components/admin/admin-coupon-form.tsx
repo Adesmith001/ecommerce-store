@@ -73,29 +73,21 @@ export function AdminCouponForm({
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Coupon code</label>
-                <div className="flex gap-2">
-                  <Input
-                    onChange={(event) =>
-                      updateValues({
-                        ...values,
-                        code: event.target.value.toUpperCase(),
-                      })
-                    }
-                    value={values.code}
-                  />
-                  <Button
-                    onClick={() =>
-                      updateValues({
-                        ...values,
-                        code: normalizeCouponCode(values.code),
-                      })
-                    }
-                    type="button"
-                    variant="outline"
-                  >
-                    Format
-                  </Button>
-                </div>
+                <Input
+                  onBlur={() =>
+                    updateValues({
+                      ...values,
+                      code: normalizeCouponCode(values.code),
+                    })
+                  }
+                  onChange={(event) =>
+                    updateValues({
+                      ...values,
+                      code: event.target.value.toUpperCase(),
+                    })
+                  }
+                  value={values.code}
+                />
                 {errors.code ? <p className="text-sm text-danger">{errors.code}</p> : null}
               </div>
 

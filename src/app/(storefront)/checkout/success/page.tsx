@@ -5,6 +5,7 @@ import { StorePageHero, SectionWrapper } from "@/components/storefront";
 import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ROUTES } from "@/constants/routes";
+import { formatCurrency } from "@/helpers/format-currency";
 import { verifyAndFinalizeKoraOrder } from "@/lib/payments/kora";
 
 type CheckoutSuccessPageProps = {
@@ -101,10 +102,9 @@ export default async function CheckoutSuccessPage({
             <div>
               <p className="text-muted-foreground">Estimated total</p>
               <p className="mt-1 font-medium">
-                {new Intl.NumberFormat("en-US", {
+                {formatCurrency(result.order.pricing.estimatedTotal, {
                   currency: result.order.currency,
-                  style: "currency",
-                }).format(result.order.pricing.estimatedTotal)}
+                })}
               </p>
             </div>
           </div>

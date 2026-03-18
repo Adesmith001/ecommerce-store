@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { formatCurrency } from "@/helpers/format-currency";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux";
 import { buildCartPricing } from "@/lib/checkout/checkout-pricing";
 import {
@@ -13,13 +14,6 @@ import {
   setAppliedCoupon,
 } from "@/store/features/cart/cart-slice";
 import type { AppliedCoupon } from "@/types/coupon";
-
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    currency: "USD",
-    style: "currency",
-  }).format(value);
-}
 
 export function CouponApplicationCard({
   description = "Apply one valid coupon at a time. Invalid or expired coupons will not affect your total.",
@@ -97,7 +91,7 @@ export function CouponApplicationCard({
               dispatch(setAppliedCoupon(payload.appliedCoupon));
               setCode(payload.appliedCoupon.code);
               setMessage(
-                `${payload.message ?? "Coupon applied."} You saved ${formatPrice(payload.discountAmount ?? 0)}.`,
+                `${payload.message ?? "Coupon applied."} You saved ${formatCurrency(payload.discountAmount ?? 0)}.`,
               );
             } catch (nextError) {
               setError(
@@ -123,7 +117,7 @@ export function CouponApplicationCard({
                 {pricing.appliedCoupon.code} is active
               </p>
               <p className="mt-1 text-sm text-muted-foreground">
-                Saving {formatPrice(pricing.discountAmount)} on this order.
+                Saving {formatCurrency(pricing.discountAmount)} on this order.
               </p>
             </div>
             <Button

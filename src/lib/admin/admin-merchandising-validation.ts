@@ -22,10 +22,6 @@ export function validateCategoryForm(values: CategoryFormValues): CategoryFormEr
     errors.name = "Category name is required.";
   }
 
-  if (!values.slug.trim()) {
-    errors.slug = "Category slug is required.";
-  }
-
   if (!values.description.trim()) {
     errors.description = "Category description is required.";
   }
@@ -38,10 +34,6 @@ export function validateBrandForm(values: BrandFormValues): BrandFormErrors {
 
   if (!values.name.trim()) {
     errors.name = "Brand name is required.";
-  }
-
-  if (!values.slug.trim()) {
-    errors.slug = "Brand slug is required.";
   }
 
   return errors;

@@ -102,13 +102,30 @@ function normalizeImageInput(values: AdminProductFormImage[]) {
     .filter((image) => image.url);
 }
 
+function createEmptyImage(index = 1): AdminProductFormImage {
+  return {
+    alt: "",
+    id: `image-${index}`,
+    isPrimary: index === 1,
+    publicId: "",
+    url: "",
+  };
+}
+
+function generateProductSku(values: AdminProductFormValues) {
+  const source = values.slug.trim() || slugifyProductName(values.name) || "PRODUCT";
+  const token = source.replace(/[^a-z0-9]/gi, "").toUpperCase().slice(0, 8) || "PRODUCT";
+  const suffix = Date.now().toString().slice(-6);
+  return `PRD-${token}-${suffix}`;
+}
+
 function buildEmptyFormValues(): AdminProductFormValues {
   return {
     brandId: "",
     categoryId: "",
     featured: false,
     fullDescription: "",
-    images: [],
+    images: [createEmptyImage()],
     name: "",
     price: "",
     salePrice: "",
@@ -123,18 +140,20 @@ function buildEmptyFormValues(): AdminProductFormValues {
 }
 
 function mapProductToFormValues(product: AdminManagedProduct): AdminProductFormValues {
+  const mappedImages = product.images.map((image, index) => ({
+    alt: image.alt,
+    id: image.id || `image-${index + 1}`,
+    isPrimary: index === 0,
+    publicId: image.publicId,
+    url: image.url,
+  }));
+
   return {
     brandId: product.brandOptionId,
     categoryId: product.categoryOptionId,
     featured: product.featured,
     fullDescription: product.fullDescription,
-    images: product.images.map((image, index) => ({
-      alt: image.alt,
-      id: image.id || `image-${index + 1}`,
-      isPrimary: index === 0,
-      publicId: image.publicId,
-      url: image.url,
-    })),
+    images: mappedImages.length > 0 ? mappedImages : [createEmptyImage()],
     name: product.name,
     price: String(product.price),
     salePrice: product.salePrice === null ? "" : String(product.salePrice),
@@ -247,16 +266,22 @@ async function persistProductDocument(
     throw new Error("Appwrite product management is not configured.");
   }
 
-  const validationErrors = validateAdminProductForm(values);
+  const normalizedValues = {
+    ...values,
+    sku: values.sku.trim() || generateProductSku(values),
+    slug: values.slug.trim() || slugifyProductName(values.name),
+  };
+
+  const validationErrors = validateAdminProductForm(normalizedValues);
   if (Object.keys(validationErrors).length > 0) {
     throw new Error("Please fix the highlighted product form fields.");
   }
 
-  await assertUniqueProductIdentity(values, productId);
+  await assertUniqueProductIdentity(normalizedValues, productId);
 
   const [categoryReference, brandReference] = await Promise.all([
-    getCategoryReference(values.categoryId),
-    getBrandReference(values.brandId),
+    getCategoryReference(normalizedValues.categoryId),
+    getBrandReference(normalizedValues.brandId),
   ]);
 
   if (!categoryReference) {
@@ -271,27 +296,27 @@ async function persistProductDocument(
       categoryId: categoryReference.id,
       categoryName: categoryReference.name,
       categorySlug: categoryReference.slug,
-      featured: values.featured,
-      fullDescription: values.fullDescription.trim(),
-      images: normalizeImageInput(values.images).map((image) =>
+      featured: normalizedValues.featured,
+      fullDescription: normalizedValues.fullDescription.trim(),
+      images: normalizeImageInput(normalizedValues.images).map((image) =>
         JSON.stringify(image),
       ),
-      price: Number(values.price),
+      price: Number(normalizedValues.price),
       ratingAverage: 0,
       ratingMax: 5,
       reviewCount: 0,
-      salePrice: values.salePrice.trim() ? Number(values.salePrice) : null,
-      shortDescription: values.shortDescription.trim(),
-      sku: values.sku.trim(),
-      slug: values.slug.trim(),
-      specifications: normalizeSpecificationInput(values.specifications).map(
+      salePrice: normalizedValues.salePrice.trim() ? Number(normalizedValues.salePrice) : null,
+      shortDescription: normalizedValues.shortDescription.trim(),
+      sku: normalizedValues.sku.trim(),
+      slug: normalizedValues.slug.trim(),
+      specifications: normalizeSpecificationInput(normalizedValues.specifications).map(
         (specification) => JSON.stringify(specification),
       ),
-      status: values.status,
-      stock: Number(values.stock),
-      tags: JSON.stringify(normalizeTagInput(values.tags)),
+      status: normalizedValues.status,
+      stock: Number(normalizedValues.stock),
+      tags: JSON.stringify(normalizeTagInput(normalizedValues.tags)),
       variants: [],
-      name: values.name.trim(),
+      name: normalizedValues.name.trim(),
     },
     ...(method === "POST" ? { documentId: ID.unique() } : {}),
   };

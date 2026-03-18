@@ -1,15 +1,9 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
+import { formatCurrency } from "@/helpers/format-currency";
 import type { CartItem } from "@/types/cart";
 import type { CheckoutPricing } from "@/types/checkout";
-
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    currency: "USD",
-    style: "currency",
-  }).format(value);
-}
 
 type CheckoutSummaryProps = {
   items: CartItem[];
@@ -39,12 +33,10 @@ export function CheckoutSummary({ items, pricing }: CheckoutSummaryProps) {
             >
               <div className="min-w-0">
                 <p className="font-medium">{item.name}</p>
-                <p className="text-sm text-muted-foreground">
-                  Qty {item.quantity} | {item.sku}
-                </p>
+                <p className="text-sm text-muted-foreground">Qty {item.quantity}</p>
               </div>
               <p className="shrink-0 font-medium">
-                {formatPrice(unitPrice * item.quantity)}
+                {formatCurrency(unitPrice * item.quantity)}
               </p>
             </div>
           );
@@ -54,18 +46,18 @@ export function CheckoutSummary({ items, pricing }: CheckoutSummaryProps) {
       <div className="space-y-3 text-sm">
         <div className="flex items-center justify-between gap-3">
           <span className="text-muted-foreground">Cart subtotal</span>
-          <span className="font-medium">{formatPrice(pricing.subtotal)}</span>
+          <span className="font-medium">{formatCurrency(pricing.subtotal)}</span>
         </div>
         <div className="flex items-center justify-between gap-3">
           <span className="text-muted-foreground">Shipping fee</span>
-          <span className="font-medium">{formatPrice(pricing.shippingFee)}</span>
+          <span className="font-medium">{formatCurrency(pricing.shippingFee)}</span>
         </div>
         {pricing.discountAmount > 0 ? (
           <div className="flex items-center justify-between gap-3 text-success">
             <span>
               Discount{pricing.appliedCoupon ? ` (${pricing.appliedCoupon.code})` : ""}
             </span>
-            <span className="font-medium">-{formatPrice(pricing.discountAmount)}</span>
+            <span className="font-medium">-{formatCurrency(pricing.discountAmount)}</span>
           </div>
         ) : null}
         <div className="flex items-center justify-between gap-3">
@@ -75,7 +67,7 @@ export function CheckoutSummary({ items, pricing }: CheckoutSummaryProps) {
         <div className="flex items-center justify-between gap-3 rounded-[1.35rem] border border-white/80 bg-white/72 px-4 py-4">
           <span className="text-muted-foreground">Estimated total</span>
           <span className="font-display text-2xl font-semibold tracking-[-0.05em]">
-            {formatPrice(pricing.estimatedTotal)}
+            {formatCurrency(pricing.estimatedTotal)}
           </span>
         </div>
       </div>

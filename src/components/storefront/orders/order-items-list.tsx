@@ -53,7 +53,6 @@ export function OrderItemsList({ order }: OrderItemsListProps) {
                   >
                     {item.name}
                   </Link>
-                  <p className="text-sm text-muted-foreground">SKU: {item.sku}</p>
                   <p className="text-sm text-muted-foreground">
                     Quantity: {item.quantity}
                   </p>

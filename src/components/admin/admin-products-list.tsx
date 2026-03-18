@@ -9,18 +9,12 @@ import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { ROUTES } from "@/constants/routes";
+import { formatCurrency } from "@/helpers/format-currency";
 import type { AdminProductListItem } from "@/types/admin-product";
 
 type AdminProductsListProps = {
   products: AdminProductListItem[];
 };
-
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    currency: "USD",
-    style: "currency",
-  }).format(value);
-}
 
 export function AdminProductsList({ products }: AdminProductsListProps) {
   const [query, setQuery] = useState("");
@@ -33,7 +27,7 @@ export function AdminProductsList({ products }: AdminProductsListProps) {
     }
 
     return products.filter((product) =>
-      [product.name, product.slug, product.sku, product.category?.name, product.brand?.name]
+      [product.name, product.slug, product.category?.name, product.brand?.name]
         .filter(Boolean)
         .join(" ")
         .toLowerCase()
@@ -70,7 +64,7 @@ export function AdminProductsList({ products }: AdminProductsListProps) {
           <div className="flex flex-col gap-3 sm:flex-row">
             <Input
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search by name, slug, SKU, brand..."
+              placeholder="Search by name, slug, or brand..."
               value={query}
             />
             <Link href={`${ROUTES.admin.products}/new`}>
@@ -104,14 +98,14 @@ export function AdminProductsList({ products }: AdminProductsListProps) {
                       {product.name}
                     </h3>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      {product.slug} • {product.sku}
+                      {product.slug}
                     </p>
                   </div>
                   <div className="grid gap-3 text-sm sm:grid-cols-4">
                     <div className="rounded-[1.2rem] border border-white/80 bg-white/72 px-3 py-3">
                       <p className="text-muted-foreground">Price</p>
                       <p className="mt-1 font-medium">
-                        {formatPrice(product.salePrice ?? product.price)}
+                        {formatCurrency(product.salePrice ?? product.price)}
                       </p>
                     </div>
                     <div className="rounded-[1.2rem] border border-white/80 bg-white/72 px-3 py-3">
@@ -152,3 +146,4 @@ export function AdminProductsList({ products }: AdminProductsListProps) {
     </div>
   );
 }
+

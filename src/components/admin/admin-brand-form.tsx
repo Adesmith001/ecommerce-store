@@ -12,7 +12,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { MERCHANDISING_STATUS_OPTIONS } from "@/constants/admin";
 import { ROUTES } from "@/constants/routes";
 import {
-  slugifyMerchandisingName,
   validateBrandForm,
 } from "@/lib/admin/admin-merchandising-validation";
 import type { BrandFormContext, BrandFormErrors } from "@/types/admin-merchandising";
@@ -73,29 +72,6 @@ export function AdminBrandForm({
                   value={values.name}
                 />
                 {errors.name ? <p className="text-sm text-danger">{errors.name}</p> : null}
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Slug</label>
-                <div className="flex gap-2">
-                  <Input
-                    onChange={(event) => updateValues({ ...values, slug: event.target.value })}
-                    value={values.slug}
-                  />
-                  <Button
-                    onClick={() =>
-                      updateValues({
-                        ...values,
-                        slug: slugifyMerchandisingName(values.name),
-                      })
-                    }
-                    type="button"
-                    variant="outline"
-                  >
-                    Generate
-                  </Button>
-                </div>
-                {errors.slug ? <p className="text-sm text-danger">{errors.slug}</p> : null}
               </div>
 
               <div className="space-y-2">

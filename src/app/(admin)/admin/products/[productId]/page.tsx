@@ -7,18 +7,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ROUTES } from "@/constants/routes";
+import { formatCurrency } from "@/helpers/format-currency";
 import { getAdminProductById } from "@/lib/admin/admin-product-service";
 
 type AdminProductDetailPageProps = {
   params: Promise<{ productId: string }>;
 };
-
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    currency: "USD",
-    style: "currency",
-  }).format(value);
-}
 
 export default async function AdminProductDetailPage({
   params,
@@ -51,7 +45,7 @@ export default async function AdminProductDetailPage({
                 {product.name}
               </h1>
               <p className="mt-2 text-sm text-muted-foreground">
-                {product.slug} • {product.sku}
+                {product.slug}
               </p>
             </div>
           </div>
@@ -75,12 +69,12 @@ export default async function AdminProductDetailPage({
         <div className="grid gap-4 text-sm sm:grid-cols-2 xl:grid-cols-4">
           <div className="rounded-[1.3rem] border border-white/80 bg-white/72 p-4">
             <p className="text-muted-foreground">Base price</p>
-            <p className="mt-1 font-medium">{formatPrice(product.price)}</p>
+            <p className="mt-1 font-medium">{formatCurrency(product.price)}</p>
           </div>
           <div className="rounded-[1.3rem] border border-white/80 bg-white/72 p-4">
             <p className="text-muted-foreground">Sale price</p>
             <p className="mt-1 font-medium">
-              {product.salePrice === null ? "No sale price" : formatPrice(product.salePrice)}
+              {product.salePrice === null ? "No sale price" : formatCurrency(product.salePrice)}
             </p>
           </div>
           <div className="rounded-[1.3rem] border border-white/80 bg-white/72 p-4">
@@ -199,3 +193,4 @@ export default async function AdminProductDetailPage({
     </div>
   );
 }
+

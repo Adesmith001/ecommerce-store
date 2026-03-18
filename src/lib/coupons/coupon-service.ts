@@ -5,6 +5,7 @@ import { appwriteConfig } from "@/lib/appwrite/config";
 import { buildAppwriteApiUrl, getAppwriteErrorMessage } from "@/lib/appwrite/server-api";
 import { createAppliedCouponSnapshot, evaluateCoupon, normalizeCouponCode } from "@/lib/coupons/coupon-pricing";
 import { validateAdminCouponForm } from "@/lib/admin/admin-coupon-validation";
+import { formatCurrency } from "@/helpers/format-currency";
 import type {
   AdminCouponFormContext,
   AdminCouponFormValues,
@@ -408,7 +409,7 @@ export async function validateCouponApplication(input: CouponValidationInput): P
 
   if (input.subtotal < coupon.minimumSpend) {
     throw new Error(
-      `This coupon requires a minimum spend of ${coupon.minimumSpend.toFixed(2)}.`,
+      `This coupon requires a minimum spend of ${formatCurrency(coupon.minimumSpend)}.`,
     );
   }
 
