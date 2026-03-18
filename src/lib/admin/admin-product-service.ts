@@ -273,7 +273,9 @@ async function persistProductDocument(
       categorySlug: categoryReference.slug,
       featured: values.featured,
       fullDescription: values.fullDescription.trim(),
-      images: JSON.stringify(normalizeImageInput(values.images)),
+      images: normalizeImageInput(values.images).map((image) =>
+        JSON.stringify(image),
+      ),
       price: Number(values.price),
       ratingAverage: 0,
       ratingMax: 5,
@@ -282,13 +284,13 @@ async function persistProductDocument(
       shortDescription: values.shortDescription.trim(),
       sku: values.sku.trim(),
       slug: values.slug.trim(),
-      specifications: JSON.stringify(
-        normalizeSpecificationInput(values.specifications),
+      specifications: normalizeSpecificationInput(values.specifications).map(
+        (specification) => JSON.stringify(specification),
       ),
       status: values.status,
       stock: Number(values.stock),
       tags: JSON.stringify(normalizeTagInput(values.tags)),
-      variants: JSON.stringify([]),
+      variants: [],
       name: values.name.trim(),
     },
     ...(method === "POST" ? { documentId: ID.unique() } : {}),

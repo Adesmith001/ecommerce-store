@@ -88,6 +88,30 @@ function normalizeImage(value: unknown, fallbackAlt: string): ProductImage | nul
   }
 
   if (typeof value === "string") {
+    const parsedFromString = parseObject<{
+      alt?: string;
+      height?: number;
+      id?: string;
+      isPrimary?: boolean;
+      publicId?: string;
+      url?: string;
+      width?: number;
+    }>(value);
+
+    if (parsedFromString) {
+      const source = parsedFromString.url ?? parsedFromString.publicId ?? "";
+
+      return {
+        id: parsedFromString.id ?? source ?? fallbackAlt,
+        url: resolveCatalogAssetUrl(source),
+        alt: parsedFromString.alt ?? fallbackAlt,
+        publicId: parsedFromString.publicId,
+        isPrimary: parsedFromString.isPrimary,
+        width: parsedFromString.width,
+        height: parsedFromString.height,
+      };
+    }
+
     return {
       id: value,
       url: resolveCatalogAssetUrl(value),
