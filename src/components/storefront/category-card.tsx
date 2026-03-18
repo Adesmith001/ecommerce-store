@@ -38,7 +38,7 @@ export function CategoryCard({
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 alt={name}
-                className="mt-6 aspect-[4/3] w-full rounded-[0.8rem] border-2 border-accent object-cover"
+                className="mt-6 aspect-4/3 w-full rounded-[0.8rem] border-2 border-accent object-cover"
                 src={imageUrl}
               />
             ) : (
