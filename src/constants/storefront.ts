@@ -118,6 +118,7 @@ export const FOOTER_LINK_GROUPS = [
     title: "Quick Links",
     links: [
       { label: "Home", href: ROUTES.storefront.home },
+      { label: "About", href: ROUTES.storefront.about },
       { label: "Shop", href: ROUTES.storefront.shop },
       { label: "Categories", href: ROUTES.storefront.categories },
       { label: "Contact", href: ROUTES.storefront.contact },
@@ -130,6 +131,7 @@ export const FOOTER_LINK_GROUPS = [
       { label: "Shipping Policy", href: ROUTES.storefront.shippingPolicy },
       { label: "Returns Policy", href: ROUTES.storefront.returnsPolicy },
       { label: "Privacy Policy", href: ROUTES.storefront.privacyPolicy },
+      { label: "Terms", href: ROUTES.storefront.termsPolicy },
     ],
   },
 ] as const;

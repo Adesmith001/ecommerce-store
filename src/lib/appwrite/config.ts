@@ -13,6 +13,8 @@ export const appwriteConfig = {
   ordersCollectionId: APPWRITE_COLLECTION_IDS.orders,
   notificationsCollectionId: APPWRITE_COLLECTION_IDS.notifications,
   reviewsCollectionId: APPWRITE_COLLECTION_IDS.reviews,
+  storeContentPagesCollectionId: APPWRITE_COLLECTION_IDS.storeContentPages,
+  storeSettingsCollectionId: APPWRITE_COLLECTION_IDS.storeSettings,
   userProfilesCollectionId: APPWRITE_COLLECTION_IDS.userProfiles,
   wishlistsCollectionId: APPWRITE_COLLECTION_IDS.wishlists,
   apiKey: process.env.APPWRITE_API_KEY ?? "",

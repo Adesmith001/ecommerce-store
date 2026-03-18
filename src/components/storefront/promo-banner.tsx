@@ -81,23 +81,14 @@ export function PromoBanner({
             />
           </div>
         ) : (
-          <div className="grid gap-3">
-            <div className="rounded-[1.8rem] border border-white/10 bg-white/8 p-5 backdrop-blur-md">
-              <p className="text-xs uppercase tracking-[0.24em] text-white/55">
-                Campaign code
-              </p>
-              <p className="font-display mt-2 text-3xl font-semibold tracking-[-0.06em]">
-                BAG20
-              </p>
-            </div>
-            <div className="rounded-[1.8rem] border border-white/10 bg-white/8 p-5 backdrop-blur-md">
-              <p className="text-xs uppercase tracking-[0.24em] text-white/55">
-                Included
-              </p>
-              <p className="mt-2 text-sm leading-6 text-white/75">
-                Signature wrapping, delivery updates, and thoughtful support.
-              </p>
-            </div>
+          <div className="rounded-[2rem] border border-white/10 bg-white/8 p-6 backdrop-blur-md">
+            <p className="text-xs uppercase tracking-[0.24em] text-white/55">
+              {eyebrow}
+            </p>
+            <p className="font-display mt-4 text-3xl font-semibold tracking-[-0.06em]">
+              {title}
+            </p>
+            <p className="mt-4 text-sm leading-7 text-white/75">{description}</p>
           </div>
         )}
       </div>

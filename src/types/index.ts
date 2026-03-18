@@ -16,3 +16,4 @@ export * from "@/types/admin-inventory";
 export * from "@/types/admin-order";
 export * from "@/types/admin-product";
 export * from "@/types/admin-merchandising";
+export * from "@/types/store-settings";

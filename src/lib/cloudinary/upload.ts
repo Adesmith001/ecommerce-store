@@ -13,6 +13,19 @@ export function canUploadToCloudinary() {
   return Boolean(cloudinaryConfig.cloudName && cloudinaryConfig.uploadPreset);
 }
 
+export async function deleteCloudinaryImageByPublicId(publicId: string) {
+  const response = await fetch("/api/admin/cloudinary/assets", {
+    body: JSON.stringify({ publicId }),
+    headers: { "Content-Type": "application/json" },
+    method: "DELETE",
+  });
+  const payload = (await response.json()) as { message?: string };
+
+  if (!response.ok) {
+    throw new Error(payload.message ?? "Failed to delete image.");
+  }
+}
+
 export async function uploadProductImageToCloudinary(
   file: File,
 ): Promise<AdminProductFormImage> {

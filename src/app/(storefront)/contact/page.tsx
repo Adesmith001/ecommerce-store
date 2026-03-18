@@ -5,8 +5,11 @@ import { Container } from "@/components/ui/container";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ROUTES } from "@/constants/routes";
+import { getStoreSettings } from "@/lib/settings/store-settings-service";
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const settings = await getStoreSettings();
+
   return (
     <>
       <StorePageHero
@@ -14,20 +17,18 @@ export default function ContactPage() {
           { label: "Home", href: ROUTES.storefront.home },
           { label: "Contact" },
         ]}
-        description="A simple support and brand-contact shell that can later connect to forms, live chat, or customer service workflows."
+        description={settings.supportText}
         eyebrow="Contact"
-        title="We’re here to help"
+        title="We're here to help"
       />
       <Container className="grid gap-6 py-12 lg:grid-cols-[0.8fr_1.2fr]">
         <Card className="space-y-4">
           <h3 className="text-xl font-semibold">Customer service</h3>
-          <p className="text-body">
-            Reach out for order questions, product guidance, or wholesale interest.
-          </p>
+          <p className="text-body">{settings.supportText}</p>
           <div className="space-y-3 text-sm text-muted-foreground">
-            <p>Email: hello@asterstore.example</p>
-            <p>Phone: +1 (555) 240-1984</p>
-            <p>Hours: Monday to Saturday, 9:00 AM - 6:00 PM</p>
+            <p>Email: {settings.contactEmail}</p>
+            <p>Phone: {settings.phoneNumber}</p>
+            <p>Currency: {settings.currencyCode}</p>
           </div>
         </Card>
         <Card className="space-y-4">

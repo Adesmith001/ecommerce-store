@@ -2,17 +2,19 @@ import Link from "next/link";
 import { Card } from "@/components/ui/card";
 
 type CategoryCardPlaceholderProps = {
-  name: string;
   description: string;
-  itemCount: string;
   href: string;
+  imageUrl?: string;
+  itemCount: string;
+  name: string;
 };
 
 export function CategoryCardPlaceholder({
-  name,
   description,
-  itemCount,
   href,
+  imageUrl,
+  itemCount,
+  name,
 }: CategoryCardPlaceholderProps) {
   return (
     <Link href={href}>
@@ -24,10 +26,19 @@ export function CategoryCardPlaceholder({
                 {itemCount}
               </span>
               <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/80 bg-white/75 text-lg transition-transform group-hover:translate-x-1">
-                →
+                &rarr;
               </span>
             </div>
-            <div className="headline-marquee mt-8">Edit</div>
+            {imageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                alt={name}
+                className="mt-6 aspect-[4/3] w-full rounded-[1.35rem] object-cover"
+                src={imageUrl}
+              />
+            ) : (
+              <div className="headline-marquee mt-8">Edit</div>
+            )}
           </div>
 
           <div className="space-y-3">

@@ -16,6 +16,7 @@ import {
 } from "@/lib/admin/admin-product-validation";
 import {
   canUploadToCloudinary,
+  deleteCloudinaryImageByPublicId,
   uploadProductImageToCloudinary,
 } from "@/lib/cloudinary/upload";
 import type {
@@ -39,6 +40,7 @@ export function AdminProductForm({
   const [errors, setErrors] = useState<AdminProductFormErrors>({});
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [deletingImageId, setDeletingImageId] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
   const cloudinaryReady = useMemo(() => canUploadToCloudinary(), []);
@@ -101,6 +103,29 @@ export function AdminProductForm({
     } finally {
       setIsUploading(false);
       event.target.value = "";
+    }
+  };
+
+  const handleRemoveImage = async (image: AdminProductFormImage) => {
+    setSubmitError(null);
+
+    try {
+      setDeletingImageId(image.id);
+
+      if (image.publicId) {
+        await deleteCloudinaryImageByPublicId(image.publicId);
+      }
+
+      updateValues({
+        ...values,
+        images: values.images.filter((currentImage) => currentImage.id !== image.id),
+      });
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error ? error.message : "Failed to remove image.",
+      );
+    } finally {
+      setDeletingImageId(null);
     }
   };
 
@@ -444,18 +469,12 @@ export function AdminProductForm({
                     />
                     <div className="sm:col-span-2 flex justify-end">
                       <Button
-                        onClick={() =>
-                          updateValues({
-                            ...values,
-                            images: values.images.filter(
-                              (currentImage) => currentImage.id !== image.id,
-                            ),
-                          })
-                        }
+                        disabled={deletingImageId === image.id}
+                        onClick={() => void handleRemoveImage(image)}
                         type="button"
                         variant="danger"
                       >
-                        Remove image
+                        {deletingImageId === image.id ? "Removing..." : "Remove image"}
                       </Button>
                     </div>
                   </div>

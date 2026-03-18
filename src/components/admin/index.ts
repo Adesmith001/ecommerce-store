@@ -21,6 +21,7 @@ export * from "./admin-product-form";
 export * from "./admin-product-status-badge";
 export * from "./admin-products-list";
 export * from "./admin-shipping-settings-manager";
+export * from "./admin-store-settings-manager";
 export * from "./dashboard-chart-card";
 export * from "./dashboard-stat-card";
 export * from "./low-stock-panel";

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   canUploadToCloudinary,
+  deleteCloudinaryImageByPublicId,
   uploadProductImageToCloudinary,
 } from "@/lib/cloudinary/upload";
 import type { ProductImage } from "@/types/catalog";
@@ -24,6 +25,7 @@ export function AdminImageField({
   helperText,
 }: AdminImageFieldProps) {
   const [isUploading, setIsUploading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const cloudinaryReady = useMemo(() => canUploadToCloudinary(), []);
 
@@ -49,8 +51,24 @@ export function AdminImageField({
     setIsUploading(true);
 
     try {
+      const previousImage = image;
       const uploadedImage = await uploadProductImageToCloudinary(file);
       onChange(uploadedImage);
+
+      if (
+        previousImage?.publicId &&
+        previousImage.publicId !== uploadedImage.publicId
+      ) {
+        try {
+          await deleteCloudinaryImageByPublicId(previousImage.publicId);
+        } catch (error) {
+          setUploadError(
+            error instanceof Error
+              ? error.message
+              : "Uploaded the new image, but failed to delete the previous one.",
+          );
+        }
+      }
     } catch (error) {
       setUploadError(
         error instanceof Error ? error.message : "Failed to upload image.",
@@ -58,6 +76,29 @@ export function AdminImageField({
     } finally {
       setIsUploading(false);
       event.target.value = "";
+    }
+  };
+
+  const handleRemove = async () => {
+    if (!image) {
+      return;
+    }
+
+    setUploadError(null);
+    setIsDeleting(true);
+
+    try {
+      if (image.publicId) {
+        await deleteCloudinaryImageByPublicId(image.publicId);
+      }
+
+      onChange(null);
+    } catch (error) {
+      setUploadError(
+        error instanceof Error ? error.message : "Failed to delete image.",
+      );
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -71,8 +112,13 @@ export function AdminImageField({
           ) : null}
         </div>
         {image ? (
-          <Button onClick={() => onChange(null)} type="button" variant="danger">
-            Remove
+          <Button
+            disabled={isUploading || isDeleting}
+            onClick={() => void handleRemove()}
+            type="button"
+            variant="danger"
+          >
+            {isDeleting ? "Removing..." : "Remove"}
           </Button>
         ) : null}
       </div>
@@ -98,6 +144,7 @@ export function AdminImageField({
               <input
                 accept="image/*"
                 className="block w-full text-sm"
+                disabled={isDeleting}
                 onChange={(event) => void handleUpload(event)}
                 type="file"
               />

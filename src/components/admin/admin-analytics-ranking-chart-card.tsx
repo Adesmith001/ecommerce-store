@@ -10,6 +10,7 @@ import {
   YAxis,
 } from "recharts";
 import { Card } from "@/components/ui/card";
+import { formatCurrency } from "@/helpers/format-currency";
 import type { AdminAnalyticsRankingPoint } from "@/types/admin";
 
 type AdminAnalyticsRankingChartCardProps = {
@@ -24,11 +25,7 @@ function formatMetric(
   value: number,
 ) {
   if (metric === "revenue") {
-    return new Intl.NumberFormat("en-US", {
-      currency: "USD",
-      notation: "compact",
-      style: "currency",
-    }).format(value);
+    return formatCurrency(value, { notation: "compact" });
   }
 
   if (metric === "quantity") {

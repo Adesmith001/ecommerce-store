@@ -8,6 +8,7 @@ const policyLinks = [
   { label: "Shipping Policy", href: ROUTES.storefront.shippingPolicy },
   { label: "Returns Policy", href: ROUTES.storefront.returnsPolicy },
   { label: "Privacy Policy", href: ROUTES.storefront.privacyPolicy },
+  { label: "Terms and Conditions", href: ROUTES.storefront.termsPolicy },
 ] as const;
 
 export default function PoliciesPage() {

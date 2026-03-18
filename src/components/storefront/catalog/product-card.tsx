@@ -4,18 +4,12 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ROUTES } from "@/constants/routes";
+import { formatCurrency } from "@/helpers/format-currency";
 import type { Product } from "@/types/catalog";
 
 type ProductCardProps = {
   product: Product;
 };
-
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    currency: "USD",
-    style: "currency",
-  }).format(value);
-}
 
 function getDiscountPercentage(price: number, salePrice: number) {
   return Math.round(((price - salePrice) / price) * 100);
@@ -77,11 +71,11 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="flex items-end justify-between gap-3">
           <div className="flex items-end gap-2">
             <span className="font-display text-2xl font-semibold tracking-[-0.05em]">
-              {formatPrice(product.salePrice ?? product.price)}
+              {formatCurrency(product.salePrice ?? product.price)}
             </span>
             {hasDiscount ? (
               <span className="pb-1 text-sm text-muted-foreground line-through">
-                {formatPrice(product.price)}
+                {formatCurrency(product.price)}
               </span>
             ) : null}
           </div>

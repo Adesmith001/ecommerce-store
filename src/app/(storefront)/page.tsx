@@ -1,7 +1,7 @@
 import Link from "next/link";
+import { ProductCard } from "@/components/storefront/catalog";
 import {
   CategoryCardPlaceholder,
-  ProductCardPlaceholder,
   PromoBanner,
   SectionWrapper,
 } from "@/components/storefront";
@@ -10,31 +10,61 @@ import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
 import { Input } from "@/components/ui/input";
-import { SectionHeading } from "@/components/ui/section-heading";
 import { ROUTES } from "@/constants/routes";
 import {
-  BEST_SELLERS,
-  FEATURED_CATEGORIES,
-  NEW_ARRIVALS,
-  TESTIMONIALS,
-  TRUST_HIGHLIGHTS,
-} from "@/constants/storefront";
+  getAllCategories,
+  getAllProducts,
+  getFeaturedProducts,
+} from "@/lib/catalog/catalog-service";
 import { getHomepageBanners } from "@/lib/marketing/banner-service";
-
-const SUPPORTING_BRANDS = [
-  "Nike",
-  "Etsy",
-  "Reebok",
-  "Puma",
-  "ASOS",
-  "eBay",
-  "Zara",
-  "adidas",
-];
+import {
+  getStoreContentPage,
+  getStoreSettings,
+} from "@/lib/settings/store-settings-service";
+import { listActiveShippingMethods } from "@/lib/shipping/shipping-service";
 
 export default async function StorefrontHomePage() {
-  const banners = await getHomepageBanners();
+  const [
+    settings,
+    aboutPage,
+    banners,
+    categories,
+    allProducts,
+    featuredProducts,
+    shippingMethods,
+  ] = await Promise.all([
+    getStoreSettings(),
+    getStoreContentPage("about"),
+    getHomepageBanners(),
+    getAllCategories(),
+    getAllProducts(),
+    getFeaturedProducts(4),
+    listActiveShippingMethods(),
+  ]);
+
   const featuredBanner = banners[0] ?? null;
+  const activeProducts = allProducts.filter((product) => product.status === "active");
+  const activeCategories = categories.filter((category) => category.status === "active");
+  const featuredCategories = activeCategories
+    .filter((category) => category.featured)
+    .slice(0, 3);
+  const categorySource =
+    featuredCategories.length > 0 ? featuredCategories : activeCategories.slice(0, 3);
+  const categoryCards = categorySource.map((category) => {
+    const itemCount = activeProducts.filter(
+      (product) => product.category?.slug === category.slug,
+    ).length;
+
+    return {
+      description: category.description,
+      href: ROUTES.storefront.category(category.slug),
+      imageUrl: category.image?.url,
+      itemCount: `${itemCount} item${itemCount === 1 ? "" : "s"}`,
+      name: category.name,
+    };
+  });
+  const newArrivals = activeProducts.slice(0, 4);
+  const trustCards = shippingMethods.slice(0, 3);
 
   return (
     <>
@@ -44,65 +74,65 @@ export default async function StorefrontHomePage() {
             <div className="editorial-panel relative overflow-hidden px-6 py-8 sm:px-8 lg:px-10 lg:py-10">
               <div className="relative z-10 space-y-8">
                 <div className="space-y-5">
-                  <Badge variant="outline">New season collection</Badge>
-                  <h1 className="text-display max-w-4xl">
-                    Best leather bag collection for the way people actually shop.
-                  </h1>
-                  <p className="max-w-2xl text-body">
-                    A softer, editorial storefront built around premium product
-                    storytelling, calm navigation, and a checkout path that already
-                    feels trustworthy before deeper business logic arrives.
-                  </p>
+                  <Badge variant="outline">{settings.heroEyebrow}</Badge>
+                  <h1 className="text-display max-w-4xl">{settings.heroTitle}</h1>
+                  <p className="max-w-2xl text-body">{settings.heroDescription}</p>
                 </div>
 
                 <div className="flex flex-wrap gap-3">
                   <Link
                     className={buttonVariants({ size: "lg", variant: "secondary" })}
-                    href={ROUTES.storefront.shop}
+                    href={settings.heroPrimaryCtaHref || ROUTES.storefront.shop}
                   >
-                    Start shopping
+                    {settings.heroPrimaryCtaLabel}
                   </Link>
                   <Link
                     className={buttonVariants({ size: "lg", variant: "outline" })}
-                    href={ROUTES.storefront.category("wardrobe-refresh")}
+                    href={settings.heroSecondaryCtaHref || ROUTES.storefront.categories}
                   >
-                    Explore collections
+                    {settings.heroSecondaryCtaLabel}
                   </Link>
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-3">
                   <Card className="rounded-[1.8rem] p-5">
                     <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
-                      Season
+                      {settings.homepageMetricsCatalogEyebrow}
                     </p>
                     <p className="font-display mt-3 text-2xl font-semibold tracking-[-0.06em]">
-                      2026
+                      {activeProducts.length}
                     </p>
-                    <p className="mt-2 text-sm text-muted-foreground">Present edit</p>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {settings.homepageMetricsCatalogDescription}
+                    </p>
                   </Card>
                   <Card className="rounded-[1.8rem] p-5">
                     <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
-                      Delivery
+                      {settings.homepageMetricsCollectionsEyebrow}
                     </p>
                     <p className="font-display mt-3 text-2xl font-semibold tracking-[-0.06em]">
-                      48h
+                      {activeCategories.length}
                     </p>
-                    <p className="mt-2 text-sm text-muted-foreground">Express options</p>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {settings.homeMetricsCollectionDesc}
+                    </p>
                   </Card>
                   <Card className="rounded-[1.8rem] p-5">
                     <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
-                      Promise
+                      {settings.homepageMetricsCurrencyEyebrow}
                     </p>
                     <p className="font-display mt-3 text-2xl font-semibold tracking-[-0.06em]">
-                      Easy
+                      {settings.currencyCode}
                     </p>
-                    <p className="mt-2 text-sm text-muted-foreground">Returns & support</p>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {settings.homepageMetricsCurrencyDescription}
+                    </p>
                   </Card>
                 </div>
               </div>
 
               <div className="headline-marquee pointer-events-none absolute inset-x-0 bottom-0 translate-y-1/3 text-center">
-                Bagstore
+                {settings.storeName}
               </div>
             </div>
 
@@ -111,277 +141,243 @@ export default async function StorefrontHomePage() {
                 <div className="grid gap-6 p-6 sm:grid-cols-[1fr_0.78fr] sm:p-8">
                   <div className="space-y-4">
                     <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
-                      Hero collection
+                      {settings.identityEyebrow}
                     </p>
                     <h2 className="font-display max-w-sm text-3xl font-semibold tracking-[-0.06em]">
-                      Chelsea Malibu
+                      {settings.identityTitle}
                     </h2>
                     <p className="max-w-md text-sm leading-7 text-muted-foreground">
-                      Clean silhouettes, waterproof finishes, and premium details that
-                      make the storefront feel curated from the first glance.
+                      {settings.identityDescription}
                     </p>
                     <Link
                       className={buttonVariants({ variant: "outline" })}
-                      href={ROUTES.storefront.shop}
+                      href={settings.identityCtaHref || ROUTES.storefront.about}
                     >
-                      View all catalog
+                      {settings.identityCtaLabel}
                     </Link>
                   </div>
                   <div className="rounded-4xl bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.86),transparent_28%),linear-gradient(180deg,#d8ebf6,#edf5f9)] p-5">
                     <div className="h-full rounded-[1.8rem] border border-white/80 bg-white/60 p-4">
-                      <div className="headline-marquee text-center">Malibu</div>
+                      {settings.logo?.url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          alt={settings.logo.alt || settings.storeName}
+                          className="h-full w-full rounded-[1.6rem] object-cover"
+                          src={settings.logo.url}
+                        />
+                      ) : (
+                        <div className="headline-marquee text-center">{settings.storeName}</div>
+                      )}
                     </div>
                   </div>
                 </div>
               </Card>
 
-              <Card className="space-y-4 rounded-4xl p-6">
-                <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
-                  Payment in 3x
-                </p>
-                <p className="font-display text-2xl font-semibold tracking-[-0.06em]">
-                  Flexible checkout
-                </p>
-                <p className="text-sm leading-7 text-muted-foreground">
-                  Give customers a polished payment preview before final integration.
-                </p>
-              </Card>
-
-              <Card className="space-y-4 rounded-4xl p-6">
-                <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
-                  Coupon drop
-                </p>
-                <p className="font-display text-2xl font-semibold tracking-[-0.06em]">
-                  Use code BAG20
-                </p>
-                <p className="text-sm leading-7 text-muted-foreground">
-                  Surface campaign moments as soft product-first content instead of loud banners.
-                </p>
-              </Card>
-            </div>
-          </div>
-
-          <div className="editorial-panel px-6 py-6 sm:px-8">
-            <div className="space-y-6">
-              <SectionHeading
-                align="center"
-                eyebrow="We supported by"
-                title="Retail-friendly sections that already feel launch ready"
-              />
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                {SUPPORTING_BRANDS.map((brand) => (
-                  <div
-                    key={brand}
-                    className="rounded-[1.45rem] border border-white/80 bg-white/72 px-4 py-4 text-center font-display text-2xl font-semibold tracking-[-0.04em] text-foreground/80"
-                  >
-                    {brand}
-                  </div>
-                ))}
-              </div>
+              {trustCards.map((method) => (
+                <Card key={method.id} className="space-y-4 rounded-4xl p-6">
+                  <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
+                    {method.code}
+                  </p>
+                  <p className="font-display text-2xl font-semibold tracking-[-0.06em]">
+                    {method.name}
+                  </p>
+                  <p className="text-sm leading-7 text-muted-foreground">
+                    {method.description} {method.estimatedDelivery}
+                  </p>
+                </Card>
+              ))}
             </div>
           </div>
         </Container>
       </section>
 
-      <SectionWrapper
-        description="A warm, structured category system that feels like a curated collection wall rather than a generic grid."
-        eyebrow="Featured categories"
-        title="Browse collection edits made for real discovery"
-      >
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {FEATURED_CATEGORIES.map((category) => (
-            <CategoryCardPlaceholder key={category.href} {...category} />
-          ))}
-        </div>
-      </SectionWrapper>
+      {settings.showFeaturedCategories ? (
+        <SectionWrapper
+          description={settings.featuredCategoriesDescription}
+          eyebrow={settings.featuredCategoriesEyebrow}
+          title={settings.featuredCategoriesTitle}
+        >
+          {categoryCards.length === 0 ? (
+            <Card className="p-6 text-sm text-muted-foreground">
+              No active categories are available yet.
+            </Card>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {categoryCards.map((category) => (
+                <CategoryCardPlaceholder key={category.href} {...category} />
+              ))}
+            </div>
+          )}
+        </SectionWrapper>
+      ) : null}
 
-      <SectionWrapper
-        actions={
-          <Link className={buttonVariants({ variant: "outline" })} href={ROUTES.storefront.shop}>
-            View all products
-          </Link>
-        }
-        description="Top-performing items should feel tactile, premium, and immediately scannable across desktop and mobile."
-        eyebrow="Best selling bags"
-        title="Customer favorites with a calmer, more editorial card language"
-      >
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {BEST_SELLERS.map((product) => (
-            <ProductCardPlaceholder key={product.href} {...product} />
-          ))}
-        </div>
-      </SectionWrapper>
+      {settings.showBestSellers ? (
+        <SectionWrapper
+          actions={
+            <Link className={buttonVariants({ variant: "outline" })} href={ROUTES.storefront.shop}>
+              {settings.featuredProductsCtaLabel}
+            </Link>
+          }
+          description={settings.featuredProductsDescription}
+          eyebrow={settings.featuredProductsEyebrow}
+          title={settings.featuredProductsTitle}
+        >
+          {featuredProducts.length === 0 ? (
+            <Card className="p-6 text-sm text-muted-foreground">
+              No featured products are available yet.
+            </Card>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+              {featuredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
+        </SectionWrapper>
+      ) : null}
 
       <SectionWrapper
         className="pt-8"
-        description="Trust messaging works better when it feels integrated into the merchandising rhythm."
-        eyebrow="Service"
-        title="Support, payment, and return messaging that stays on-brand"
+        description={settings.serviceDescription}
+        eyebrow={settings.serviceEyebrow}
+        title={settings.serviceTitle}
       >
         <div className="grid gap-4 lg:grid-cols-3">
-          {TRUST_HIGHLIGHTS.slice(0, 3).map((item) => (
-            <Card key={item} className="rounded-4xl p-6">
-              <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
-                Promise
-              </p>
-              <p className="font-display mt-4 text-2xl font-semibold tracking-[-0.05em]">
-                {item}
-              </p>
+          {trustCards.length === 0 ? (
+            <Card className="rounded-4xl p-6 text-sm text-muted-foreground">
+              No active shipping methods are configured yet.
             </Card>
-          ))}
+          ) : (
+            trustCards.map((method) => (
+              <Card key={method.id} className="rounded-4xl p-6">
+                <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
+                  {method.code}
+                </p>
+                <p className="font-display mt-4 text-2xl font-semibold tracking-[-0.05em]">
+                  {method.name}
+                </p>
+                <p className="mt-3 text-sm leading-7 text-muted-foreground">
+                  {method.description}
+                </p>
+              </Card>
+            ))
+          )}
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <Card className="overflow-hidden p-0">
-            <div className="grid gap-6 p-6 sm:grid-cols-[0.9fr_1.1fr] sm:p-8">
-              <div className="rounded-4xl bg-[linear-gradient(180deg,#f4f7fb,#ecf0f6)] p-5">
-                <div className="h-full rounded-[1.8rem] border border-white/80 bg-white/72" />
-              </div>
-              <div className="space-y-4">
-                <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
-                  Modern quality
-                </p>
-                <h3 className="font-display text-3xl font-semibold tracking-[-0.06em]">
-                  Material stories with more emotion and less clutter
-                </h3>
-                <p className="text-sm leading-7 text-muted-foreground">
-                  The new surface system uses soft layers, rounded framing, and more
-                  intentional spacing so your storefront already feels like a product.
-                </p>
-              </div>
-            </div>
+          <Card className="space-y-4 p-6 sm:p-8">
+            <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
+              {settings.serviceSupportCardEyebrow}
+            </p>
+            <h3 className="font-display text-3xl font-semibold tracking-[-0.06em]">
+              {settings.serviceSupportCardTitle}
+            </h3>
+            <p className="text-sm leading-7 text-muted-foreground">
+              {settings.supportText}
+            </p>
+            <p className="text-sm leading-7 text-muted-foreground">
+              {settings.contactEmail} · {settings.phoneNumber}
+            </p>
           </Card>
 
-          <Card className="overflow-hidden p-0">
-            <div className="grid gap-6 p-6 sm:grid-cols-[1.1fr_0.9fr] sm:p-8">
-              <div className="space-y-4">
-                <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
-                  Latest fashion
-                </p>
-                <h3 className="font-display text-3xl font-semibold tracking-[-0.06em]">
-                  Product storytelling that can scale into real content later
-                </h3>
-                <p className="text-sm leading-7 text-muted-foreground">
-                  Today these are static shells. Later the same slots can map to real
-                  campaigns, imagery, and merchandising rules.
-                </p>
-              </div>
-              <div className="rounded-4xl bg-[linear-gradient(180deg,#f7ede8,#f2dcd4)] p-5">
-                <div className="h-full rounded-[1.8rem] border border-white/80 bg-white/72" />
-              </div>
-            </div>
+          <Card className="space-y-4 p-6 sm:p-8">
+            <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
+              {settings.aboutCardEyebrow}
+            </p>
+            <h3 className="font-display text-3xl font-semibold tracking-[-0.06em]">
+              {aboutPage?.title || settings.storeName}
+            </h3>
+            <p className="text-sm leading-7 text-muted-foreground">
+              {aboutPage?.description || settings.supportText}
+            </p>
+            <Link
+              className={buttonVariants({ variant: "outline" })}
+              href={ROUTES.storefront.about}
+            >
+              {settings.aboutCardCtaLabel}
+            </Link>
           </Card>
         </div>
       </SectionWrapper>
 
       <SectionWrapper
         className="bg-transparent pt-8"
-        description="The promotional layer should feel like part of the brand world, not bolted onto it."
-        eyebrow="Campaign"
-        title="Launch limited offers without breaking the premium feel"
+        description={settings.campaignDescription}
+        eyebrow={settings.campaignEyebrow}
+        title={settings.campaignTitle}
       >
         <PromoBanner
-          ctaHref={featuredBanner?.ctaLink || ROUTES.storefront.shop}
-          ctaLabel={featuredBanner?.ctaText || "Shop the campaign"}
-          description={
-            featuredBanner?.subtitle ||
-            "A darker, fashion-led campaign surface for coupon drops, capsule releases, or time-sensitive storytelling."
-          }
-          eyebrow={featuredBanner ? "Homepage banner" : "Promotional banner"}
+          ctaHref={featuredBanner?.ctaLink || settings.campaignPrimaryCtaHref}
+          ctaLabel={featuredBanner?.ctaText || settings.campaignPrimaryCtaLabel}
+          description={featuredBanner?.subtitle || settings.supportText}
+          eyebrow={featuredBanner ? settings.campaignBannerEyebrow : settings.campaignEyebrow}
           imageAlt={featuredBanner?.image?.alt}
           imageUrl={featuredBanner?.image?.url}
-          secondaryHref={ROUTES.storefront.contact}
-          secondaryLabel="Talk to us"
-          title={
-            featuredBanner?.title || "Give BAG20 a home that feels considered, not noisy"
-          }
+          secondaryHref={settings.campaignSecondaryCtaHref}
+          secondaryLabel={settings.campaignSecondaryCtaLabel}
+          title={featuredBanner?.title || settings.heroTitle}
         />
       </SectionWrapper>
 
-      <SectionWrapper
-        description="Fresh drops and social proof can still feel premium when the layout stays restrained."
-        eyebrow="New arrivals"
-        title="Merchandising blocks that carry straight into reviews, wishlist, and orders"
-      >
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {NEW_ARRIVALS.map((product) => (
-            <ProductCardPlaceholder key={product.href} {...product} />
-          ))}
-        </div>
-
-        <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-          <Card className="space-y-4 p-6 sm:p-8">
-            <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">
-              Testimonial wall
-            </p>
-            <h3 className="font-display text-3xl font-semibold tracking-[-0.06em]">
-              Built to support trust and conversion
-            </h3>
-            <div className="grid gap-3">
-              {TRUST_HIGHLIGHTS.map((item) => (
-                <div
-                  key={item}
-                  className="rounded-[1.35rem] border border-white/80 bg-white/70 px-4 py-3 text-sm font-medium"
-                >
-                  {item}
-                </div>
+      {settings.showNewArrivals ? (
+        <SectionWrapper
+          description={settings.newArrivalsDescription}
+          eyebrow={settings.newArrivalsEyebrow}
+          title={settings.newArrivalsTitle}
+        >
+          {newArrivals.length === 0 ? (
+            <Card className="p-6 text-sm text-muted-foreground">
+              No active products are available yet.
+            </Card>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+              {newArrivals.map((product) => (
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
-          </Card>
+          )}
+        </SectionWrapper>
+      ) : null}
 
-          <div className="grid gap-6 md:grid-cols-3">
-            {TESTIMONIALS.map((testimonial) => (
-                <Card key={testimonial.name} className="flex h-full flex-col justify-between">
-                  <p className="text-base leading-7 text-foreground/90">
-                    &ldquo;{testimonial.quote}&rdquo;
-                  </p>
-                <div className="mt-6">
-                  <p className="font-display text-xl font-semibold tracking-[-0.05em]">
-                    {testimonial.name}
-                  </p>
-                  <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+      {settings.showNewsletter ? (
+        <SectionWrapper
+          className="pb-20"
+          description={settings.newsletterDescription}
+          eyebrow={settings.newsletterEyebrow}
+          title={settings.newsletterTitle}
+        >
+          <div className="editorial-panel overflow-hidden px-6 py-8 sm:px-8 lg:px-10 lg:py-10">
+            <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+              <div className="space-y-4">
+                <p className="text-sm leading-7 text-muted-foreground">
+                  {settings.supportText}
+                </p>
+                <div className="grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
+                  <span>{settings.contactEmail}</span>
+                  <span>{settings.phoneNumber}</span>
+                  <span>{settings.storeName}</span>
+                  <span>{settings.currencyCode}</span>
                 </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </SectionWrapper>
-
-      <SectionWrapper
-        className="pb-20"
-        description="A newsletter block that looks like part of the premium storefront, not an afterthought."
-        eyebrow="Newsletter"
-        title="Stay close to your customers between drops"
-      >
-        <div className="editorial-panel overflow-hidden px-6 py-8 sm:px-8 lg:px-10 lg:py-10">
-          <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
-            <div className="space-y-4">
-              <p className="text-sm leading-7 text-muted-foreground">
-                Subscribe to our newsletter and be the first to know about releases,
-                offers, and new product stories from the storefront.
-              </p>
-              <div className="grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
-                <span>Curated drops</span>
-                <span>Campaign previews</span>
-                <span>Back-in-stock notes</span>
-                <span>Editorial stories</span>
               </div>
+
+              <form className="space-y-4">
+                <Input placeholder={settings.newsletterPlaceholder} type="email" />
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    className={buttonVariants({ size: "lg", variant: "secondary" })}
+                    type="submit"
+                  >
+                    {settings.newsletterPrimaryCtaLabel}
+                  </button>
+                  <span className="self-center text-sm text-muted-foreground">
+                    {settings.newsletterDisclaimer}
+                  </span>
+                </div>
+              </form>
             </div>
-
-            <form className="space-y-4">
-              <Input placeholder="Enter your email here" type="email" />
-              <div className="flex flex-wrap gap-3">
-                <button className={buttonVariants({ size: "lg", variant: "secondary" })} type="submit">
-                  Join the list
-                </button>
-                <span className="self-center text-sm text-muted-foreground">
-                  No integration yet, just the upgraded shell.
-                </span>
-              </div>
-            </form>
           </div>
-        </div>
-      </SectionWrapper>
+        </SectionWrapper>
+      ) : null}
     </>
   );
 }

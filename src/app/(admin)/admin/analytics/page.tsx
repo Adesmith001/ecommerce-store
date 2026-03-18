@@ -5,21 +5,14 @@ import {
   DashboardStatCard,
 } from "@/components/admin";
 import { Card } from "@/components/ui/card";
+import { formatCurrency } from "@/helpers/format-currency";
 import {
   getAdminAnalyticsData,
   parseAdminAnalyticsRange,
 } from "@/lib/admin/admin-analytics-service";
-
 type AdminAnalyticsPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function formatCurrency(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    currency: "USD",
-    style: "currency",
-  }).format(value);
-}
 
 export default async function AdminAnalyticsPage({
   searchParams,

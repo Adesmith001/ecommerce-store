@@ -6,9 +6,7 @@ import { UserButton, useAuth } from "@clerk/nextjs";
 import { buttonVariants } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Input } from "@/components/ui/input";
-import { APP_NAME } from "@/constants/app";
 import { ROUTES, STOREFRONT_NAV_LINKS } from "@/constants/routes";
-import { STORE_TAGLINE } from "@/constants/storefront";
 import { useNotificationSummary } from "@/hooks/use-notification-summary";
 import { useUserRole } from "@/hooks/use-user-role";
 import { useAppSelector } from "@/hooks/use-redux";
@@ -102,7 +100,23 @@ function formatNotificationDate(value: string) {
   });
 }
 
-export function StorefrontHeader() {
+type StorefrontHeaderProps = {
+  announcementText: string;
+  logoAlt?: string;
+  logoUrl?: string | null;
+  storeName: string;
+  tagline: string;
+  topbarDetail?: string;
+};
+
+export function StorefrontHeader({
+  announcementText,
+  logoAlt,
+  logoUrl,
+  storeName,
+  tagline,
+  topbarDetail,
+}: StorefrontHeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const notificationPanelRef = useRef<HTMLDivElement | null>(null);
@@ -151,22 +165,31 @@ export function StorefrontHeader() {
     <header className="sticky top-0 z-30 px-2 pt-3 sm:px-3">
       <Container className="space-y-3">
         <div className="editorial-panel hidden items-center justify-between gap-6 px-6 py-3 text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground lg:flex">
-          <p>Soft luxury essentials for everyday carry.</p>
-          <p>Free signature delivery on orders above $75</p>
+          <p>{announcementText}</p>
+          <p>{topbarDetail || tagline}</p>
         </div>
 
         <div className="editorial-panel px-4 py-4 sm:px-6">
           <div className="flex items-center justify-between gap-3">
             <Link className="flex min-w-0 items-center gap-3" href="/">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[1.35rem] bg-foreground text-sm font-semibold text-white shadow-[0_12px_30px_rgba(20,21,26,0.22)]">
-                AS
-              </span>
+              {logoUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  alt={logoAlt || storeName}
+                  className="h-11 w-11 shrink-0 rounded-[1.35rem] object-cover shadow-[0_12px_30px_rgba(20,21,26,0.18)]"
+                  src={logoUrl}
+                />
+              ) : (
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[1.35rem] bg-foreground text-sm font-semibold text-white shadow-[0_12px_30px_rgba(20,21,26,0.22)]">
+                  {storeName.slice(0, 2).toUpperCase()}
+                </span>
+              )}
               <div className="min-w-0">
                 <span className="font-display block truncate text-lg font-semibold tracking-[-0.05em]">
-                  {APP_NAME}
+                  {storeName}
                 </span>
                 <span className="hidden truncate text-xs uppercase tracking-[0.24em] text-muted-foreground sm:block">
-                  {STORE_TAGLINE}
+                  {tagline}
                 </span>
               </div>
             </Link>

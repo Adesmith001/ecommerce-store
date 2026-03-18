@@ -12,6 +12,7 @@ import {
   YAxis,
 } from "recharts";
 import { Card } from "@/components/ui/card";
+import { formatCurrency } from "@/helpers/format-currency";
 import type { AdminChartPoint } from "@/types/admin";
 
 type DashboardChartCardProps = {
@@ -21,14 +22,6 @@ type DashboardChartCardProps = {
   title: string;
   variant?: "area" | "bar";
 };
-
-function formatCurrency(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    currency: "USD",
-    notation: "compact",
-    style: "currency",
-  }).format(value);
-}
 
 export function DashboardChartCard({
   data,
@@ -68,7 +61,9 @@ export function DashboardChartCard({
                 <XAxis dataKey="label" tickLine={false} axisLine={false} />
                 <YAxis
                   tickFormatter={(value) =>
-                    metric === "revenue" ? formatCurrency(Number(value)) : String(value)
+                    metric === "revenue"
+                      ? formatCurrency(Number(value), { notation: "compact" })
+                      : String(value)
                   }
                   tickLine={false}
                   axisLine={false}
@@ -77,7 +72,7 @@ export function DashboardChartCard({
                 <Tooltip
                   formatter={(value) =>
                     metric === "revenue"
-                      ? formatCurrency(Number(value))
+                      ? formatCurrency(Number(value), { notation: "compact" })
                       : `${value} orders`
                   }
                   contentStyle={{

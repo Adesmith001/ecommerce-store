@@ -6,14 +6,8 @@ import {
   TopProductsPanel,
 } from "@/components/admin";
 import { Card } from "@/components/ui/card";
+import { formatCurrency } from "@/helpers/format-currency";
 import { getAdminDashboardData } from "@/lib/admin/admin-dashboard-service";
-
-function formatCurrency(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    currency: "USD",
-    style: "currency",
-  }).format(value);
-}
 
 export default async function AdminDashboardPage() {
   const dashboard = await getAdminDashboardData();

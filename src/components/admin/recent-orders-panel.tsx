@@ -1,18 +1,12 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { formatCurrency } from "@/helpers/format-currency";
 import { formatOrderDate } from "@/lib/orders/order-presentation";
 import type { AdminRecentOrder } from "@/types/admin";
 
 type RecentOrdersPanelProps = {
   orders: AdminRecentOrder[];
 };
-
-function formatPrice(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    currency: "USD",
-    style: "currency",
-  }).format(value);
-}
 
 export function RecentOrdersPanel({ orders }: RecentOrdersPanelProps) {
   return (
@@ -50,7 +44,7 @@ export function RecentOrdersPanel({ orders }: RecentOrdersPanelProps) {
                 </Badge>
               </div>
               <div className="text-sm lg:text-right">
-                <p className="font-medium">{formatPrice(order.total)}</p>
+                <p className="font-medium">{formatCurrency(order.total)}</p>
                 <p className="text-muted-foreground">{formatOrderDate(order.createdAt)}</p>
               </div>
             </div>
