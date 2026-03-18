@@ -27,13 +27,13 @@ export function LowStockPanel({ products }: LowStockPanelProps) {
           {products.map((product) => (
             <div
               key={product.id}
-              className="flex items-center justify-between gap-4 rounded-[1.4rem] border border-white/80 bg-white/72 px-4 py-4"
+              className="flex flex-col gap-3 rounded-[1.4rem] border border-white/80 bg-white/72 px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
             >
-              <div>
-                <p className="font-medium">{product.name}</p>
-                <p className="text-sm text-muted-foreground">SKU: {product.sku}</p>
+              <div className="min-w-0">
+                <p className="break-words font-medium">{product.name}</p>
+                <p className="break-words text-sm text-muted-foreground">SKU: {product.sku}</p>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <Badge variant="danger">{product.stock} left</Badge>
                 <Badge variant="outline">{product.status}</Badge>
               </div>

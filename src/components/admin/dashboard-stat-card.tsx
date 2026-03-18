@@ -16,7 +16,7 @@ export function DashboardStatCard({
       <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
         {label}
       </p>
-      <p className="font-display text-4xl font-semibold tracking-[-0.06em]">
+      <p className="font-display break-words text-3xl font-semibold tracking-[-0.06em] sm:text-4xl">
         {value}
       </p>
       <p className="text-sm leading-6 text-muted-foreground">{description}</p>

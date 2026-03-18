@@ -47,7 +47,7 @@ export function DashboardChartCard({
           No chart data yet.
         </div>
       ) : (
-        <div className="h-72 w-full">
+        <div className="h-64 w-full sm:h-72">
           <ResponsiveContainer>
             {variant === "area" ? (
               <AreaChart data={data}>
