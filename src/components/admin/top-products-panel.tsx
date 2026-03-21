@@ -8,18 +8,18 @@ type TopProductsPanelProps = {
 
 export function TopProductsPanel({ products }: TopProductsPanelProps) {
   return (
-    <Card className="space-y-5 p-6">
+    <Card className="space-y-5 rounded-[1.8rem] bg-white/60 p-6">
       <div>
-        <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
+        <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
           Top products
         </p>
-        <h2 className="font-display mt-3 text-3xl font-semibold tracking-[-0.05em]">
-          Placeholder leaders
+        <h2 className="font-display mt-3 text-3xl font-bold uppercase tracking-[-0.08em]">
+          Product leaders
         </h2>
       </div>
 
       {products.length === 0 ? (
-        <div className="rounded-3xl border border-dashed border-border px-4 py-10 text-center text-sm text-muted-foreground">
+        <div className="admin-subpanel border-dashed px-4 py-10 text-center text-sm text-muted-foreground">
           No product data yet.
         </div>
       ) : (
@@ -27,7 +27,7 @@ export function TopProductsPanel({ products }: TopProductsPanelProps) {
           {products.map((product) => (
             <div
               key={product.id}
-              className="flex flex-col gap-3 rounded-[1.4rem] border border-white/80 bg-white/72 px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
+              className="admin-subpanel flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
             >
               <div className="min-w-0">
                 <p className="break-words font-medium">{product.name}</p>

@@ -51,17 +51,17 @@ export function AdminProductsList({ products }: AdminProductsListProps) {
 
   return (
     <div className="space-y-5">
-      <Card className="space-y-4 p-5">
+      <Card className="space-y-4 rounded-[1.8rem] bg-white/60 p-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
+            <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
               Product manager
             </p>
-            <h2 className="font-display mt-3 text-3xl font-semibold tracking-[-0.05em]">
+            <h2 className="font-display mt-3 text-3xl font-bold uppercase tracking-[-0.08em]">
               Catalog products
             </h2>
           </div>
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="flex w-full max-w-[34rem] flex-col gap-3 sm:flex-row">
             <Input
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search by name, slug, or brand..."
@@ -82,7 +82,7 @@ export function AdminProductsList({ products }: AdminProductsListProps) {
       ) : (
         <div className="space-y-4">
           {filteredProducts.map((product) => (
-            <Card key={product.id} className="space-y-4 p-5">
+            <Card key={product.id} className="space-y-5 rounded-[1.8rem] bg-white/60 p-6">
               <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
                 <div className="space-y-3">
                   <div className="flex flex-wrap items-center gap-2">
@@ -94,31 +94,31 @@ export function AdminProductsList({ products }: AdminProductsListProps) {
                     ) : null}
                   </div>
                   <div>
-                    <h3 className="font-display text-2xl font-semibold tracking-[-0.05em]">
+                    <h3 className="font-display text-3xl font-bold tracking-[-0.07em]">
                       {product.name}
                     </h3>
                     <p className="mt-1 text-sm text-muted-foreground">
                       {product.slug}
                     </p>
                   </div>
-                  <div className="grid gap-3 text-sm sm:grid-cols-4">
-                    <div className="rounded-[1.2rem] border border-white/80 bg-white/72 px-3 py-3">
+                  <div className="grid gap-3 text-sm sm:grid-cols-2 xl:grid-cols-4">
+                    <div className="admin-subpanel px-4 py-4">
                       <p className="text-muted-foreground">Price</p>
                       <p className="mt-1 font-medium">
                         {formatCurrency(product.salePrice ?? product.price)}
                       </p>
                     </div>
-                    <div className="rounded-[1.2rem] border border-white/80 bg-white/72 px-3 py-3">
+                    <div className="admin-subpanel px-4 py-4">
                       <p className="text-muted-foreground">Stock</p>
                       <p className="mt-1 font-medium">{product.stock}</p>
                     </div>
-                    <div className="rounded-[1.2rem] border border-white/80 bg-white/72 px-3 py-3">
+                    <div className="admin-subpanel px-4 py-4">
                       <p className="text-muted-foreground">Category</p>
                       <p className="mt-1 font-medium">
                         {product.category?.name ?? "Unassigned"}
                       </p>
                     </div>
-                    <div className="rounded-[1.2rem] border border-white/80 bg-white/72 px-3 py-3">
+                    <div className="admin-subpanel px-4 py-4">
                       <p className="text-muted-foreground">Brand</p>
                       <p className="mt-1 font-medium">
                         {product.brand?.name ?? "Unassigned"}

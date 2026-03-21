@@ -15,8 +15,8 @@ export default async function AdminDashboardPage() {
   return (
     <div className="space-y-6">
       {dashboard.warnings.length > 0 ? (
-        <Card className="space-y-2 border-accent/20 p-5">
-          <p className="text-xs font-medium uppercase tracking-[0.24em] text-accent">
+        <Card className="space-y-2 rounded-[1.6rem] border-accent/25 bg-white/60 p-5">
+          <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-accent">
             Setup notes
           </p>
           <div className="space-y-2 text-sm text-muted-foreground">

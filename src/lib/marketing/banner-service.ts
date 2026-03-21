@@ -1,12 +1,16 @@
 import { Query } from "appwrite";
 import { appwriteDatabases } from "@/lib/appwrite/client";
 import { appwriteConfig } from "@/lib/appwrite/config";
+import { logAppwriteReadFallback } from "@/lib/appwrite/server-api";
 import { mapBannerDocumentToHomepageBanner } from "@/lib/catalog/catalog-mappers";
 import type { AppwriteBannerDocument, HomepageBanner } from "@/types/catalog";
 
 function canReadBanners() {
   return Boolean(
-    appwriteConfig.databaseId && appwriteConfig.catalog.bannersCollectionId,
+    appwriteConfig.databaseId &&
+      appwriteConfig.endpoint &&
+      appwriteConfig.catalog.bannersCollectionId &&
+      appwriteConfig.projectId,
   );
 }
 
@@ -31,7 +35,11 @@ export async function getHomepageBanners() {
       response.documents.map(mapBannerDocumentToHomepageBanner).filter((banner) => banner.active),
     );
   } catch (error) {
-    console.error("Failed to load homepage banners.", error);
+    logAppwriteReadFallback(
+      "Failed to load homepage banners",
+      error,
+      "Using no homepage banners.",
+    );
 
     return [];
   }

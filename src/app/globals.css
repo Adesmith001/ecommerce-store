@@ -128,7 +128,7 @@ img {
 }
 
 .app-shell {
-  @apply mx-auto w-full max-w-[1320px] px-5 sm:px-8 lg:px-12;
+  @apply mx-auto w-full max-w-330 px-5 sm:px-8 lg:px-12;
 }
 
 .section-space {
@@ -154,7 +154,7 @@ img {
 }
 
 .surface {
-  @apply rounded-[2rem] border text-surface-foreground;
+  @apply rounded-4xl border text-surface-foreground;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(248, 243, 235, 0.76)),
     linear-gradient(140deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.28));
@@ -162,7 +162,7 @@ img {
 }
 
 .card-shell {
-  @apply rounded-[1.8rem] border backdrop-blur-sm;
+  @apply rounded-4xl border backdrop-blur-sm;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(251, 247, 241, 0.8)),
     linear-gradient(140deg, rgba(255, 255, 255, 0.76), rgba(255, 255, 255, 0.22));
@@ -170,7 +170,7 @@ img {
 }
 
 .field-base {
-  @apply flex w-full rounded-[1rem] border px-4 py-3.5 text-sm text-foreground outline-none ring-0 transition placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-60;
+  @apply flex w-full rounded-2xl border px-4 py-3.5 text-sm text-foreground outline-none ring-0 transition placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-60;
   background: rgba(236, 232, 223, 0.64);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.84),
@@ -192,7 +192,7 @@ img {
 }
 
 .editorial-panel {
-  @apply rounded-[2rem] border border-white/80 backdrop-blur-md;
+  @apply rounded-4xl border border-white/80 backdrop-blur-md;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(246, 240, 232, 0.76)),
     linear-gradient(140deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.2));
@@ -207,6 +207,21 @@ img {
   font-family: var(--font-space-grotesk), sans-serif;
   color: rgba(17, 17, 17, 0.05);
   @apply text-[4rem] font-bold uppercase leading-none tracking-[-0.08em] sm:text-[6rem] lg:text-[9rem];
+}
+
+.admin-workspace {
+  @apply mx-auto w-full max-w-370 px-5 py-5 sm:px-8 sm:py-8 lg:px-10;
+}
+
+.admin-panel {
+  @apply rounded-4xl border border-border bg-white/70 backdrop-blur-sm;
+  box-shadow:
+    0 18px 42px rgba(17, 17, 17, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.admin-subpanel {
+  @apply rounded-4xl border border-border bg-muted/45;
 }
 
 .storefront-brand-mark {

@@ -27,11 +27,11 @@ export function ProductCard({ product }: ProductCardProps) {
             // eslint-disable-next-line @next/next/no-img-element
             <img
               alt={primaryImage.alt}
-              className="aspect-[4/5] w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+              className="aspect-4/5 w-full object-cover transition duration-500 group-hover:scale-[1.03]"
               src={primaryImage.url}
             />
           ) : (
-            <div className="aspect-[4/5] bg-[linear-gradient(180deg,#ebe6de,#dcd5ca)]" />
+            <div className="aspect-4/5 bg-[linear-gradient(180deg,#ebe6de,#dcd5ca)]" />
           )}
         </Link>
 

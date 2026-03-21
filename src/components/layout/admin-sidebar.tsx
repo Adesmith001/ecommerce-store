@@ -10,13 +10,13 @@ export function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="card-shell hidden h-fit p-6 lg:block">
-      <Badge variant="primary">Admin panel</Badge>
+    <aside className="admin-panel sticky top-6 hidden h-fit p-6 lg:block">
+      <Badge variant="secondary">Admin panel</Badge>
       <div className="mt-5 space-y-2">
-        <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+        <p className="text-[11px] uppercase tracking-[0.28em] text-muted-foreground">
           Back office
         </p>
-        <h2 className="font-display text-3xl font-semibold tracking-[-0.05em]">
+        <h2 className="font-display text-4xl font-bold uppercase tracking-[-0.08em]">
           Operations
         </h2>
       </div>
@@ -31,10 +31,10 @@ export function AdminSidebar() {
             <Link
               key={link.href}
               className={cn(
-                "rounded-[1.4rem] px-4 py-3 text-sm font-medium transition",
+                "rounded-[1rem] px-4 py-3 text-sm font-medium transition",
                 active
-                  ? "bg-foreground text-white shadow-[0_16px_34px_rgba(20,21,26,0.16)]"
-                  : "border border-white/80 bg-white/60 text-muted-foreground hover:bg-white hover:text-foreground",
+                  ? "bg-foreground text-white shadow-[0_16px_34px_rgba(20,21,26,0.12)]"
+                  : "border border-border bg-white/60 text-muted-foreground hover:bg-white hover:text-foreground",
               )}
               href={link.href}
             >

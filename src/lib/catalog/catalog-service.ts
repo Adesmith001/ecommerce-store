@@ -1,6 +1,7 @@
 import { Query } from "appwrite";
 import { appwriteDatabases } from "@/lib/appwrite/client";
 import { appwriteConfig } from "@/lib/appwrite/config";
+import { logAppwriteReadFallback } from "@/lib/appwrite/server-api";
 import {
   mapCategoryDocumentToCategory,
   mapProductDocumentToProduct,
@@ -14,13 +15,19 @@ import type {
 function canReadCatalogFromAppwrite() {
   return Boolean(
     appwriteConfig.databaseId &&
+      appwriteConfig.endpoint &&
       appwriteConfig.catalog.categoriesCollectionId &&
+      appwriteConfig.projectId &&
       appwriteConfig.catalog.productsCollectionId,
   );
 }
 
 function handleCatalogError(error: unknown, context: string) {
-  console.error(`Catalog service error: ${context}`, error);
+  logAppwriteReadFallback(
+    `Catalog service error: ${context}`,
+    error,
+    "Using an empty catalog response.",
+  );
 }
 
 function sortProducts(products: Product[]) {

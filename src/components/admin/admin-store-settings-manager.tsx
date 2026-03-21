@@ -252,11 +252,11 @@ export function AdminStoreSettingsManager({
 
   return (
     <div className="space-y-6">
-      <Card className="space-y-4 p-6">
-        <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
+      <Card className="space-y-4 rounded-[1.8rem] bg-white/60 p-6">
+        <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
           Store configuration
         </p>
-        <h1 className="font-display text-4xl font-semibold tracking-[-0.06em]">
+        <h1 className="font-display text-4xl font-bold uppercase tracking-[-0.08em]">
           Content and settings
         </h1>
         <p className="max-w-3xl text-sm leading-7 text-muted-foreground">
@@ -267,12 +267,12 @@ export function AdminStoreSettingsManager({
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
         <div className="space-y-6">
-          <Card className="space-y-5 p-6">
+          <Card className="space-y-5 rounded-[1.8rem] bg-white/60 p-6">
             <div>
-              <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
+              <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
                 Brand settings
               </p>
-              <h2 className="font-display mt-3 text-3xl font-semibold tracking-[-0.05em]">
+              <h2 className="font-display mt-3 text-3xl font-bold uppercase tracking-[-0.08em]">
                 Store identity
               </h2>
             </div>
@@ -310,12 +310,12 @@ export function AdminStoreSettingsManager({
             {renderTextarea("supportText", "Support text", { rows: 4 })}
           </Card>
 
-          <Card className="space-y-5 p-6">
+          <Card className="space-y-5 rounded-[1.8rem] bg-white/60 p-6">
             <div>
-              <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
+              <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
                 Hero settings
               </p>
-              <h2 className="font-display mt-3 text-3xl font-semibold tracking-[-0.05em]">
+              <h2 className="font-display mt-3 text-3xl font-bold uppercase tracking-[-0.08em]">
                 Above-the-fold experience
               </h2>
             </div>
@@ -340,12 +340,12 @@ export function AdminStoreSettingsManager({
             </div>
           </Card>
 
-          <Card className="space-y-6 p-6">
+          <Card className="space-y-6 rounded-[1.8rem] bg-white/60 p-6">
             <div>
-              <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
+              <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
                 Homepage modules
               </p>
-              <h2 className="font-display mt-3 text-3xl font-semibold tracking-[-0.05em]">
+              <h2 className="font-display mt-3 text-3xl font-bold uppercase tracking-[-0.08em]">
                 Section copy and toggles
               </h2>
             </div>
@@ -359,7 +359,7 @@ export function AdminStoreSettingsManager({
               ].map(([field, label]) => (
                 <label
                   key={field}
-                  className="flex items-center gap-3 rounded-[1.4rem] border border-white/80 bg-white/72 px-4 py-3 text-sm font-medium"
+                  className="admin-subpanel flex items-center gap-3 px-4 py-3 text-sm font-medium"
                 >
                   <input
                     checked={Boolean(settings[field as keyof StoreSettingsFormValues])}
@@ -377,8 +377,8 @@ export function AdminStoreSettingsManager({
               ))}
             </div>
 
-            <div className="space-y-5 rounded-[1.8rem] border border-white/75 bg-white/65 p-5">
-              <h3 className="font-display text-2xl font-semibold tracking-[-0.05em]">
+            <div className="admin-subpanel space-y-5 p-5">
+              <h3 className="font-display text-2xl font-bold tracking-[-0.06em]">
                 Identity card
               </h3>
               <div className="grid gap-4 md:grid-cols-2">
@@ -392,8 +392,8 @@ export function AdminStoreSettingsManager({
               </div>
             </div>
 
-            <div className="space-y-5 rounded-[1.8rem] border border-white/75 bg-white/65 p-5">
-              <h3 className="font-display text-2xl font-semibold tracking-[-0.05em]">
+            <div className="admin-subpanel space-y-5 p-5">
+              <h3 className="font-display text-2xl font-bold tracking-[-0.06em]">
                 Metrics strip
               </h3>
               <div className="grid gap-4 md:grid-cols-2">
@@ -418,8 +418,8 @@ export function AdminStoreSettingsManager({
               </div>
             </div>
 
-            <div className="space-y-5 rounded-[1.8rem] border border-white/75 bg-white/65 p-5">
-              <h3 className="font-display text-2xl font-semibold tracking-[-0.05em]">
+            <div className="admin-subpanel space-y-5 p-5">
+              <h3 className="font-display text-2xl font-bold tracking-[-0.06em]">
                 Catalog sections
               </h3>
               <div className="grid gap-4 md:grid-cols-2">
@@ -452,8 +452,8 @@ export function AdminStoreSettingsManager({
               {renderTextarea("newArrivalsDescription", "New arrivals description")}
             </div>
 
-            <div className="space-y-5 rounded-[1.8rem] border border-white/75 bg-white/65 p-5">
-              <h3 className="font-display text-2xl font-semibold tracking-[-0.05em]">
+            <div className="admin-subpanel space-y-5 p-5">
+              <h3 className="font-display text-2xl font-bold tracking-[-0.06em]">
                 Service and story
               </h3>
               <div className="grid gap-4 md:grid-cols-2">
@@ -472,8 +472,8 @@ export function AdminStoreSettingsManager({
               </div>
             </div>
 
-            <div className="space-y-5 rounded-[1.8rem] border border-white/75 bg-white/65 p-5">
-              <h3 className="font-display text-2xl font-semibold tracking-[-0.05em]">
+            <div className="admin-subpanel space-y-5 p-5">
+              <h3 className="font-display text-2xl font-bold tracking-[-0.06em]">
                 Campaign and newsletter
               </h3>
               <div className="grid gap-4 md:grid-cols-2">
@@ -522,12 +522,12 @@ export function AdminStoreSettingsManager({
         </div>
 
         <div className="space-y-6">
-          <Card className="space-y-5 p-6">
+          <Card className="space-y-5 rounded-[1.8rem] bg-white/60 p-6">
             <div>
-              <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
+              <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
                 SEO defaults
               </p>
-              <h2 className="font-display mt-3 text-3xl font-semibold tracking-[-0.05em]">
+              <h2 className="font-display mt-3 text-3xl font-bold uppercase tracking-[-0.08em]">
                 Metadata defaults
               </h2>
             </div>
@@ -535,7 +535,7 @@ export function AdminStoreSettingsManager({
             {renderInput("seoTitle", "Default SEO title")}
             {renderTextarea("seoDescription", "Default SEO description")}
 
-            <div className="rounded-[1.6rem] border border-white/80 bg-white/72 p-4">
+            <div className="admin-subpanel p-4">
               <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
                 Preview
               </p>
@@ -548,12 +548,12 @@ export function AdminStoreSettingsManager({
           </Card>
 
           {pages.map((page) => (
-            <Card key={page.slug} className="space-y-5 p-6">
+            <Card key={page.slug} className="space-y-5 rounded-[1.8rem] bg-white/60 p-6">
               <div>
-                <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
+                <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
                   Content page
                 </p>
-                <h2 className="font-display mt-3 text-3xl font-semibold tracking-[-0.05em]">
+                <h2 className="font-display mt-3 text-3xl font-bold uppercase tracking-[-0.08em]">
                   {page.title}
                 </h2>
               </div>

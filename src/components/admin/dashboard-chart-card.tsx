@@ -31,19 +31,19 @@ export function DashboardChartCard({
   variant = "area",
 }: DashboardChartCardProps) {
   return (
-    <Card className="space-y-5 p-6">
+    <Card className="space-y-5 rounded-[1.8rem] bg-white/60 p-6">
       <div>
-        <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
+        <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
           Dashboard chart
         </p>
-        <h2 className="font-display mt-3 text-3xl font-semibold tracking-[-0.05em]">
+        <h2 className="font-display mt-3 text-3xl font-bold uppercase tracking-[-0.08em]">
           {title}
         </h2>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">{description}</p>
       </div>
 
       {data.length === 0 ? (
-        <div className="rounded-3xl border border-dashed border-border px-4 py-10 text-center text-sm text-muted-foreground">
+        <div className="admin-subpanel border-dashed px-4 py-10 text-center text-sm text-muted-foreground">
           No chart data yet.
         </div>
       ) : (
@@ -77,8 +77,8 @@ export function DashboardChartCard({
                   }
                   contentStyle={{
                     background: "rgba(255,255,255,0.94)",
-                    border: "1px solid rgba(222,213,202,0.9)",
-                    borderRadius: "20px",
+                    border: "1px solid rgba(217,211,201,0.9)",
+                    borderRadius: "16px",
                   }}
                 />
                 <Area
@@ -98,8 +98,8 @@ export function DashboardChartCard({
                   formatter={(value) => `${value} orders`}
                   contentStyle={{
                     background: "rgba(255,255,255,0.94)",
-                    border: "1px solid rgba(222,213,202,0.9)",
-                    borderRadius: "20px",
+                    border: "1px solid rgba(217,211,201,0.9)",
+                    borderRadius: "16px",
                   }}
                 />
                 <Bar dataKey={metric} fill="#F97316" radius={[12, 12, 6, 6]} />

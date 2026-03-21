@@ -78,17 +78,17 @@ export function AdminOrdersList({ orders }: AdminOrdersListProps) {
 
   return (
     <div className="space-y-5">
-      <Card className="space-y-4 p-5">
+      <Card className="space-y-4 rounded-[1.8rem] bg-white/60 p-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
+            <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
               Order manager
             </p>
-            <h2 className="font-display mt-3 text-3xl font-semibold tracking-[-0.05em]">
+            <h2 className="font-display mt-3 text-3xl font-bold uppercase tracking-[-0.08em]">
               Customer orders
             </h2>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid w-full max-w-[48rem] gap-3 sm:grid-cols-2 xl:grid-cols-4">
             <Input
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search order, customer, email..."
@@ -142,7 +142,7 @@ export function AdminOrdersList({ orders }: AdminOrdersListProps) {
       ) : (
         <div className="space-y-4">
           {filteredOrders.map((order) => (
-            <Card key={order.id} className="space-y-4 p-5">
+            <Card key={order.id} className="space-y-5 rounded-[1.8rem] bg-white/60 p-6">
               <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
                 <div className="space-y-3">
                   <div className="flex flex-wrap items-center gap-2">
@@ -155,7 +155,7 @@ export function AdminOrdersList({ orders }: AdminOrdersListProps) {
                   </div>
 
                   <div>
-                    <h3 className="font-display text-2xl font-semibold tracking-[-0.05em]">
+                    <h3 className="font-display text-3xl font-bold tracking-[-0.07em]">
                       {order.orderNumber}
                     </h3>
                     <p className="mt-1 text-sm text-muted-foreground">
@@ -163,18 +163,18 @@ export function AdminOrdersList({ orders }: AdminOrdersListProps) {
                     </p>
                   </div>
 
-                  <div className="grid gap-3 text-sm sm:grid-cols-3">
-                    <div className="rounded-[1.2rem] border border-white/80 bg-white/72 px-3 py-3">
+                  <div className="grid gap-3 text-sm sm:grid-cols-2 xl:grid-cols-3">
+                    <div className="admin-subpanel px-4 py-4">
                       <p className="text-muted-foreground">Total amount</p>
                       <p className="mt-1 font-medium">
                         {formatOrderCurrency(order.totalAmount, order.currency)}
                       </p>
                     </div>
-                    <div className="rounded-[1.2rem] border border-white/80 bg-white/72 px-3 py-3">
+                    <div className="admin-subpanel px-4 py-4">
                       <p className="text-muted-foreground">Created</p>
                       <p className="mt-1 font-medium">{formatOrderDate(order.createdAt)}</p>
                     </div>
-                    <div className="rounded-[1.2rem] border border-white/80 bg-white/72 px-3 py-3">
+                    <div className="admin-subpanel px-4 py-4">
                       <p className="text-muted-foreground">Order id</p>
                       <p className="mt-1 font-medium">{order.id}</p>
                     </div>
@@ -183,7 +183,7 @@ export function AdminOrdersList({ orders }: AdminOrdersListProps) {
 
                 <div className="flex flex-wrap gap-2">
                   <Link
-                    className="rounded-full border border-white/80 bg-white/75 px-4 py-2 text-sm font-medium text-foreground shadow-[0_10px_24px_rgba(20,21,26,0.04)] hover:bg-white"
+                    className="rounded-[1rem] border border-border bg-white/75 px-4 py-2 text-sm font-medium text-foreground shadow-[0_10px_24px_rgba(20,21,26,0.04)] hover:bg-white"
                     href={`${ROUTES.admin.orders}/${order.id}`}
                   >
                     View order

@@ -5,6 +5,7 @@ import { appwriteConfig } from "@/lib/appwrite/config";
 import {
   buildAppwriteApiUrl,
   getAppwriteErrorMessage,
+  logAppwriteReadFallback,
 } from "@/lib/appwrite/server-api";
 import type {
   DeliveryMethod,
@@ -197,23 +198,32 @@ export async function listAdminShippingMethods() {
     return getDefaultShippingMethods();
   }
 
-  const url = getShippingCollectionUrl();
-  const response = await fetch(url, {
-    cache: "no-store",
-    headers: getAppwriteHeaders(),
-    method: "GET",
-  });
+  try {
+    const url = getShippingCollectionUrl();
+    const response = await fetch(url, {
+      cache: "no-store",
+      headers: getAppwriteHeaders(),
+      method: "GET",
+    });
 
-  if (!response.ok) {
-    throw new Error(
-      await getAppwriteErrorMessage(response, "Failed to load shipping methods."),
+    if (!response.ok) {
+      throw new Error(
+        await getAppwriteErrorMessage(response, "Failed to load shipping methods."),
+      );
+    }
+
+    const payload =
+      (await response.json()) as AppwriteDocumentListResponse<AppwriteShippingMethodDocument>;
+
+    return sortShippingMethods(payload.documents.map(toShippingMethod));
+  } catch (error) {
+    logAppwriteReadFallback(
+      "Shipping service error: listAdminShippingMethods",
+      error,
+      "Using default shipping methods.",
     );
+    return getDefaultShippingMethods();
   }
-
-  const payload =
-    (await response.json()) as AppwriteDocumentListResponse<AppwriteShippingMethodDocument>;
-
-  return sortShippingMethods(payload.documents.map(toShippingMethod));
 }
 
 export async function listActiveShippingMethods() {

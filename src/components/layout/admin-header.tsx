@@ -72,25 +72,29 @@ export function AdminHeader() {
 
   return (
     <header className="space-y-4">
-      <div className="card-shell flex flex-col gap-4 px-4 py-4 sm:px-6 sm:py-5 md:flex-row md:items-center md:justify-between">
-        <div className="space-y-2">
+      <div className="admin-panel flex flex-col gap-5 px-5 py-5 sm:px-7 sm:py-6 md:flex-row md:items-end md:justify-between">
+        <div className="space-y-3">
           <Badge variant="outline">{pageMeta.eyebrow}</Badge>
           <div>
-            <p className="text-sm text-muted-foreground">Admin workspace</p>
-            <h1 className="font-display text-2xl font-semibold tracking-[-0.05em] sm:text-3xl">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">
+              Admin workspace
+            </p>
+            <h1 className="font-display mt-2 text-3xl font-bold uppercase tracking-[-0.08em] sm:text-4xl">
               {pageMeta.title}
             </h1>
           </div>
         </div>
-        <Link
-          className={buttonVariants({ className: "w-full md:w-auto", variant: "outline" })}
-          href={ROUTES.storefront.home}
-        >
-          View storefront
-        </Link>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            className={buttonVariants({ className: "w-full md:w-auto", variant: "outline" })}
+            href={ROUTES.storefront.home}
+          >
+            View storefront
+          </Link>
+        </div>
       </div>
 
-      <div className="card-shell -mx-1 flex gap-2 overflow-x-auto p-3 lg:hidden">
+      <div className="admin-panel -mx-1 flex gap-2 overflow-x-auto p-3 lg:hidden">
         {ADMIN_NAV_LINKS.map((link) => {
           const active =
             link.href === "/admin"
@@ -103,7 +107,7 @@ export function AdminHeader() {
               className={
                 active
                   ? "whitespace-nowrap rounded-full bg-foreground px-4 py-2 text-sm font-medium text-white"
-                  : "whitespace-nowrap rounded-full border border-white/80 bg-white/70 px-4 py-2 text-sm font-medium text-muted-foreground"
+                  : "whitespace-nowrap rounded-full border border-border bg-white/70 px-4 py-2 text-sm font-medium text-muted-foreground"
               }
               href={link.href}
             >

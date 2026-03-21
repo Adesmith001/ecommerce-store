@@ -9,6 +9,7 @@ import { appwriteConfig } from "@/lib/appwrite/config";
 import {
   buildAppwriteApiUrl,
   getAppwriteErrorMessage,
+  logAppwriteReadFallback,
 } from "@/lib/appwrite/server-api";
 import type { ProductImage } from "@/types/catalog";
 import type {
@@ -651,7 +652,11 @@ export async function getStoreSettings() {
       ? mapStoreSettingsDocument(document)
       : getDefaultStoreSettings();
   } catch (error) {
-    console.error("Store settings service error: getStoreSettings", error);
+    logAppwriteReadFallback(
+      "Store settings service error: getStoreSettings",
+      error,
+      "Using default storefront settings.",
+    );
     return getDefaultStoreSettings();
   }
 }
@@ -673,7 +678,11 @@ export async function listStoreContentPages() {
       (page) => mapped.find((entry) => entry.slug === page.slug) ?? page,
     );
   } catch (error) {
-    console.error("Store settings service error: listStoreContentPages", error);
+    logAppwriteReadFallback(
+      "Store settings service error: listStoreContentPages",
+      error,
+      "Using default storefront content pages.",
+    );
     return getDefaultContentPages();
   }
 }

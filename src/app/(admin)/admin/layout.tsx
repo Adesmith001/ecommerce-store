@@ -11,11 +11,13 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
   await requireAdminUser();
 
   return (
-    <div className="app-shell grid min-h-screen gap-4 py-4 sm:gap-6 sm:py-6 lg:grid-cols-[280px_minmax(0,1fr)]">
+    <div className="admin-workspace grid min-h-screen gap-6 lg:grid-cols-[270px_minmax(0,1fr)] lg:items-start">
       <AdminSidebar />
-      <div className="min-w-0 space-y-4 sm:space-y-6">
+      <div className="min-w-0 space-y-6">
         <AdminHeader />
-        <main className="min-w-0">{children}</main>
+        <main className="min-w-0">
+          <div className="mx-auto w-full max-w-280">{children}</div>
+        </main>
       </div>
     </div>
   );
