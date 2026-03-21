@@ -21,7 +21,7 @@ export function SectionHeading({
   const centered = align === "center";
 
   return (
-    <div className={cn("space-y-5", centered && "text-center", className)}>
+    <div className={cn("space-y-4", centered && "text-center", className)}>
       {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
       <div className={cn("space-y-3", centered && "mx-auto max-w-3xl")}>
         <h2 className="text-heading max-w-4xl">{title}</h2>

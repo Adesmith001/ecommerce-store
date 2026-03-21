@@ -23,7 +23,7 @@ export function Textarea({
   return (
     <textarea
       className={cn(
-        "field-base min-h-32 resize-y rounded-[1.6rem] py-3.5",
+        "field-base min-h-32 resize-y rounded-[1rem] py-3.5",
         fieldVariants[variant],
         className,
       )}

@@ -12,12 +12,12 @@ type CheckoutSummaryProps = {
 
 export function CheckoutSummary({ items, pricing }: CheckoutSummaryProps) {
   return (
-    <Card className="space-y-5 p-6">
+    <Card className="space-y-5 rounded-[1.8rem] bg-white/55 p-6">
       <div>
-        <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
+        <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
           Order summary
         </p>
-        <h2 className="font-display mt-3 text-3xl font-semibold tracking-[-0.05em]">
+        <h2 className="font-display mt-3 text-4xl font-bold uppercase tracking-[-0.08em]">
           Review your order
         </h2>
       </div>
@@ -29,7 +29,7 @@ export function CheckoutSummary({ items, pricing }: CheckoutSummaryProps) {
           return (
             <div
               key={item.productId}
-              className="flex items-start justify-between gap-4 rounded-[1.35rem] border border-white/80 bg-white/72 p-4"
+              className="flex items-start justify-between gap-4 rounded-[1.2rem] border border-border bg-white/72 p-4"
             >
               <div className="min-w-0">
                 <p className="font-medium">{item.name}</p>
@@ -64,9 +64,9 @@ export function CheckoutSummary({ items, pricing }: CheckoutSummaryProps) {
           <span className="text-muted-foreground">Total quantity</span>
           <span className="font-medium">{pricing.totalQuantity}</span>
         </div>
-        <div className="flex items-center justify-between gap-3 rounded-[1.35rem] border border-white/80 bg-white/72 px-4 py-4">
+        <div className="flex items-center justify-between gap-3 rounded-[1.2rem] border border-border bg-muted/55 px-4 py-4">
           <span className="text-muted-foreground">Estimated total</span>
-          <span className="font-display text-2xl font-semibold tracking-[-0.05em]">
+          <span className="font-display text-3xl font-bold tracking-[-0.06em]">
             {formatCurrency(pricing.estimatedTotal)}
           </span>
         </div>

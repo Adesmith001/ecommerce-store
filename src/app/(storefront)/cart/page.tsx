@@ -10,9 +10,9 @@ export default function CartPage() {
           { label: "Home", href: ROUTES.storefront.home },
           { label: "Cart" },
         ]}
-        description="Review your selected products, update quantities, and prepare the data that checkout will consume next."
+        description="Review your selected pieces, adjust quantities, and move into checkout through the same calm editorial flow."
         eyebrow="Cart"
-        title="Your shopping cart"
+        title="Your shopping bag"
       />
       <SectionWrapper>
         <CartPageClient />

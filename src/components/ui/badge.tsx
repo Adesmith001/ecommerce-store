@@ -8,10 +8,10 @@ type BadgeProps = HTMLAttributes<HTMLSpanElement> & {
 };
 
 const badgeVariants: Record<BadgeVariant, string> = {
-  primary: "border border-primary/10 bg-primary/8 text-primary",
-  secondary: "border border-accent/10 bg-accent/10 text-accent",
-  outline: "border border-border bg-white/70 text-foreground",
-  danger: "border border-danger/10 bg-danger/8 text-danger",
+  primary: "border border-foreground bg-foreground text-primary-foreground",
+  secondary: "border border-border bg-[#e6e2da] text-foreground",
+  outline: "border border-border bg-white/75 text-foreground",
+  danger: "border border-danger bg-danger/8 text-danger",
 };
 
 export function Badge({

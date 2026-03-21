@@ -31,14 +31,23 @@ export function CatalogFilterPanel({
   query,
   response,
 }: CatalogFilterPanelProps) {
+  const availabilityOptions: {
+    label: string;
+    value: CatalogListingQuery["availability"];
+  }[] = [
+    { label: "All products", value: "all" },
+    { label: "In stock", value: "in-stock" },
+    { label: "Out of stock", value: "out-of-stock" },
+  ];
+
   return (
-    <Card className="space-y-5 p-5 sm:p-6">
+    <Card className="space-y-8 rounded-[1.8rem] bg-white/45 p-6 sm:p-7">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">
             Refine view
           </p>
-          <h2 className="font-display mt-2 text-2xl font-semibold tracking-[-0.05em]">
+          <h2 className="font-display mt-3 text-4xl font-bold uppercase tracking-[-0.08em]">
             Filters
           </h2>
         </div>
@@ -47,29 +56,41 @@ export function CatalogFilterPanel({
         </Button>
       </div>
 
-      <div className="space-y-2">
-        <label className="text-sm font-medium" htmlFor="catalog-category">
-          Category
-        </label>
-        <Select
-          disabled={Boolean(lockedCategorySlug)}
-          id="catalog-category"
-          onChange={(event) => onCategoryChange(event.target.value)}
-          value={lockedCategorySlug ?? query.category}
-        >
-          <option value="">All categories</option>
+      <div className="space-y-4">
+        <p className="text-lg font-semibold uppercase tracking-[0.12em]">Category</p>
+        <div className="grid gap-2">
+          <button
+            className={`rounded-[1rem] border px-4 py-3 text-left text-sm font-medium ${
+              (lockedCategorySlug ?? query.category) === ""
+                ? "border-foreground bg-foreground text-primary-foreground"
+                : "border-border bg-white/60 text-foreground"
+            }`}
+            disabled={Boolean(lockedCategorySlug)}
+            onClick={() => onCategoryChange("")}
+            type="button"
+          >
+            All categories
+          </button>
           {response.availableFilters.categories.map((category) => (
-            <option key={category.value} value={category.value}>
+            <button
+              key={category.value}
+              className={`rounded-[1rem] border px-4 py-3 text-left text-sm font-medium ${
+                (lockedCategorySlug ?? query.category) === category.value
+                  ? "border-foreground bg-foreground text-primary-foreground"
+                  : "border-border bg-white/60 text-foreground"
+              }`}
+              disabled={Boolean(lockedCategorySlug)}
+              onClick={() => onCategoryChange(category.value)}
+              type="button"
+            >
               {category.label} ({category.count})
-            </option>
+            </button>
           ))}
-        </Select>
+        </div>
       </div>
 
-      <div className="space-y-2">
-        <label className="text-sm font-medium" htmlFor="catalog-brand">
-          Brand
-        </label>
+      <div className="space-y-4">
+        <p className="text-lg font-semibold uppercase tracking-[0.12em]">Brand</p>
         <Select
           id="catalog-brand"
           onChange={(event) => onBrandChange(event.target.value)}
@@ -84,25 +105,28 @@ export function CatalogFilterPanel({
         </Select>
       </div>
 
-      <div className="space-y-2">
-        <label className="text-sm font-medium" htmlFor="catalog-availability">
-          Availability
-        </label>
-        <Select
-          id="catalog-availability"
-          onChange={(event) =>
-            onAvailabilityChange(event.target.value as CatalogListingQuery["availability"])
-          }
-          value={query.availability}
-        >
-          <option value="all">All products</option>
-          <option value="in-stock">In stock</option>
-          <option value="out-of-stock">Out of stock</option>
-        </Select>
+      <div className="space-y-4">
+        <p className="text-lg font-semibold uppercase tracking-[0.12em]">Availability</p>
+        <div className="grid gap-2">
+          {availabilityOptions.map((option) => (
+            <button
+              key={option.value}
+              className={`rounded-[1rem] border px-4 py-3 text-left text-sm font-medium ${
+                query.availability === option.value
+                  ? "border-foreground bg-foreground text-primary-foreground"
+                  : "border-border bg-white/60 text-foreground"
+              }`}
+              onClick={() => onAvailabilityChange(option.value)}
+              type="button"
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="space-y-3">
-        <p className="text-sm font-medium">Price range</p>
+        <p className="text-lg font-semibold uppercase tracking-[0.12em]">Price range</p>
         <div className="grid grid-cols-2 gap-3">
           <Input
             inputMode="numeric"
@@ -119,7 +143,7 @@ export function CatalogFilterPanel({
         </div>
       </div>
 
-      <label className="flex items-center gap-3 rounded-[1.4rem] border border-white/80 bg-white/72 px-4 py-3 text-sm font-medium">
+      <label className="flex items-center gap-3 rounded-[1rem] border border-border bg-white/60 px-4 py-3 text-sm font-medium">
         <input
           checked={query.featured}
           className="h-4 w-4 accent-[var(--primary)]"

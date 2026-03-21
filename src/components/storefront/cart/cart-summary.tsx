@@ -21,13 +21,13 @@ export function CartSummary({
 }: CartSummaryProps) {
   return (
     <div className="space-y-6">
-      <Card className="space-y-5 p-6">
+      <Card className="space-y-6 rounded-[1.8rem] bg-white/55 p-6">
         <div>
-          <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
-            Summary
+          <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
+            Order summary
           </p>
-          <h2 className="font-display mt-3 text-3xl font-semibold tracking-[-0.05em]">
-            Order overview
+          <h2 className="font-display mt-3 text-4xl font-bold uppercase tracking-[-0.08em]">
+            Total
           </h2>
         </div>
 
@@ -52,9 +52,13 @@ export function CartSummary({
               <span className="font-medium">-{formatCurrency(pricing.discountAmount)}</span>
             </div>
           ) : null}
-          <div className="flex items-center justify-between gap-3 rounded-[1.35rem] border border-white/80 bg-white/72 px-4 py-4">
+          <div className="flex items-center justify-between gap-3 border-t border-border/70 pt-4">
+            <span className="text-muted-foreground">Shipping</span>
+            <span className="font-medium">Calculated at checkout</span>
+          </div>
+          <div className="flex items-center justify-between gap-3 rounded-[1.2rem] border border-border bg-muted/55 px-4 py-4">
             <span className="text-muted-foreground">Estimated total</span>
-            <span className="font-display text-2xl font-semibold tracking-[-0.05em]">
+            <span className="font-display text-3xl font-bold tracking-[-0.06em]">
               {formatCurrency(pricing.estimatedTotal)}
             </span>
           </div>
@@ -65,7 +69,7 @@ export function CartSummary({
             className={buttonVariants({ className: "w-full", size: "lg" })}
             href={ROUTES.storefront.checkout}
           >
-            Proceed to checkout
+            Continue
           </Link>
           <Link
             className={buttonVariants({
@@ -79,9 +83,8 @@ export function CartSummary({
           </Link>
         </div>
 
-        <div className="rounded-[1.5rem] border border-white/80 bg-white/72 p-4 text-sm leading-7 text-muted-foreground">
-          Taxes, shipping, and payment handling will plug into this summary in the
-          checkout phase.
+        <div className="rounded-[1.2rem] border border-border bg-white/70 p-4 text-sm leading-7 text-muted-foreground">
+          Taxes, shipping, and payment handling finalize in checkout.
         </div>
       </Card>
 

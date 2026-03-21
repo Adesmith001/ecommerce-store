@@ -28,27 +28,21 @@ export function ProductGallery({
     galleryImages.find((image) => image.id === activeImageId) ?? galleryImages[0];
 
   return (
-    <div className="space-y-4">
-      <div className="editorial-panel overflow-hidden p-4 sm:p-5">
-        <div className="relative overflow-hidden rounded-[2.1rem] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.82),transparent_30%),linear-gradient(180deg,#f8f4ee,#ece4db)]">
-          {activeImage.url ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              alt={activeImage.alt}
-              className="aspect-square w-full object-cover"
-              src={activeImage.url}
-            />
-          ) : (
-            <div className="aspect-square bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.76),transparent_28%),linear-gradient(180deg,#d8ebf6,#f5ede2)]" />
-          )}
-
-          <div className="headline-marquee pointer-events-none absolute inset-x-0 bottom-2 text-center">
-            {productName}
-          </div>
-        </div>
+    <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_88px]">
+      <div className="overflow-hidden rounded-[2rem] border border-border bg-[#ece8e1]">
+        {activeImage.url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            alt={activeImage.alt}
+            className="aspect-[4/5] w-full object-cover"
+            src={activeImage.url}
+          />
+        ) : (
+          <div className="aspect-[4/5] bg-[linear-gradient(180deg,#ebe6de,#dcd5ca)]" />
+        )}
       </div>
 
-      <div className="grid grid-cols-4 gap-3 sm:grid-cols-5">
+      <div className="grid grid-cols-5 gap-3 lg:grid-cols-1">
         {galleryImages.map((image) => {
           const isActive = image.id === activeImage.id;
 
@@ -56,10 +50,8 @@ export function ProductGallery({
             <button
               key={image.id}
               className={cn(
-                "overflow-hidden rounded-[1.4rem] border bg-white/75 p-1.5 shadow-[0_10px_24px_rgba(20,21,26,0.05)] transition",
-                isActive
-                  ? "border-primary shadow-[0_0_0_4px_rgba(37,99,235,0.12)]"
-                  : "border-white/80",
+                "overflow-hidden rounded-[1.2rem] border bg-[#ece8e1] p-1 transition",
+                isActive ? "border-foreground" : "border-border",
               )}
               onClick={() => setActiveImageId(image.id)}
               type="button"
@@ -68,11 +60,11 @@ export function ProductGallery({
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   alt={image.alt}
-                  className="aspect-square w-full rounded-2xl object-cover"
+                  className="aspect-square w-full rounded-[1rem] object-cover"
                   src={image.url}
                 />
               ) : (
-                <div className="aspect-square rounded-2xl bg-[linear-gradient(180deg,#eff6ff,#f9fafb)]" />
+                <div className="aspect-square rounded-[1rem] bg-[linear-gradient(180deg,#ebe6de,#dcd5ca)]" />
               )}
             </button>
           );

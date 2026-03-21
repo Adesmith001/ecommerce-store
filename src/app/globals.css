@@ -1,30 +1,30 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f3ed;
-  --foreground: #14151a;
-  --surface: #efe8df;
-  --surface-foreground: #14151a;
-  --muted: #f3eee7;
-  --muted-foreground: #706a63;
-  --border: #ded5ca;
-  --card: rgba(255, 255, 255, 0.74);
-  --card-foreground: #14151a;
-  --primary: #2563eb;
-  --primary-foreground: #fdfdff;
-  --accent: #f97316;
-  --accent-foreground: #111827;
-  --success: #16a34a;
-  --success-foreground: #f0fdf4;
-  --danger: #dc2626;
-  --danger-foreground: #fef2f2;
-  --ring: rgba(37, 99, 235, 0.14);
+  --background: #f5f2eb;
+  --foreground: #111111;
+  --surface: #ece8df;
+  --surface-foreground: #111111;
+  --muted: #efebe4;
+  --muted-foreground: #6e695f;
+  --border: #d9d3c9;
+  --card: rgba(255, 255, 255, 0.82);
+  --card-foreground: #111111;
+  --primary: #111111;
+  --primary-foreground: #f7f3ec;
+  --accent: #d9d5cf;
+  --accent-foreground: #111111;
+  --success: #0f8a52;
+  --success-foreground: #effcf6;
+  --danger: #b63830;
+  --danger-foreground: #fff1ef;
+  --ring: rgba(17, 17, 17, 0.14);
   --shadow-soft:
-    0 24px 80px rgba(37, 30, 21, 0.08),
-    0 6px 18px rgba(37, 30, 21, 0.05);
+    0 28px 70px rgba(17, 17, 17, 0.07),
+    0 8px 22px rgba(17, 17, 17, 0.04);
   --shadow-card:
-    0 20px 40px rgba(20, 21, 26, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+    0 16px 38px rgba(17, 17, 17, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
 }
 
 @theme inline {
@@ -46,8 +46,8 @@
   --color-danger: var(--danger);
   --color-danger-foreground: var(--danger-foreground);
   --color-ring: var(--ring);
-  --font-sans: var(--font-jakarta);
-  --font-display: var(--font-sora);
+  --font-sans: var(--font-manrope);
+  --font-display: var(--font-space-grotesk);
 }
 
 * {
@@ -61,10 +61,10 @@ html {
 
 body {
   background:
-    radial-gradient(circle at top, rgba(255, 255, 255, 0.96), transparent 26%),
-    linear-gradient(180deg, #fcfaf7 0%, #f7f3ed 46%, #f1ebe2 100%);
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.94), transparent 28%),
+    linear-gradient(180deg, #faf7f2 0%, #f5f2eb 52%, #efe9df 100%);
   color: var(--foreground);
-  font-family: var(--font-jakarta), sans-serif;
+  font-family: var(--font-manrope), sans-serif;
   text-rendering: optimizeLegibility;
 }
 
@@ -74,11 +74,11 @@ body::before {
   inset: 0;
   z-index: -2;
   background:
-    linear-gradient(90deg, rgba(20, 21, 26, 0.04) 1px, transparent 1px),
-    linear-gradient(rgba(20, 21, 26, 0.04) 1px, transparent 1px);
-  background-size: 120px 120px;
-  mask-image: radial-gradient(circle at center, black 42%, transparent 88%);
-  opacity: 0.2;
+    radial-gradient(circle at 12% 20%, rgba(17, 17, 17, 0.045) 0.7px, transparent 0.9px),
+    radial-gradient(circle at 68% 74%, rgba(17, 17, 17, 0.035) 0.7px, transparent 0.95px),
+    radial-gradient(circle at 84% 16%, rgba(17, 17, 17, 0.03) 0.8px, transparent 1px);
+  background-size: 14px 14px, 18px 18px, 22px 22px;
+  opacity: 0.3;
   pointer-events: none;
 }
 
@@ -88,10 +88,10 @@ body::after {
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(circle at 15% 10%, rgba(37, 99, 235, 0.08), transparent 22%),
-    radial-gradient(circle at 82% 12%, rgba(249, 115, 22, 0.1), transparent 18%),
-    radial-gradient(circle at 50% 84%, rgba(20, 21, 26, 0.08), transparent 24%);
-  filter: blur(24px);
+    radial-gradient(circle at 14% 9%, rgba(255, 255, 255, 0.72), transparent 22%),
+    radial-gradient(circle at 86% 12%, rgba(255, 255, 255, 0.48), transparent 16%),
+    radial-gradient(circle at 54% 84%, rgba(17, 17, 17, 0.05), transparent 18%);
+  filter: blur(28px);
   pointer-events: none;
 }
 
@@ -120,19 +120,19 @@ img {
 
 .ui-focus:focus-visible,
 .field-base:focus-visible {
-  border-color: color-mix(in srgb, var(--primary) 30%, white);
+  border-color: color-mix(in srgb, var(--primary) 42%, white);
   box-shadow:
-    0 0 0 5px rgba(37, 99, 235, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8),
-    0 14px 24px rgba(20, 21, 26, 0.06);
+    0 0 0 4px rgba(17, 17, 17, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.84),
+    0 14px 28px rgba(17, 17, 17, 0.06);
 }
 
 .app-shell {
-  @apply mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-10;
+  @apply mx-auto w-full max-w-[1320px] px-5 sm:px-8 lg:px-12;
 }
 
 .section-space {
-  @apply py-12 sm:py-16 lg:py-24;
+  @apply py-12 sm:py-16 lg:py-20;
 }
 
 .content-stack {
@@ -140,71 +140,96 @@ img {
 }
 
 .text-display {
-  font-family: var(--font-sora), sans-serif;
-  @apply text-4xl font-semibold leading-[0.95] tracking-[-0.06em] sm:text-5xl lg:text-7xl;
+  font-family: var(--font-space-grotesk), sans-serif;
+  @apply text-4xl font-bold leading-[0.88] tracking-[-0.08em] sm:text-5xl lg:text-7xl;
 }
 
 .text-heading {
-  font-family: var(--font-sora), sans-serif;
-  @apply text-3xl font-semibold leading-[1.02] tracking-[-0.05em] sm:text-4xl lg:text-5xl;
+  font-family: var(--font-space-grotesk), sans-serif;
+  @apply text-3xl font-bold leading-[0.94] tracking-[-0.06em] sm:text-4xl lg:text-5xl;
 }
 
 .text-body {
-  @apply text-base leading-7 text-muted-foreground sm:text-lg;
+  @apply text-base leading-7 text-muted-foreground sm:text-[1.05rem];
 }
 
 .surface {
   @apply rounded-[2rem] border text-surface-foreground;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(244, 238, 230, 0.76)),
-    linear-gradient(140deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.22));
+    linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(248, 243, 235, 0.76)),
+    linear-gradient(140deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.28));
   box-shadow: var(--shadow-card);
 }
 
 .card-shell {
-  @apply rounded-[2rem] border backdrop-blur-sm;
+  @apply rounded-[1.8rem] border backdrop-blur-sm;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 251, 247, 0.78)),
-    linear-gradient(140deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.22));
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(251, 247, 241, 0.8)),
+    linear-gradient(140deg, rgba(255, 255, 255, 0.76), rgba(255, 255, 255, 0.22));
   box-shadow: var(--shadow-card);
 }
 
 .field-base {
-  @apply flex w-full rounded-[1.2rem] border px-4 py-3.5 text-sm text-foreground outline-none ring-0 transition placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-60;
-  background: rgba(255, 255, 255, 0.8);
+  @apply flex w-full rounded-[1rem] border px-4 py-3.5 text-sm text-foreground outline-none ring-0 transition placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-60;
+  background: rgba(236, 232, 223, 0.64);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.74),
-    0 10px 20px rgba(20, 21, 26, 0.035);
+    inset 0 1px 0 rgba(255, 255, 255, 0.84),
+    0 8px 18px rgba(17, 17, 17, 0.03);
 }
 
 .eyebrow {
-  @apply inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.32em] text-muted-foreground;
+  @apply inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-muted-foreground;
 }
 
 .eyebrow::before {
   content: "";
-  @apply h-2 w-2 rounded-full bg-accent;
+  @apply h-2 w-2 rotate-45 bg-foreground;
 }
 
 .metric-value {
-  font-family: var(--font-sora), sans-serif;
-  @apply text-3xl font-semibold tracking-[-0.05em];
+  font-family: var(--font-space-grotesk), sans-serif;
+  @apply text-3xl font-bold tracking-[-0.05em];
 }
 
 .editorial-panel {
-  @apply rounded-[2.5rem] border border-white/80 backdrop-blur-md;
+  @apply rounded-[2rem] border border-white/80 backdrop-blur-md;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(244, 238, 230, 0.74)),
-    linear-gradient(140deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.22));
+    linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(246, 240, 232, 0.76)),
+    linear-gradient(140deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.2));
   box-shadow: var(--shadow-soft);
 }
 
 .chip-link {
-  @apply inline-flex items-center justify-center rounded-full border border-white/70 bg-white/70 px-4 py-2 text-sm font-medium text-foreground transition hover:-translate-y-0.5 hover:bg-white;
+  @apply inline-flex items-center justify-center rounded-full border border-border bg-white/62 px-4 py-2 text-sm font-medium text-foreground transition hover:bg-white;
 }
 
 .headline-marquee {
-  font-family: var(--font-sora), sans-serif;
-  color: rgba(20, 21, 26, 0.06);
-  @apply text-[4rem] font-semibold uppercase leading-none tracking-[-0.08em] sm:text-[6rem] lg:text-[9rem];
+  font-family: var(--font-space-grotesk), sans-serif;
+  color: rgba(17, 17, 17, 0.05);
+  @apply text-[4rem] font-bold uppercase leading-none tracking-[-0.08em] sm:text-[6rem] lg:text-[9rem];
+}
+
+.storefront-brand-mark {
+  @apply relative block h-8 w-8 overflow-hidden;
+}
+
+.storefront-brand-mark::before,
+.storefront-brand-mark::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  height: 1.15rem;
+  width: 1.15rem;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.storefront-brand-mark::before {
+  left: 0.2rem;
+  background: white;
+  border: 1px solid rgba(17, 17, 17, 0.12);
+}
+
+.storefront-brand-mark::after {
+  right: 0.2rem;
+  background: var(--foreground);
 }

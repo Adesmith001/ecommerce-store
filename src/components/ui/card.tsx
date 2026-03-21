@@ -23,7 +23,7 @@ export function Card({
 }: CardProps) {
   return (
     <div
-      className={cn("card-shell p-6 sm:p-8", cardVariants[variant], className)}
+      className={cn("card-shell p-6 sm:p-7", cardVariants[variant], className)}
       {...props}
     >
       {children}
@@ -51,7 +51,7 @@ export function CardTitle({
   return (
     <h3
       className={cn(
-        "font-display text-xl font-semibold tracking-[-0.04em] text-foreground",
+        "font-display text-xl font-bold tracking-[-0.04em] text-foreground",
         className,
       )}
       {...props}

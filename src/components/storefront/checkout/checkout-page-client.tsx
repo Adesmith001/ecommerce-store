@@ -59,9 +59,9 @@ export function CheckoutPageClient({
 
   if (!hydrated) {
     return (
-      <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
-        <Skeleton className="h-170 w-full rounded-4xl" />
-        <Skeleton className="h-105 w-full rounded-4xl" />
+      <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
+        <Skeleton className="h-[56rem] w-full rounded-[2rem]" />
+        <Skeleton className="h-[30rem] w-full rounded-[2rem]" />
       </div>
     );
   }
@@ -90,15 +90,23 @@ export function CheckoutPageClient({
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
+    <div className="grid gap-8 lg:grid-cols-[1fr_400px]">
       <div className="space-y-6">
-        <Card className="space-y-6 p-6">
+        <div className="space-y-6 border-b border-border/70 pb-6">
+          <div className="flex flex-wrap gap-8 text-lg font-medium uppercase tracking-[0.14em]">
+            <span className="text-foreground">Information</span>
+            <span className="text-muted-foreground">Shipping</span>
+            <span className="text-muted-foreground">Payment</span>
+          </div>
+        </div>
+
+        <Card className="space-y-6 rounded-[1.8rem] bg-white/55 p-6">
           <div>
-            <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
-              Customer Information
+            <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
+              Contact info
             </p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight">
-              Delivery details
+            <h2 className="font-display mt-3 text-4xl font-bold uppercase tracking-[-0.08em]">
+              Checkout
             </h2>
           </div>
 
@@ -272,13 +280,13 @@ export function CheckoutPageClient({
           </div>
         </Card>
 
-        <Card className="space-y-5 p-6">
+        <Card className="space-y-5 rounded-[1.8rem] bg-white/55 p-6">
           <div>
-            <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">
+            <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
               Delivery Method
             </p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight">
-              Choose how you want it delivered
+            <h2 className="font-display mt-3 text-3xl font-bold uppercase tracking-[-0.08em]">
+              Shipping
             </h2>
           </div>
 
@@ -286,10 +294,10 @@ export function CheckoutPageClient({
             {shippingMethods.map((method) => (
               <label
                 key={method.id}
-                className={`flex cursor-pointer items-start gap-4 rounded-3xl border px-4 py-4 ${
+                className={`flex cursor-pointer items-start gap-4 rounded-[1.2rem] border px-4 py-4 ${
                   deliveryMethod === method.code
-                    ? "border-primary bg-primary/5"
-                    : "border-border bg-white"
+                    ? "border-foreground bg-foreground text-primary-foreground"
+                    : "border-border bg-white/70"
                 }`}
               >
                 <input
@@ -374,7 +382,7 @@ export function CheckoutPageClient({
             }}
             size="lg"
           >
-            {isSubmitting ? "Redirecting to payment..." : "Proceed to secure payment"}
+            {isSubmitting ? "Redirecting to payment..." : "Proceed to payment"}
           </Button>
           <Link href={ROUTES.storefront.cart}>
             <Button size="lg" variant="outline">
@@ -384,7 +392,7 @@ export function CheckoutPageClient({
         </div>
 
         {submitError ? (
-          <Card className="space-y-3 border-danger/20 p-6">
+          <Card className="space-y-3 rounded-[1.6rem] border-danger/20 bg-white/55 p-6">
             <p className="text-sm font-medium uppercase tracking-[0.2em] text-danger">
               Payment initialization failed
             </p>
@@ -395,7 +403,7 @@ export function CheckoutPageClient({
 
       <div className="space-y-6">
         <CheckoutSummary items={items} pricing={pricing} />
-        <Card className="space-y-3 p-5 text-sm text-muted-foreground">
+        <Card className="space-y-3 rounded-[1.6rem] bg-white/55 p-5 text-sm text-muted-foreground">
           <p className="font-medium text-foreground">Payment note</p>
           <p>
             Orders are created before payment starts, and the cart will only clear

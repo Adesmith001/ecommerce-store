@@ -21,7 +21,7 @@ export function Input({
 }: InputProps) {
   return (
     <input
-      className={cn("field-base", fieldVariants[variant], className)}
+      className={cn("field-base min-h-12", fieldVariants[variant], className)}
       {...props}
     />
   );

@@ -10,9 +10,9 @@ export default function ShopPage() {
           { label: "Home", href: ROUTES.storefront.home },
           { label: "Shop" },
         ]}
-        description="A scalable product listing shell with room for filters, sorting, merchandising controls, and search results later."
+        description="Explore the live catalog through an editorial product grid, with search, filters, and sorting tuned for modern fashion browsing."
         eyebrow="Shop"
-        title="Browse the storefront"
+        title="Browse the collection"
       />
       <SectionWrapper>
         <CatalogListingView />

@@ -30,12 +30,12 @@ export function CartPageClient() {
 
   if (!hydrated) {
     return (
-      <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
+      <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
         <div className="space-y-4">
-          <Skeleton className="h-36 w-full rounded-[2.2rem]" />
-          <Skeleton className="h-36 w-full rounded-[2.2rem]" />
+          <Skeleton className="h-[24rem] w-full rounded-[2rem]" />
+          <Skeleton className="h-[24rem] w-full rounded-[2rem]" />
         </div>
-        <Skeleton className="h-96 w-full rounded-[2.2rem]" />
+        <Skeleton className="h-[28rem] w-full rounded-[2rem]" />
       </div>
     );
   }
@@ -55,9 +55,20 @@ export function CartPageClient() {
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
-      <div className="space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+    <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
+      <div className="space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/70 pb-4">
+          <div className="flex flex-wrap items-center gap-4">
+            <p className="text-lg font-semibold uppercase tracking-[0.12em] text-foreground">
+              Shopping bag
+            </p>
+            <Link
+              className="rounded-[0.9rem] border border-border bg-white/65 px-4 py-2 text-sm uppercase tracking-[0.14em] text-muted-foreground"
+              href={ROUTES.storefront.accountWishlist}
+            >
+              Favourites
+            </Link>
+          </div>
           <p className="text-sm text-muted-foreground">
             {lineItemCount} item{lineItemCount === 1 ? "" : "s"} in cart
           </p>
@@ -73,36 +84,39 @@ export function CartPageClient() {
           return (
             <Card
               key={item.productId}
-              className="grid gap-4 p-4 sm:grid-cols-[140px_minmax(0,1fr)] sm:p-5"
+              className="grid gap-6 rounded-[1.8rem] bg-white/55 p-5 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]"
             >
-              <div className="overflow-hidden rounded-[1.6rem] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.76),transparent_28%),linear-gradient(180deg,#f8f4ee,#ece4db)] p-3">
+              <div className="overflow-hidden rounded-[1.6rem] border border-border bg-[#ece8e1]">
                 {item.image?.url ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     alt={item.image.alt}
-                    className="aspect-square w-full rounded-[1.2rem] object-cover"
+                    className="aspect-[4/5] w-full object-cover"
                     src={item.image.url}
                   />
                 ) : (
-                  <div className="aspect-square rounded-[1.2rem] bg-[linear-gradient(180deg,#dbeafe,#f9fafb)]" />
+                  <div className="aspect-[4/5] bg-[linear-gradient(180deg,#ebe6de,#dcd5ca)]" />
                 )}
               </div>
 
-              <div className="flex flex-col justify-between gap-4">
+              <div className="flex flex-col justify-between gap-5">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">
+                      {item.category?.name ?? "Catalog"}
+                    </p>
                     <Link href={ROUTES.storefront.product(item.slug)}>
-                      <h2 className="font-display text-2xl font-semibold tracking-[-0.05em] hover:text-primary">
+                      <h2 className="font-display text-3xl font-bold tracking-[-0.07em] hover:text-primary">
                         {item.name}
                       </h2>
                     </Link>
-                    <div className="text-sm text-muted-foreground">
-                      <p>{item.category?.name ?? "Catalog"}</p>
-                    </div>
+                    <p className="text-sm uppercase tracking-[0.16em] text-muted-foreground">
+                      Quantity {item.quantity}
+                    </p>
                   </div>
 
                   <div className="text-right">
-                    <p className="font-display text-2xl font-semibold tracking-[-0.05em]">
+                    <p className="font-display text-3xl font-bold tracking-[-0.07em]">
                       {formatCurrency(unitPrice)}
                     </p>
                     {item.salePrice !== null ? (
@@ -114,9 +128,9 @@ export function CartPageClient() {
                 </div>
 
                 <div className="flex flex-wrap items-center justify-between gap-4">
-                  <div className="inline-flex items-center gap-3 rounded-full border border-white/80 bg-white/80 px-3 py-2 shadow-[0_10px_24px_rgba(20,21,26,0.05)]">
+                  <div className="inline-flex items-center gap-2 rounded-[1rem] border border-border bg-muted/60 p-2">
                     <Button
-                      className="h-9 w-9 rounded-full px-0"
+                      className="h-10 w-10 rounded-[0.85rem] px-0"
                       disabled={item.quantity <= 1}
                       onClick={() =>
                         dispatch(
@@ -131,11 +145,11 @@ export function CartPageClient() {
                     >
                       -
                     </Button>
-                    <span className="min-w-8 text-center text-sm font-semibold">
+                    <span className="min-w-10 text-center text-sm font-semibold">
                       {item.quantity}
                     </span>
                     <Button
-                      className="h-9 w-9 rounded-full px-0"
+                      className="h-10 w-10 rounded-[0.85rem] px-0"
                       disabled={item.quantity >= item.stock}
                       onClick={() =>
                         dispatch(
@@ -154,7 +168,7 @@ export function CartPageClient() {
 
                   <div className="flex items-center gap-4">
                     <p className="text-sm text-muted-foreground">
-                      Subtotal:{" "}
+                      Subtotal{" "}
                       <span className="font-semibold text-foreground">
                         {formatCurrency(lineSubtotal)}
                       </span>

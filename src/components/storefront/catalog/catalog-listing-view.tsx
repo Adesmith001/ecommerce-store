@@ -82,13 +82,13 @@ export function CatalogListingView({
 
   if (!queryState.initialized || isLoading) {
     return (
-      <div className="space-y-6">
-        <Skeleton className="h-28 w-full rounded-[2.2rem]" />
-        <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
-          <Skeleton className="h-105 w-full rounded-[2.2rem]" />
+      <div className="space-y-8">
+        <Skeleton className="h-36 w-full rounded-[2rem]" />
+        <div className="grid gap-8 lg:grid-cols-[300px_minmax(0,1fr)]">
+          <Skeleton className="h-[52rem] w-full rounded-[2rem]" />
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {Array.from({ length: 6 }).map((_, index) => (
-              <Skeleton key={index} className="h-115 w-full rounded-[2.2rem]" />
+              <Skeleton key={index} className="h-[29rem] w-full rounded-[2rem]" />
             ))}
           </div>
         </div>
@@ -115,7 +115,7 @@ export function CatalogListingView({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <CatalogToolbar
         onSearchSubmit={(value) => dispatch(setQuery(value))}
         onSortChange={(value) => dispatch(setSort(value))}
@@ -123,7 +123,7 @@ export function CatalogListingView({
         response={data}
       />
 
-      <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
+      <div className="grid gap-8 lg:grid-cols-[300px_minmax(0,1fr)]">
         <div>
           <CatalogFilterPanel
             lockedCategorySlug={lockedCategorySlug}
@@ -148,7 +148,7 @@ export function CatalogListingView({
               title="No products match this view"
             />
           ) : (
-            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
               {data.products.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}

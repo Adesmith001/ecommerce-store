@@ -14,24 +14,24 @@ export function QuantitySelector({
   value,
 }: QuantitySelectorProps) {
   return (
-    <div className="space-y-2">
-      <p className="text-sm font-medium uppercase tracking-[0.18em] text-muted-foreground">
+    <div className="space-y-3">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">
         Quantity
       </p>
-      <div className="inline-flex items-center gap-3 rounded-full border border-white/80 bg-white/80 px-3 py-2 shadow-[0_10px_24px_rgba(20,21,26,0.05)]">
+      <div className="inline-flex items-center gap-2 rounded-[1rem] border border-border bg-muted/60 p-2">
         <Button
           aria-label="Decrease quantity"
-          className="h-9 w-9 rounded-full px-0"
+          className="h-10 w-10 rounded-[0.85rem] px-0"
           onClick={() => onChange(Math.max(1, value - 1))}
           size="sm"
           variant="outline"
         >
           -
         </Button>
-        <span className="min-w-8 text-center text-sm font-semibold">{value}</span>
+        <span className="min-w-12 text-center text-sm font-semibold">{value}</span>
         <Button
           aria-label="Increase quantity"
-          className="h-9 w-9 rounded-full px-0"
+          className="h-10 w-10 rounded-[0.85rem] px-0"
           onClick={() => onChange(Math.min(max, value + 1))}
           size="sm"
           variant="outline"

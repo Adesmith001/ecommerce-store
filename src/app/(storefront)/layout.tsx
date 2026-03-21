@@ -22,7 +22,7 @@ export default async function StorefrontLayout({
         tagline={settings.tagline}
         topbarDetail={settings.contactEmail}
       />
-      <main className="flex-1 pt-3">{children}</main>
+      <main className="flex-1">{children}</main>
       <StorefrontFooter settings={settings} />
     </div>
   );

@@ -23,7 +23,7 @@ export function Select({
   return (
     <select
       className={cn(
-        "field-base appearance-none bg-[linear-gradient(45deg,transparent_50%,#7f756c_50%),linear-gradient(135deg,#7f756c_50%,transparent_50%)] bg-[length:0.6rem_0.6rem] bg-[position:calc(100%-1.25rem)_calc(50%-0.12rem),calc(100%-0.9rem)_calc(50%-0.12rem)] bg-no-repeat pr-10",
+        "field-base appearance-none bg-[linear-gradient(45deg,transparent_50%,#6e695f_50%),linear-gradient(135deg,#6e695f_50%,transparent_50%)] bg-[length:0.55rem_0.55rem] bg-[position:calc(100%-1.25rem)_calc(50%-0.16rem),calc(100%-0.9rem)_calc(50%-0.16rem)] bg-no-repeat pr-10",
         fieldVariants[variant],
         className,
       )}

@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import { UserButton, useAuth } from "@clerk/nextjs";
 import { buttonVariants } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { Input } from "@/components/ui/input";
 import { ROUTES, STOREFRONT_NAV_LINKS } from "@/constants/routes";
 import { useNotificationSummary } from "@/hooks/use-notification-summary";
 import { useUserRole } from "@/hooks/use-user-role";
@@ -14,45 +13,31 @@ import { isAdminRole } from "@/lib/auth/roles";
 import { getNotificationActionHref } from "@/lib/notifications/notification-links";
 import { selectCartTotalQuantity } from "@/store/features/cart/cart-slice";
 
-function SearchIcon() {
-  return (
-    <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24" fill="none">
-      <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.8" />
-      <path
-        d="m20 20-3.5-3.5"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeWidth="1.8"
-      />
-    </svg>
-  );
-}
-
 function CartIcon() {
   return (
-    <svg aria-hidden="true" className="h-5 w-5" viewBox="0 0 24 24" fill="none">
+    <svg aria-hidden="true" className="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none">
       <path
-        d="M3 4h2l2.3 10.1a1 1 0 0 0 1 .8h8.8a1 1 0 0 0 1-.8L20 7H7"
+        d="M4 6h2l2.2 9.5a1 1 0 0 0 1 .8h7.9a1 1 0 0 0 1-.8L20 9H8"
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth="1.8"
+        strokeWidth="1.7"
       />
-      <circle cx="10" cy="19" r="1.2" fill="currentColor" />
-      <circle cx="17" cy="19" r="1.2" fill="currentColor" />
+      <circle cx="10" cy="19" r="1.25" fill="currentColor" />
+      <circle cx="17" cy="19" r="1.25" fill="currentColor" />
     </svg>
   );
 }
 
 function AccountIcon() {
   return (
-    <svg aria-hidden="true" className="h-5 w-5" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="8" r="3.5" stroke="currentColor" strokeWidth="1.8" />
+    <svg aria-hidden="true" className="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="8" r="3.25" stroke="currentColor" strokeWidth="1.7" />
       <path
-        d="M5 19c1.5-3 4-4.5 7-4.5s5.5 1.5 7 4.5"
+        d="M5.5 18.5c1.6-2.8 3.9-4.2 6.5-4.2s4.9 1.4 6.5 4.2"
         stroke="currentColor"
         strokeLinecap="round"
-        strokeWidth="1.8"
+        strokeWidth="1.7"
       />
     </svg>
   );
@@ -60,19 +45,19 @@ function AccountIcon() {
 
 function NotificationIcon() {
   return (
-    <svg aria-hidden="true" className="h-5 w-5" viewBox="0 0 24 24" fill="none">
+    <svg aria-hidden="true" className="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none">
       <path
-        d="M8 18h8m-7-8.5a3 3 0 1 1 6 0V12c0 .9.3 1.8.9 2.5l.8.9a1 1 0 0 1-.8 1.6H8.1a1 1 0 0 1-.8-1.6l.8-.9c.6-.7.9-1.6.9-2.5V9.5"
+        d="M8.5 17.5h7m-6.25-8a3.75 3.75 0 1 1 7.5 0V12c0 .9.3 1.8.86 2.5l.66.83a1 1 0 0 1-.78 1.62H7.5a1 1 0 0 1-.78-1.62l.66-.83A4 4 0 0 0 8.25 12V9.5Z"
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth="1.8"
+        strokeWidth="1.7"
       />
       <path
-        d="M10.5 18a1.5 1.5 0 0 0 3 0"
+        d="M10.5 17.5a1.5 1.5 0 0 0 3 0"
         stroke="currentColor"
         strokeLinecap="round"
-        strokeWidth="1.8"
+        strokeWidth="1.7"
       />
     </svg>
   );
@@ -81,14 +66,13 @@ function NotificationIcon() {
 function MenuIcon() {
   return (
     <svg aria-hidden="true" className="h-5 w-5" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M4 7h16M4 12h16M4 17h16"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeWidth="1.8"
-      />
+      <path d="M4 7h16M4 12h11M4 17h16" stroke="currentColor" strokeLinecap="round" strokeWidth="1.7" />
     </svg>
   );
+}
+
+function BrandMark() {
+  return <span aria-hidden="true" className="storefront-brand-mark shrink-0" />;
 }
 
 function formatNotificationDate(value: string) {
@@ -109,10 +93,37 @@ type StorefrontHeaderProps = {
   topbarDetail?: string;
 };
 
+function HeaderIconButton({
+  ariaLabel,
+  children,
+  href,
+  onClick,
+}: {
+  ariaLabel: string;
+  children: React.ReactNode;
+  href?: string;
+  onClick?: () => void;
+}) {
+  const className =
+    "inline-flex h-12 w-12 items-center justify-center rounded-full border border-foreground bg-white text-foreground";
+
+  if (href) {
+    return (
+      <Link aria-label={ariaLabel} className={className} href={href}>
+        {children}
+      </Link>
+    );
+  }
+
+  return (
+    <button aria-label={ariaLabel} className={className} onClick={onClick} type="button">
+      {children}
+    </button>
+  );
+}
+
 export function StorefrontHeader({
   announcementText,
-  logoAlt,
-  logoUrl,
   storeName,
   tagline,
   topbarDetail,
@@ -162,334 +173,249 @@ export function StorefrontHeader({
   }, [notificationsOpen]);
 
   return (
-    <header className="sticky top-0 z-30 px-2 pt-3 sm:px-3">
-      <Container className="space-y-3">
-        <div className="editorial-panel hidden items-center justify-between gap-6 px-6 py-3 text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground lg:flex">
+    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/92 backdrop-blur-xl">
+      <Container className="space-y-3 py-4">
+        <div className="hidden items-center justify-between text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground lg:flex">
           <p>{announcementText}</p>
           <p>{topbarDetail || tagline}</p>
         </div>
 
-        <div className="editorial-panel px-4 py-4 sm:px-6">
-          <div className="flex items-center justify-between gap-3">
-            <Link className="flex min-w-0 items-center gap-3" href="/">
-              {logoUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  alt={logoAlt || storeName}
-                  className="h-11 w-11 shrink-0 rounded-[1.35rem] object-cover shadow-[0_12px_30px_rgba(20,21,26,0.18)]"
-                  src={logoUrl}
-                />
-              ) : (
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[1.35rem] bg-foreground text-sm font-semibold text-white shadow-[0_12px_30px_rgba(20,21,26,0.22)]">
-                  {storeName.slice(0, 2).toUpperCase()}
-                </span>
-              )}
-              <div className="min-w-0">
-                <span className="font-display block truncate text-lg font-semibold tracking-[-0.05em]">
-                  {storeName}
-                </span>
-                <span className="hidden truncate text-xs uppercase tracking-[0.24em] text-muted-foreground sm:block">
-                  {tagline}
-                </span>
-              </div>
-            </Link>
-
-            <nav className="hidden flex-1 items-center justify-center gap-2 lg:flex">
-              {STOREFRONT_NAV_LINKS.map((link) => (
-                <Link key={link.href} className="chip-link" href={link.href}>
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-
-            <div className="hidden max-w-sm flex-1 items-center gap-3 xl:flex">
-              <form action={ROUTES.storefront.shop} className="relative flex-1">
-                <Input
-                  aria-label="Search storefront"
-                  className="pl-11 pr-11"
-                  name="q"
-                  placeholder="Search the collection"
-                />
-                <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">
-                  <SearchIcon />
-                </span>
-              </form>
-            </div>
-
-            <div className="hidden items-center gap-2 md:flex">
-              {isLoaded && isSignedIn ? (
-                <div className="relative" ref={notificationPanelRef}>
-                  <button
-                    aria-expanded={notificationsOpen}
-                    aria-haspopup="dialog"
-                    aria-label="Open notifications preview"
-                    className={buttonVariants({
-                      className: "relative h-11 w-11 rounded-full px-0",
-                      variant: "outline",
-                    })}
-                    onClick={() => setNotificationsOpen((open) => !open)}
-                    type="button"
-                  >
-                    <NotificationIcon />
-                    {notificationSummary.unreadCount > 0 ? (
-                      <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[11px] font-semibold text-white">
-                        {notificationSummary.unreadCount}
-                      </span>
-                    ) : null}
-                  </button>
-
-                  {notificationsOpen ? (
-                    <div className="absolute right-0 top-[calc(100%+0.85rem)] z-40 w-88 rounded-[1.8rem] border border-white/80 bg-white/92 p-4 shadow-[0_28px_70px_rgba(20,21,26,0.16)] backdrop-blur-xl">
-                      <div className="flex items-start justify-between gap-3 border-b border-border/60 pb-3">
-                        <div>
-                          <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-muted-foreground">
-                            Latest Activity
-                          </p>
-                          <p className="mt-2 text-sm text-muted-foreground">
-                            {notificationSummary.unreadCount} unread notification
-                            {notificationSummary.unreadCount === 1 ? "" : "s"}
-                          </p>
-                        </div>
-                        <Link
-                          className="text-xs font-semibold uppercase tracking-[0.18em] text-primary"
-                          href={ROUTES.storefront.accountNotifications}
-                          onClick={() => setNotificationsOpen(false)}
-                        >
-                          View all
-                        </Link>
-                      </div>
-
-                      <div className="mt-3 space-y-2">
-                        {isNotificationsLoading ? (
-                          <div className="rounded-[1.4rem] border border-white/75 bg-white/72 px-4 py-5 text-sm text-muted-foreground">
-                            Loading notifications...
-                          </div>
-                        ) : null}
-
-                        {!isNotificationsLoading && notificationError ? (
-                          <div className="rounded-[1.4rem] border border-danger/15 bg-danger/5 px-4 py-5 text-sm text-danger">
-                            {notificationError}
-                          </div>
-                        ) : null}
-
-                        {!isNotificationsLoading &&
-                        !notificationError &&
-                        latestNotifications.length === 0 ? (
-                          <div className="rounded-[1.4rem] border border-white/75 bg-white/72 px-4 py-5 text-sm text-muted-foreground">
-                            No recent notifications yet.
-                          </div>
-                        ) : null}
-
-                        {!isNotificationsLoading && !notificationError
-                          ? latestNotifications.map((notification) => {
-                              const actionHref =
-                                getNotificationActionHref(notification) ??
-                                ROUTES.storefront.accountNotifications;
-                              const isRead =
-                                userId &&
-                                notification.readByClerkIds.includes(userId);
-
-                              return (
-                                <Link
-                                  key={notification.id}
-                                  className="block rounded-[1.4rem] border border-white/75 bg-white/76 px-4 py-3 transition hover:bg-white"
-                                  href={actionHref}
-                                  onClick={() => setNotificationsOpen(false)}
-                                >
-                                  <div className="flex items-start gap-3">
-                                    <span
-                                      className={`mt-1 h-2.5 w-2.5 shrink-0 rounded-full ${
-                                        isRead ? "bg-border" : "bg-primary"
-                                      }`}
-                                    />
-                                    <div className="min-w-0 flex-1">
-                                      <div className="flex items-start justify-between gap-3">
-                                        <p className="truncate text-sm font-semibold text-foreground">
-                                          {notification.title}
-                                        </p>
-                                        <span className="shrink-0 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-                                          {formatNotificationDate(notification.createdAt)}
-                                        </span>
-                                      </div>
-                                      <p className="mt-1 line-clamp-2 text-sm leading-6 text-muted-foreground">
-                                        {notification.message}
-                                      </p>
-                                    </div>
-                                  </div>
-                                </Link>
-                              );
-                            })
-                          : null}
-                      </div>
-                    </div>
-                  ) : null}
-                </div>
-              ) : null}
-
-              <Link
-                aria-label="Open cart"
-                className={buttonVariants({
-                  className: "relative h-11 w-11 rounded-full px-0",
-                  variant: "outline",
-                })}
-                href={ROUTES.storefront.cart}
-              >
-                <CartIcon />
-                {totalCartQuantity > 0 ? (
-                  <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-foreground px-1 text-[11px] font-semibold text-white">
-                    {totalCartQuantity}
-                  </span>
-                ) : null}
-              </Link>
-
-              {!isLoaded ? <div className="h-11 w-24 rounded-full bg-muted" /> : null}
-
-              {isLoaded && !isSignedIn ? (
-                <>
-                  <Link
-                    className={buttonVariants({
-                      className: "hidden lg:inline-flex",
-                      variant: "outline",
-                    })}
-                    href={ROUTES.auth.signIn}
-                  >
-                    Sign in
-                  </Link>
-                  <Link
-                    className={buttonVariants({ variant: "secondary" })}
-                    href={ROUTES.auth.signUp}
-                  >
-                    Sign up
-                  </Link>
-                </>
-              ) : null}
-
-              {isLoaded && isSignedIn ? (
-                <>
-                  <Link
-                    className={buttonVariants({
-                      className: "hidden lg:inline-flex",
-                      variant: "outline",
-                    })}
-                    href={ROUTES.storefront.account}
-                  >
-                    <AccountIcon />
-                    Account
-                  </Link>
-                  {showAdminLink ? (
-                    <Link
-                      className={buttonVariants({
-                        className: "hidden xl:inline-flex",
-                        variant: "outline",
-                      })}
-                      href={ROUTES.admin.dashboard}
-                    >
-                      Admin
-                    </Link>
-                  ) : null}
-                  <div className="flex h-11 items-center rounded-full border border-white/70 bg-white/80 px-1.5 shadow-[0_10px_24px_rgba(20,21,26,0.06)]">
-                    <UserButton
-                      appearance={{
-                        elements: {
-                          avatarBox: "h-8 w-8",
-                          userButtonPopoverActionButtonIcon: "text-primary",
-                        },
-                      }}
-                    />
-                  </div>
-                </>
-              ) : null}
-            </div>
-
+        <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4">
+          <div className="flex items-center gap-3">
             <button
               aria-expanded={mobileMenuOpen}
-              aria-label="Toggle mobile menu"
-              className={buttonVariants({
-                className: "h-11 w-11 rounded-full px-0 md:hidden",
-                variant: "outline",
-              })}
+              aria-label="Toggle navigation menu"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-transparent text-foreground lg:hidden"
               onClick={() => setMobileMenuOpen((open) => !open)}
               type="button"
             >
               <MenuIcon />
             </button>
+
+            <nav className="hidden items-center gap-8 lg:flex">
+              {STOREFRONT_NAV_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  className="text-sm font-medium tracking-[0.16em] text-foreground/78 uppercase hover:text-foreground"
+                  href={link.href}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <Link
+                className="text-sm font-medium tracking-[0.16em] text-foreground/78 uppercase hover:text-foreground"
+                href={ROUTES.storefront.shop}
+              >
+                New
+              </Link>
+            </nav>
           </div>
 
-          <div className="mt-4 lg:hidden">
-            <form action={ROUTES.storefront.shop} className="relative">
-              <Input
-                aria-label="Search storefront"
-                className="pl-11 pr-11"
-                name="q"
-                placeholder="Search the storefront"
-              />
-              <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">
-                <SearchIcon />
+          <Link
+            className="mx-auto flex items-center gap-3 text-center"
+            href={ROUTES.storefront.home}
+          >
+            <BrandMark />
+            <div className="hidden min-w-0 sm:block">
+              <span className="font-display block text-lg font-bold uppercase tracking-[0.18em]">
+                {storeName}
               </span>
-            </form>
+            </div>
+          </Link>
+
+          <div className="flex items-center justify-end gap-2.5">
+            {isLoaded && isSignedIn ? (
+              <div className="relative hidden md:block" ref={notificationPanelRef}>
+                <HeaderIconButton
+                  ariaLabel="Open notifications"
+                  onClick={() => setNotificationsOpen((open) => !open)}
+                >
+                  <NotificationIcon />
+                </HeaderIconButton>
+                {notificationSummary.unreadCount > 0 ? (
+                  <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#1b33d6] px-1 text-[10px] font-semibold text-white">
+                    {notificationSummary.unreadCount}
+                  </span>
+                ) : null}
+
+                {notificationsOpen ? (
+                  <div className="absolute right-0 top-[calc(100%+0.9rem)] z-50 w-[22rem] rounded-[1.6rem] border border-border bg-[rgba(255,255,255,0.95)] p-4 shadow-[0_28px_80px_rgba(17,17,17,0.14)]">
+                    <div className="flex items-start justify-between gap-3 border-b border-border/80 pb-3">
+                      <div>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-muted-foreground">
+                          Latest activity
+                        </p>
+                        <p className="mt-2 text-sm text-muted-foreground">
+                          {notificationSummary.unreadCount} unread notification
+                          {notificationSummary.unreadCount === 1 ? "" : "s"}
+                        </p>
+                      </div>
+                      <Link
+                        className="text-[11px] font-semibold uppercase tracking-[0.2em] text-foreground"
+                        href={ROUTES.storefront.accountNotifications}
+                        onClick={() => setNotificationsOpen(false)}
+                      >
+                        View all
+                      </Link>
+                    </div>
+
+                    <div className="mt-3 space-y-2">
+                      {isNotificationsLoading ? (
+                        <div className="rounded-[1.2rem] border border-border bg-muted/55 px-4 py-5 text-sm text-muted-foreground">
+                          Loading notifications...
+                        </div>
+                      ) : null}
+
+                      {!isNotificationsLoading && notificationError ? (
+                        <div className="rounded-[1.2rem] border border-danger/25 bg-danger/5 px-4 py-5 text-sm text-danger">
+                          {notificationError}
+                        </div>
+                      ) : null}
+
+                      {!isNotificationsLoading &&
+                      !notificationError &&
+                      latestNotifications.length === 0 ? (
+                        <div className="rounded-[1.2rem] border border-border bg-muted/55 px-4 py-5 text-sm text-muted-foreground">
+                          No recent notifications yet.
+                        </div>
+                      ) : null}
+
+                      {!isNotificationsLoading && !notificationError
+                        ? latestNotifications.map((notification) => {
+                            const actionHref =
+                              getNotificationActionHref(notification) ??
+                              ROUTES.storefront.accountNotifications;
+                            const isRead =
+                              userId &&
+                              notification.readByClerkIds.includes(userId);
+
+                            return (
+                              <Link
+                                key={notification.id}
+                                className="block rounded-[1.2rem] border border-border bg-white/80 px-4 py-3 hover:bg-white"
+                                href={actionHref}
+                                onClick={() => setNotificationsOpen(false)}
+                              >
+                                <div className="flex items-start gap-3">
+                                  <span
+                                    className={`mt-1 h-2.5 w-2.5 shrink-0 rounded-full ${
+                                      isRead ? "bg-border" : "bg-[#1b33d6]"
+                                    }`}
+                                  />
+                                  <div className="min-w-0 flex-1">
+                                    <div className="flex items-start justify-between gap-3">
+                                      <p className="truncate text-sm font-semibold text-foreground">
+                                        {notification.title}
+                                      </p>
+                                      <span className="shrink-0 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                                        {formatNotificationDate(notification.createdAt)}
+                                      </span>
+                                    </div>
+                                    <p className="mt-1 line-clamp-2 text-sm leading-6 text-muted-foreground">
+                                      {notification.message}
+                                    </p>
+                                  </div>
+                                </div>
+                              </Link>
+                            );
+                          })
+                        : null}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+
+            <Link
+              aria-label="Open cart"
+              className="relative inline-flex h-12 min-w-12 items-center justify-center gap-2 rounded-full border border-foreground bg-foreground px-5 text-sm font-medium tracking-[0.16em] text-primary-foreground uppercase"
+              href={ROUTES.storefront.cart}
+            >
+              <span className="hidden sm:inline">Cart</span>
+              <span className="sm:hidden">
+                <CartIcon />
+              </span>
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-primary-foreground/30 bg-primary-foreground text-[11px] font-semibold text-foreground">
+                {totalCartQuantity}
+              </span>
+            </Link>
+
+            {!isLoaded ? <div className="hidden h-12 w-12 rounded-full bg-muted md:block" /> : null}
+
+            {isLoaded && !isSignedIn ? (
+              <>
+                <Link
+                  className={buttonVariants({
+                    className: "hidden md:inline-flex rounded-full",
+                    variant: "outline",
+                  })}
+                  href={ROUTES.auth.signIn}
+                >
+                  Sign in
+                </Link>
+                <Link
+                  className="hidden h-12 w-12 items-center justify-center rounded-full border border-foreground bg-white text-foreground md:inline-flex"
+                  href={ROUTES.auth.signUp}
+                >
+                  <AccountIcon />
+                </Link>
+              </>
+            ) : null}
+
+            {isLoaded && isSignedIn ? (
+              <>
+                <Link
+                  aria-label="Account"
+                  className="hidden h-12 w-12 items-center justify-center rounded-full border border-foreground bg-white text-foreground md:inline-flex"
+                  href={ROUTES.storefront.account}
+                >
+                  <AccountIcon />
+                </Link>
+                {showAdminLink ? (
+                  <Link
+                    className={buttonVariants({
+                      className: "hidden xl:inline-flex rounded-full",
+                      variant: "outline",
+                    })}
+                    href={ROUTES.admin.dashboard}
+                  >
+                    Admin
+                  </Link>
+                ) : null}
+                <div className="hidden md:flex h-12 items-center rounded-full border border-foreground bg-white px-1.5">
+                  <UserButton
+                    appearance={{
+                      elements: {
+                        avatarBox: "h-8 w-8",
+                      },
+                    }}
+                  />
+                </div>
+              </>
+            ) : null}
           </div>
         </div>
 
         {mobileMenuOpen ? (
-          <div className="editorial-panel space-y-4 p-4 md:hidden">
-            <nav className="grid grid-cols-2 gap-2">
+          <div className="rounded-[1.6rem] border border-border bg-[rgba(255,255,255,0.9)] p-5 lg:hidden">
+            <div className="grid gap-3">
               {STOREFRONT_NAV_LINKS.map((link) => (
                 <Link
                   key={link.href}
-                  className="rounded-[1.2rem] border border-white/75 bg-white/70 px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-white hover:text-foreground"
+                  className="rounded-[1rem] border border-border bg-white/70 px-4 py-3 text-sm font-medium uppercase tracking-[0.16em] text-foreground"
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {link.label}
                 </Link>
               ))}
-            </nav>
-
-            <div className="grid gap-2">
-              {isLoaded && isSignedIn ? (
-                <Link
-                  className={buttonVariants({ className: "w-full", variant: "outline" })}
-                  href={ROUTES.storefront.accountNotifications}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <NotificationIcon />
-                  Notifications
-                  {notificationSummary.unreadCount > 0
-                    ? ` (${notificationSummary.unreadCount})`
-                    : ""}
-                </Link>
-              ) : null}
-
               <Link
-                className={buttonVariants({ className: "w-full", variant: "outline" })}
-                href={ROUTES.storefront.cart}
+                className="rounded-[1rem] border border-border bg-white/70 px-4 py-3 text-sm font-medium uppercase tracking-[0.16em] text-foreground"
+                href={ROUTES.storefront.shop}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <CartIcon />
-                Cart
-                {totalCartQuantity > 0 ? ` (${totalCartQuantity})` : ""}
+                New
               </Link>
-
-              {!isLoaded ? <div className="h-11 rounded-full bg-muted" /> : null}
-
-              {isLoaded && !isSignedIn ? (
-                <>
-                  <Link
-                    className={buttonVariants({ className: "w-full", variant: "outline" })}
-                    href={ROUTES.auth.signIn}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Sign in
-                  </Link>
-                  <Link
-                    className={buttonVariants({ className: "w-full", variant: "secondary" })}
-                    href={ROUTES.auth.signUp}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Create account
-                  </Link>
-                </>
-              ) : null}
 
               {isLoaded && isSignedIn ? (
                 <>
@@ -498,7 +424,17 @@ export function StorefrontHeader({
                     href={ROUTES.storefront.account}
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Account center
+                    Account
+                  </Link>
+                  <Link
+                    className={buttonVariants({ className: "w-full", variant: "outline" })}
+                    href={ROUTES.storefront.accountNotifications}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Notifications
+                    {notificationSummary.unreadCount > 0
+                      ? ` (${notificationSummary.unreadCount})`
+                      : ""}
                   </Link>
                   {showAdminLink ? (
                     <Link
@@ -506,12 +442,28 @@ export function StorefrontHeader({
                       href={ROUTES.admin.dashboard}
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      Admin dashboard
+                      Admin
                     </Link>
                   ) : null}
-                  <div className="flex items-center justify-center rounded-[1.2rem] border border-white/80 bg-white/80 px-4 py-3">
-                    <UserButton />
-                  </div>
+                </>
+              ) : null}
+
+              {isLoaded && !isSignedIn ? (
+                <>
+                  <Link
+                    className={buttonVariants({ className: "w-full", variant: "outline" })}
+                    href={ROUTES.auth.signIn}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Sign in
+                  </Link>
+                  <Link
+                    className={buttonVariants({ className: "w-full" })}
+                    href={ROUTES.auth.signUp}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Create account
+                  </Link>
                 </>
               ) : null}
             </div>

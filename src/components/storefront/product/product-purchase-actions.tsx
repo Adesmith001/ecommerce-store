@@ -50,20 +50,27 @@ export function ProductPurchaseActions({
         value={quantity}
       />
 
-      <div className="grid gap-3 sm:grid-cols-3">
-        <Button disabled={isOutOfStock} onClick={handleAddToCart} size="lg">
-          Add to Cart
+      <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+        <Button
+          className="w-full"
+          disabled={isOutOfStock}
+          onClick={handleAddToCart}
+          size="lg"
+        >
+          Add to bag
         </Button>
         <Button
+          className="w-full"
           disabled={isOutOfStock}
           onClick={handleBuyNow}
           size="lg"
           variant="secondary"
         >
-          Buy Now
+          Buy now
         </Button>
-        <WishlistToggleButton product={product} showLabel />
       </div>
+
+      <WishlistToggleButton className="w-full" product={product} showLabel />
     </div>
   );
 }

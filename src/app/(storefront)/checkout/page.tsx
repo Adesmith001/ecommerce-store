@@ -16,9 +16,9 @@ export default async function CheckoutPage() {
           { label: "Cart", href: ROUTES.storefront.cart },
           { label: "Checkout" },
         ]}
-        description="Confirm your delivery details, create your order, and continue into the secure payment flow."
+        description="Confirm your delivery details, review your order, and continue into the secure payment flow."
         eyebrow="Checkout"
-        title="Secure your order"
+        title="Complete your order"
       />
       <SectionWrapper>
         <CheckoutPageClient
